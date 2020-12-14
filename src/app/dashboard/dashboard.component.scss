@@ -1,0 +1,92 @@
+@import "../../styles/bootstrap/functions";
+@import "../../styles/mis-variables";
+
+.row {
+    display: flex;
+  }
+  
+  /* Create three equal columns that sits next to each other */
+  .column {
+    flex: 33.33%;
+    padding: 5px;
+  }
+
+  @media screen and (max-width: 992px) {
+    .titulomenu {
+        margin-left: 0px !important;
+        font-size: 14px;
+    }
+}
+
+/*-- banner --*/
+.banner {
+	background: #f8f9fa;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    background-size: cover;
+}
+.banner-text-agile img {
+    border-radius: 50%;
+}
+.layer1 {
+    background: rgba(0, 0, 0, 0.4);
+}
+.banner-text-agile {
+    padding: 11vw 0 5vw;
+    box-sizing: border-box;
+	opacity:1;
+}
+
+h3.b-w3ltxt span {
+    font-weight: 300;
+    text-shadow: none;
+    letter-spacing: 1px;
+    color: #353c4e;
+}
+h3.b-w3ltxt {
+    font-size: 3.5em;
+    color: #353c4e;
+    font-weight: 800;
+    line-height: 70px;
+    padding-top: 1em;
+}
+.w3ls_banner_txt {
+    padding-top: 4em;
+}
+.carousel-item p {
+    color: #777;
+    text-transform: capitalize;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+.btn-banner,.btn-banner1 {
+    background: #333;
+    border-radius: 0px;
+    color: #fff;
+    font-size: 15px;
+    letter-spacing: 1px;
+    padding: 10px 25px;
+     display: inline-block;
+}
+.btn-banner1 {
+    background: #f85a40;
+}
+.btn-banner:hover,.btn-banner1:hover{
+    color: #fff;
+}
+
+.carousel-caption h3, .carousel-caption p {
+    background : $oxido;
+    color: black;
+    border-radius: 8px;
+
+}
+
+.carousel-caption img {
+max-height: 500px;
+overflow: auto;
+
+}

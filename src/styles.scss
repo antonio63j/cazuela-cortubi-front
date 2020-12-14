@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@import "./styles/bootstrap/functions";
+@import "./styles/mis-variables";
+
+.estiloinput {
+    border: 2px solid $oxido;
+
+} 
+
+// .avisoerror {
+//     color: #f04a4a;
+//     font-size: 12px;
+// }
+
+.example-full-width {
+    width: 100%;
+}
+
+.grupo-botones {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  
+.boton-bajo {
+
+        font-size: 14px;
+        line-height: 3px;
+        text-align: center;
+        // margin:0 auto;
+        height:2px;
+        display:inline-block;
+        color: $oxido;
+        // padding: 5px;
+ 
+        text-decoration: underline;
+        -webkit-text-decoration-color: orange; /* Safari */  
+        text-decoration-color: orange;
+
+ 
+}
+
+button.margin-right {
+    margin-right: 20px;
+}
+
+.color-modal-header{
+    background-color: $oxido;
+}
+  

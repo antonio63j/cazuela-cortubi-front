@@ -1,0 +1,44 @@
+<!-- <div [@routerTransition]> -->
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="container-fluid">
+      <h3 class="b-w3ltxt text-capitalize mt-md-4"><span>Delicious & crispy</span> Recipes</h3>
+      <p class="w3ls_pvt-title my-3">Onec Consequat Sapien Ut Leo Cursus Rhoncus. Nullam Dui Mi, Vulputate Ac
+        c Metus Semper Nullam Dui Mi. Vestibulum Ante Ipsum Primis In Faucibus Orci Luctus Et Ultrices Posuere
+        Cubilia Curae.</p>
+      <a [routerLink]="['about']" class="btn btn-banner my-sm-3 mb-3">Read More</a>
+      <a [routerLink]="['contact']" class="btn btn-banner1 my-sm-3 mb-3">Contact Us</a>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <ngb-carousel>
+      <ng-template *ngFor="let slider of sliders" ngbSlide>
+        <!-- <img [src]="slider.imagePath" alt="Random first slide" class="img-fluid mx-auto d-block" width="100%" /> -->
+        <img [src]="slider.imagePath" alt="Random first slide" class="img-fluid mx-auto d-block rounded" />
+
+        <div class="carousel-caption">
+          <h3>{{ slider.label }}</h3>
+          <p>{{ slider.text }}</p>
+        </div>
+        
+
+      </ng-template>
+    </ngb-carousel>
+  </div>
+
+</div>
+<hr />
+
+<!-- para login/registro -->
+<router-outlet></router-outlet>
+<!-- <div class="row">
+  <div *ngFor="let util of utilidades">
+    <div class="column">
+      <img src="{{util.imagePath}}" title="{{util.label}}" 
+      class="rounded-circle" alt="Cinque Terre" width="304" height="236" />
+    </div>
+  </div>
+</div> -->
+<hr />

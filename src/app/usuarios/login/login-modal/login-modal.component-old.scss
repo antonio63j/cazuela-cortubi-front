@@ -1,0 +1,42 @@
+// ::ng-deep .cdk-overlay-container{
+//     z-index: 1200 !important;
+// }
+
+// .example-form {
+//     min-width: 150px;
+//     max-width: 400px;
+//     width: 100%;
+//   }
+  
+//   .example-full-width {
+//     width: 100%;
+//   }
+
+//   .example-75-width {
+//     width: 75%;
+//   }
+
+//   .separacion {
+//     margin-right: 22px;
+//     margin-top: 52px;
+//   }
+
+//   ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.865em 0.5px !important;}
+//   ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label { margin-top:35px; }
+//   ::ng-deep label.ng-star-inserted { transform: translateY(-1.09375em) scale(1.00) !important; }
+
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+.basic-container {
+  padding: 30px;
+}
+.version-info {
+  font-size: 8pt;
+  float: right;
+  margin: 8px;
+}

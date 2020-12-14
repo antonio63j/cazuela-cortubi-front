@@ -1,0 +1,66 @@
+<div>
+  <!-- <div class="card"> -->
+
+  <h1 mat-dialog-title>{{titulo}}</h1>
+
+  <!-- <p>{{prompt}}</p> -->
+  <form #variableForm="ngForm">
+    <mat-form-field class="example-full-width">
+      <mat-label>Cuenta de correo</mat-label>
+      <input matInput class="form-control" id="email" name="email" placeholder="cuenta@ejemplo.es"
+        [(ngModel)]="usuario.username" #email="ngModel" minlength="5" maxlength="80" required>
+      <mat-error *ngIf="email.hasError('required')">
+        Es <strong>necesario rellenar </strong> este campo
+      </mat-error>
+      <mat-error *ngIf="email.hasError('minlength')">
+        El campo debe tener al menos 8 posiciones
+      </mat-error>
+    </mat-form-field>
+
+
+    <!-- <mat-form-field>
+      <mat-label>Contraseña</mat-label>
+      <input matInput class="form-control" id="clave" name="clave"
+         placeholder="password" [(ngModel)]="usuario.password"
+        #clave="ngModel" minlength="5" maxlength="80" required>
+      <mat-error *ngIf="clave.hasError('required')">
+        Es <strong>necesario rellenar </strong> contraseña</mat-error>
+      <mat-error *ngIf="clave.hasError('minlength')">
+        La contraseña debe tener al menos 8 posiciones
+      </mat-error>
+    </mat-form-field> -->
+
+    <br>
+
+    <!-- <table class="example-full-width" cellspacing="0">
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label>City</mat-label>
+            <input matInput placeholder="Ex. San Francisco">
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <mat-label>State</mat-label>
+            <input matInput placeholder="Ex. California">
+          </mat-form-field>
+        </td>
+
+      </tr>
+    </table> -->
+
+
+    <div mat-dialog-actions>
+
+      <button mat-button [mat-dialog-close]="usuario"
+        [disabled]="!variableForm.form.valid">iniciar sesión</button>
+      <button mat-button color="primary" 
+      (click)="onNoClick()">Cancelar</button>
+
+    </div>
+
+  </form>
+
+  <!-- </div> -->
+</div>

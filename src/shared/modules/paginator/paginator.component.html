@@ -1,0 +1,41 @@
+<!-- 
+<ul *ngIf="paginas?.length > 0" class="pagination">
+    <li *ngIf="paginador.number > 0" class="page-item">
+        <a class="page-link" [routerLink]="['/cursos/page', paginador.number -1]">&laquo;</a>
+    </li>
+    <li [ngClass]="paginador.first? 'disabled page-item': 'page-item'">
+        <a class="page-link" [routerLink]="['/cursos/page', 0]">Primera</a>
+    </li>
+    <li *ngFor="let pagina of paginas" [ngClass]="pagina-1 == paginador.number? 'page-item active':'page-item'">
+        <span *ngIf="pagina -1 == paginador.number" class="page-link">{{pagina}}</span>
+        <a *ngIf="pagina -1 != paginador.number" class="page-link"
+            [routerLink]="['/cursos/page', pagina -1]">{{pagina}}</a>
+    </li>
+    <li [ngClass]="paginador.last?' disabled page-item': 'page-item'">
+        <a class="page-link" (click) = "fun1(paginador.totalPages-1)">Última</a>
+    </li>
+
+    <li *ngIf="paginador.number < paginador.totalPages -1" class="page-item">
+        <a class="page-link" [routerLink]="['/cursos/page', paginador.number + 1]">&raquo;</a>
+    </li>
+</ul> -->
+
+<ul *ngIf="paginas?.length > 0" class="pagination">
+    <li *ngIf="paginador.number > 0" class="page-item">
+        <a class="page-link" (click)="cargaPagina(paginador.number -1)">&laquo;</a>
+    </li>
+    <li [ngClass]="paginador.first? 'disabled page-item': 'page-item'">
+        <a class="page-link" (click)="cargaPagina(0)">Primera</a>
+    </li>
+    <li *ngFor="let pagina of paginas" [ngClass]="pagina-1 == paginador.number? 'page-item active':'page-item'">
+        <span *ngIf="pagina -1 == paginador.number" class="page-link">{{pagina}}</span>
+        <a *ngIf="pagina -1 != paginador.number" class="page-link"
+            (click)="cargaPagina(pagina -1)">{{pagina}}</a>
+    </li>
+    <li [ngClass]="paginador.last?' disabled page-item': 'page-item'">
+        <a class="page-link" (click)="cargaPagina(paginador.totalPages-1)">Última</a>
+    </li>
+    <li *ngIf="paginador.number < paginador.totalPages -1" class="page-item">
+        <a class="page-link" (click)="cargaPagina(paginador.number + 1)">&raquo;</a>
+    </li>
+</ul>
