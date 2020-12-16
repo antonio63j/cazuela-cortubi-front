@@ -31,7 +31,7 @@ const swalWithBootstrapButtons = Swal.mixin({
   // animations: [routerTransition()]
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   usuario: Usuario = new Usuario();
   titulo = 'inicio de sesión';
   private unsubscribe$ = new Subject();
@@ -51,12 +51,14 @@ export class LoginComponent implements OnInit {
     } else {
       this.subscripcioneventoCerrarModalScrollable();
       this.crearModal();
-      
     }
   }
-  
+
 
   crearModal(): void {
+    this.usuario.username = null;
+    this.usuario.password = null;
+
     this.modalConModeloService.openModalScrollable(
       LoginModalComponent,
       { size: 'sm', backdrop: 'static', scrollable: true },

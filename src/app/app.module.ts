@@ -8,11 +8,12 @@ import { LanguageTranslationModule } from '../shared/modules/language-translatio
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModalFormModule } from '../shared/modules/modal-form/modal-form.module';
+// import { ModalFormModule } from '../shared/modules/modal-form/modal-form.module';
 import { ModalService } from '../shared/services/modal.service';
 import { ModalConModeloService } from '../shared/services/modal-con-modelo.service';
 import { AuthService } from './usuarios/auth.service';
 import { AllMaterialModule } from 'src/shared/modules/all-material-module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -25,13 +26,18 @@ import { AllMaterialModule } from 'src/shared/modules/all-material-module';
     TranslateModule,
     LanguageTranslationModule,
     HttpClientModule,
-    NgbModule,
     BrowserAnimationsModule,
-
-    ModalFormModule,
     AllMaterialModule
+
+
+    // NgbModule,
+    // ModalFormModule,
+    // FormsModule,
   ],
-  
+
+  exports: [
+  ],
+
   providers: [
         ModalService,
         ModalConModeloService,

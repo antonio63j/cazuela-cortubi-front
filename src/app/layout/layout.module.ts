@@ -15,13 +15,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         LayoutRoutingModule,
         TranslateModule,
         NgbModule
-
     ],
     declarations: [LayoutComponent,
         SidebarComponent,
         HeaderComponent,
         FooterComponent
     ],
-
 })
 export class LayoutModule { }

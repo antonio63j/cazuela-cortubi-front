@@ -141,7 +141,7 @@ import { FormsModule } from '@angular/forms';
     PortalModule,
     ScrollingModule,
 
-    FormsModule
+    // FormsModule
   ]
 })
 export class AllMaterialModule {}

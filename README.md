@@ -1,8 +1,23 @@
-# CazuelaCortubiFront
+# Creación del proyecto
+npx -p angular/cli ng new cazuela-cortubi-front --style=scss
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
+Queda instalada la versión Angular CLI version 11.0.2
 
-## Development server
+## incluisión de ng-bootstrap
+
+```
+npm run -- ng add @ng-bootstrap/ng-bootstrap
+```
+
+Con este comando se instala @ng-bootstrap y bootstrap
+y añade la importación de bootstrap en el fichero src\styte.scss con 
+
+```
+@import '~bootstrap/scss/bootstrap';
+```
+
+
+## Instalacion 
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 

@@ -5,11 +5,10 @@ import { StatModule } from '../../shared';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-//import { ModalFormModule } from '../../shared/modules/modal-form/modal-form.module';
 
 @NgModule({
     imports: [
-        CommonModule, 
+        CommonModule,
         NgbCarouselModule,
         NgbAlertModule,
         DashboardRoutingModule,

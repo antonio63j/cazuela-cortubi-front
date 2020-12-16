@@ -1,7 +1,8 @@
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+//@import '@angular/material/prebuilt-themes/indigo-pink.css';
 // @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-@import "./styles/bootstrap/functions";
+@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/functions';
 @import "./styles/mis-variables";
 
 .estiloinput {
