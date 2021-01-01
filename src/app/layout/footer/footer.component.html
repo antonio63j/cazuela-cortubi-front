@@ -11,15 +11,16 @@
         <div class="container py-sm-3">
             <div class="row footer-grids">
                 <div class="col-lg-3 col-sm-6 mb-lg-0 mb-sm-5 mb-4">
-                    <h4 class="mb-4"><span class="fa fa-cutlery"></span> Restaurante La cazuela Cortubí</h4>
-                    <p class="mb-3">Onec Consequat sapien ut cursus rhoncus. Nullam dui mi, vulputate ac metus semper quis luctus sed.</p>
-                    <h5>Trusted by <span>500+ People</span> </h5>
+                    <h4 class="mb-4"><span class="fa fa-cutlery"></span> {{empresa.nombre}}</h4>
+                    <p class="mb-3">{{empresa.descripcionBreve}}</p>
+                    <p class="mb-3">{{empresa.horario}}</p>
+                    <h5>ahora pedidos <span>ON LINE</span> </h5>
                 </div>
                 <div class="col-lg-3 col-sm-6 mb-md-0 mb-sm-5 mb-4">
                     <h4 class="mb-4">Address Info</h4>
-                    <p><span class="fa mr-2 fa-map-marker"></span>64d canal street TT 3356 <span>Newyork, NY.</span></p>
-                    <p class="phone py-2"><span class="fa mr-2 fa-phone"></span> +1(12) 123 456 789 </p>
-                    <p><span class="fa mr-2 fa-envelope"></span><a href="mailto:info@example.com">info@example.com</a></p>
+                    <p><span class="fa mr-2 fa-map-marker"></span>{{empresa.direccion}}<span> {{empresa.provincia}}</span></p>
+                    <p class="phone py-2"><span class="fa mr-2 fa-phone"></span> {{empresa.telefono}}</p>
+                    <p><span class="fa mr-2 fa-envelope"></span><a href="mailto:{{empresa.email}}">{{empresa.email}}</a></p>
                 </div>
                 <div class="col-lg-2 col-sm-6 mb-lg-0 mb-sm-5 mb-4">
                     <h4 class="mb-4">Quick Links</h4>
@@ -32,7 +33,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <h4 class="mb-4">Suscríbete</h4>
-                    <p class="mb-3">Reciras nuestras novedades</p>
+                    <p class="mb-3">Recibirá nuestras novedades</p>
                     <form action="#" method="post" class="d-flex">
                         <input type="email" id="emailSus" name="EMAIL" placeholder="Aquí tu email" required="">
                         <button type="submit" class="btn">Subscribe</button>
@@ -65,7 +66,7 @@
     <div class="copyright">
         <div class="container py-4">
             <div class=" text-center">
-                <p>© 2019 Crispy. All Rights Reserved | Design by <a href="http://w3layouts.com/"> W3layouts</a> </p>
+                <p>© 2021 All Rights Reserved | Design by <a href="http://w3layouts.com/"> AFL</a> </p>
             </div>
         </div>
     </div>

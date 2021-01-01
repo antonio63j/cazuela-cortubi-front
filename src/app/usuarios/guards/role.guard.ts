@@ -19,7 +19,7 @@ export class RoleGuard implements CanActivate {
 
     if (!this.authService.isAuthenticated()) {
       swal.fire('RoleGuard ha detectado que no estás autenticado', 'Por favor, Sign In', 'warning');
-      // this.router.navigate(['/login']);
+      this.router.navigate(['/dashboard/login']);
       return false;
     }
 

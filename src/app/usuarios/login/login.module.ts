@@ -17,18 +17,14 @@ import { LoginComponent } from './login.component';
     CommonModule,
     TranslateModule,
     LoginRoutingModule,
-    
-    MatIconModule,  
-
     FormsModule,
+
+    MatIconModule,
 
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
 
-    
-
-    // ModalFormModule,
   ],
 
   declarations: [

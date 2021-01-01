@@ -5,8 +5,8 @@
 export const environment = {
     production: false,
     // urlEndPoint: 'http://ec2-18-157-252-11.eu-central-1.compute.amazonaws.com:8080'
-    urlEndPoint: 'https://aflcv-back.fernandezlucena.es:8083'
-    //urlEndPoint: 'http://localhost:8080'
+    // urlEndPoint: 'https://aflcv-back.fernandezlucena.es:8083'
+    urlEndPoint: 'http://localhost:8080'
 };
 
 /*

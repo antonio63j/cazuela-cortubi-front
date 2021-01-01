@@ -19,6 +19,9 @@
     width: 100%;
 }
 
+.input-full-50 {
+    width: 50%;
+}
 .grupo-botones {
     display: flex;
     justify-content: center;
@@ -51,3 +54,5 @@ button.margin-right {
     background-color: $oxido;
 }
   
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';

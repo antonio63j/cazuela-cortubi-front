@@ -15,17 +15,17 @@ export class DashboardComponent implements OnInit {
     constructor() {
         this.sliders.push(
             {
-                imagePath: 'assets/images/slider1.jpg',
+                imagePath: 'assets/images/sliders/slider1.jpg',
                 label: '',
                 text: 'tecv ad añslk adsñlk     adsfasñlkj '
             },
             {
-                imagePath: 'assets/images/slider2.jpg',
+                imagePath: 'assets/images/sliders/slider2.jpg',
                 label: '',
                 text: 'Este plato es una maravilla, lo recomiendo '
             },
             {
-                imagePath: 'assets/images/slider3.jpg',
+                imagePath: 'assets/images/sliders/slider3.jpg',
                 label: '',
                 text: 'Este plato es una maravilla, lo recomiendo un montón',
             }

@@ -8,9 +8,11 @@ const routes: Routes = [
         path: '', component: DashboardComponent,
         children: [
             {
-              path: 'login', loadChildren: () => import('../usuarios/login/login.module').then((m) => m.LoginModule) ,
-              // path: 'login', component: LoginComponent, // child route component that the router renders
+              path: 'login', loadChildren: () => import('../usuarios/login/login.module').then((m) => m.LoginModule)
             },
+            {
+              path: 'registro', loadChildren: () => import('../usuarios/signup/signup.module').then((m) => m.SignupModule)
+            }
         ]
     }
 ];

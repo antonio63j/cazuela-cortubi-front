@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../usuarios/auth.service';
@@ -6,13 +6,15 @@ import { AuthService } from '../../usuarios/auth.service';
 import { HttpParams } from '@angular/common/http';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Empresa } from 'src/shared/modelos/empresa';
+import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy{
 
     public pushRightClass: string;
 
@@ -20,14 +22,18 @@ export class HeaderComponent implements OnInit {
     // public selectedItems = [];
     // public dropdownSettings: IDropdownSettings = {};
 
-    private observ$: Subscription = null;
-    private unsubscribe$ = new Subject();
+    // private observ$: Subscription = null;
+    // private unsubscribe$ = new Subject();
     // public dropdownSettings: any = {};
+
+    public empresa: Empresa = new Empresa();
+    public subscription: Subscription;
 
     constructor(
         private translate: TranslateService,
         public router: Router,
         public authService: AuthService,
+        public shareEmpresaService: ShareEmpresaService
     ) {
         this.router.events.subscribe((val) => {
             // console.log('en gestion router.events');
@@ -44,6 +50,12 @@ export class HeaderComponent implements OnInit {
 
     ngOnInit() {
         this.pushRightClass = 'push-right';
+        this.subscription = this.shareEmpresaService.getEmpresaMsg()
+          .subscribe(msg => {
+              console.log('recibido cambio datos empresa');
+              console.log(JSON.stringify(msg));
+              this.empresa = msg;
+            });
     }
 
     onItemSelect(item: any) {
@@ -78,6 +90,10 @@ export class HeaderComponent implements OnInit {
 
     changeLang(language: string) {
         this.translate.use(language);
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
     }
 
 }

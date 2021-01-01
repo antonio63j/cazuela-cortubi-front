@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '../../../../shared/services/modal.service';
 
+
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
@@ -39,8 +40,11 @@ export class LoginModalComponent implements OnInit, OnDestroy {
 
       },
       err => {
+        console.log(err);
         if (err.status === 400) {
-        swal.fire('Error Login', 'las credenciales son incorrectas!', 'error');
+        swal.fire('Error Login', 'Usuario o password incorrectas o cuenta no activada!', 'error');
+        } else {
+          swal.fire('Error Login', err.status, 'error');
         }
       }
       );

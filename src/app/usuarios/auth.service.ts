@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../../shared/modelos/usuario';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 
@@ -46,11 +47,20 @@ export class AuthService {
     return this.http.post<any>(urlEndpoint, params.toString(), { headers: httpHeaders});
   }
 
+  public signup(usuario: Usuario): Observable<any> {
+    return this.http.post<any>(environment.urlEndPoint + '/api/usuario/registro', usuario).pipe(
+      catchError(err => {
+        console.log(`error capturado: ${err.status} `);
+        return throwError (err);
+      })
+    );
+  }
+
   public guardarUsuario (accessToken: string): void {
     const payload = this.obtenerDatosToken (accessToken);
     this._usuario = new Usuario();
     this._usuario.nombre = payload.nombre_usuario;
-    this._usuario.apellido = payload.apellido_usuario;
+    this._usuario.apellidos = payload.apellidos_usuario;
     // this._usuario.email = payload.email_usuario;
     this._usuario.username = payload.user_name;
     this._usuario.roles = payload.authorities;

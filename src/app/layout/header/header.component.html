@@ -3,12 +3,12 @@
     <a class="navbar-brand flex-column align-items-start" href="#">
       <div class="navbar-nav mb-lg-0">
         <div class="logo">
-          <h2> <a href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Restaurante La Cazuela Cortubí</a></h2>
+          <h2> <a href="#"><i class="fa fa-cutlery" aria-hidden="true"></i>{{empresa.nombre}}</a></h2>
         </div>
       </div>
 
       <div class="navbar-nav mt-0">
-        <h5><a style="margin-right: 17px" href="#"><i class="fa fa-phone" aria-hidden="true"></i>627336511</a></h5>
+        <h5><a style="margin-right: 17px" href="#"><i class="fa fa-phone" aria-hidden="true"></i>{{empresa.telefono}}</a></h5>
 
       </div>
     </a>
@@ -22,7 +22,10 @@
       <!-- navbar1 -->
       <div class="navbar-nav mb-lg-0">
         <!-- <h5><a href="#" style="margin-right: 10px"><i class="fa fa-envelope" aria-hidden="true"></i>info@cazuela-cortubi.es</a></h5> -->
-        <h5><a href="#" style="margin-right: 10px"><i class="fa fa-map-marker" aria-hidden="true"></i>C/ Cazuela 22 (Madrid)</a></h5>
+        <h5><a href="#" style="margin-right: 10px">
+          <i class="fa fa-map-marker" aria-hidden="true"></i>
+          {{empresa.direccion}} {{empresa.provincia}}
+        </a></h5>
       </div>
 
       <ul class="navbar-nav mt-0">
@@ -41,7 +44,7 @@
         </li>
         <li class="nav-item dropdown" ngbDropdown>
           <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
-            <i *ngIf="authService.usuario.username" class="fa fa-user"></i> {{authService.usuario.username}}<b
+            <i *ngIf="authService.usuario.username" class="fa fa-user"></i> {{authService.usuario.nombre}}<b
               class="caret"></b>
             <i *ngIf="!authService.isAuthenticated()" class="fa fa-user"></i> <b class="caret"></b>
           </a>
@@ -53,7 +56,7 @@
             <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/admin-roles']">
               <i class="fa fa-fw fa-gear"></i> {{ 'Manage user roles' | translate }}
             </a>
-            <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" href="javascript:void(0)">
+            <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/admin-index']">
               <i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}
             </a>
             <a *ngIf="authService.usuario.username" (click)="onLoggedout()" class="dropdown-item"
@@ -62,6 +65,9 @@
             </a>
             <a *ngIf="!authService.usuario.username" [routerLink]="['/login']" class="dropdown-item">
               <i class="fa fa-fw fa-power-off"></i> {{ 'Log In' | translate }}
+            </a>
+            <a *ngIf="!authService.usuario.username" [routerLink]="['/registro']" class="dropdown-item">
+              <i class="fa fa-fw fa-power-off"></i> {{ 'Sing Up' | translate }}
             </a>
           </div>
         </li>
