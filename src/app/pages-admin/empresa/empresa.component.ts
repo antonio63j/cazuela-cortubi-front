@@ -49,6 +49,9 @@ export class EmpresaComponent implements OnInit, OnDestroy {
       .subscribe(
         json => {
           this.empresa = json;
+          if (this.empresa == null) {
+            this.empresa = new Empresa();
+          }
           // swal.fire('Consulta Ok', 'empresa', 'success');
         }
         , err => {
@@ -107,6 +110,8 @@ export class EmpresaComponent implements OnInit, OnDestroy {
     )
       .subscribe(
         json => {
+          this.empresa = json.empresa;
+          this.shareEmpresaService.updateEmpresaMsg(this.empresa);
           swal.fire('Creada empresa', `${json.mensaje} - ${json.empresa.nombre}`, 'success');
         }
         , err => {

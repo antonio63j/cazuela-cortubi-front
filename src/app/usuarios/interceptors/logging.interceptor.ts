@@ -20,7 +20,7 @@ export class LoggingInterceptor implements HttpInterceptor {
           error => ok = 'failed'
         ),
         catchError (e => {
-          console.error(e);
+          console.error(JSON.stringify(e));
           return throwError (e);
           }
         ),

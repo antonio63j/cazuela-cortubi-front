@@ -51,7 +51,7 @@ export class AdminIndexComponent implements OnInit, OnDestroy {
         },
         err => {
           console.log(err);
-          swal.fire('Error carga de cursos ', err.error.error, 'error');
+          swal.fire('Error carga opciones administración ', err.error.error, 'error');
         }
       );
   }

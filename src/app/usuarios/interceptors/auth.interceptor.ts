@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
           catchError (e => {
-            console.log(e);
+            console.log(JSON.stringify(e));
             if (e.status == 401) {
                 if (this.authService.isAuthenticated()) {
                     this.authService.logout();

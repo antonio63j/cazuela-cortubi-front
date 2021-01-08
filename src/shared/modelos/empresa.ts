@@ -1,11 +1,3 @@
-
-
-export class Slider {
-    img: string;
-    descripcion: string;
-
-}
-
 export class Empresa {
     id: number;
     nombre: string;

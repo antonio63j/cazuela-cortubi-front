@@ -10,12 +10,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { EmpresaComponent } from './empresa/empresa.component';
+import { AdminHomeComponent } from './admin-home/admin-home.component';
+import { UploadFotoComponent } from 'src/shared/componentes/upload-foto/upload-foto.component';
+import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
+import { SliderFormComponent } from './admin-sliders/slider-form/slider-form.component';
 
 
 @NgModule({
   declarations: [
     AdminIndexComponent,
-    EmpresaComponent
+    EmpresaComponent,
+    AdminHomeComponent,
+    AdminSlidersComponent,
+    SliderFormComponent,
+    UploadFotoComponent
   ],
   imports: [
     CommonModule,
@@ -29,8 +39,13 @@ import { EmpresaComponent } from './empresa/empresa.component';
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
+
+    MatSortModule,
+    MatCardModule,
+
   ],
   exports: [
+    
   ]
 })
 export class PagesAdminModule { }
