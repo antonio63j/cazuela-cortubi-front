@@ -16,7 +16,7 @@ import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { SliderFormComponent } from './admin-sliders/slider-form/slider-form.component';
-
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   declarations: [
@@ -42,6 +42,7 @@ import { SliderFormComponent } from './admin-sliders/slider-form/slider-form.com
 
     MatSortModule,
     MatCardModule,
+    AngularEditorModule
 
   ],
   exports: [

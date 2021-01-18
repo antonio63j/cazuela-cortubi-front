@@ -51,6 +51,11 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     return;
   }
 
+  resetPassword(): void {
+    // this.modalService.eventoCerrarModalScrollable.emit();
+    this.activeModal.close('resetPassword');
+  }
+
   ngOnDestroy(): void{
     this.location.back();
   }

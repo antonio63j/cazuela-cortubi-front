@@ -9,7 +9,7 @@ import { EmpresaService } from './empresa.service';
 import { Empresa } from 'src/shared/modelos/empresa';
 import { Subject, Subscription } from 'rxjs';
 import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
-
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-empresa',
@@ -25,7 +25,62 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   private observ1$: Subscription = null;
   private observ2$: Subscription = null;
   private unsubscribe$ = new Subject();
-  
+
+  configPortada: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '110',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '110',
+    translate: 'no',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Introducir texto que aparecerá en la portada',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    defaultFontSize: '3',
+    fonts: [
+      {class: 'arial', name: 'Arial'},
+      {class: 'times-new-roman', name: 'Times New Roman'},
+      {class: 'calibri', name: 'Calibri'},
+      {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+    ],
+    toolbarHiddenButtons: [
+      [
+       'strikeThrough',
+       'subscript',
+       'superscript',
+      ],
+      [
+       'link',
+       'unlink',
+       'insertImage',
+       'insertVideo',
+       'insertHorizontalRule',
+      ]
+    ],
+    customClasses: [
+    {
+      name: 'quote',
+      class: 'quote',
+    },
+    {
+      name: 'redText',
+      class: 'redText'
+    },
+    {
+      name: 'modalTitleText',
+      class: 'modalTitleText',
+      tag: 'h1',
+    },
+  ],
+  uploadUrl: 'v1/image',
+  sanitize: true,
+  toolbarPosition: 'top',
+  };
+
   constructor(
     private location: Location,
     private empresaService: EmpresaService,
@@ -89,6 +144,7 @@ export class EmpresaComponent implements OnInit, OnDestroy {
         json => {
           this.empresa = json.empresa;
           this.shareEmpresaService.updateEmpresaMsg(this.empresa);
+          console.log('enviado cambio datos empresa');
           swal.fire('Actualización ', `${json.mensaje} - (id=${json.empresa.id})`, 'success');
         }
         , err => {

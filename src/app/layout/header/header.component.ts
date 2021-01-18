@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
         this.subscription = this.shareEmpresaService.getEmpresaMsg()
           .subscribe(msg => {
               console.log('recibido cambio datos empresa');
-              console.log(JSON.stringify(msg));
+              // console.log(JSON.stringify(msg));
               this.empresa = msg;
             });
     }

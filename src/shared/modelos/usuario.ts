@@ -6,14 +6,12 @@ export class Usuario {
     apellidos: string;
     telefono: string;
     email: string;
-    // fechaRegistro: Date;
-    // fechaActivado: Date;
-    // codActivacion: string;
-    fechaSolCambioPassword: Date;
-    codCambioPassw: string;
-    esperandoCambioPassw: boolean;
+    fechaRegistro: Date;
+    codActivacion: string;
+    finalizadaActivacion: boolean;
+    fechaResetPwd: Date;
+    codResetPwd: string;
     enabled: boolean;
     aceptaEmails: boolean;
-
     roles: string[] = [];
 }

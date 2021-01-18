@@ -36,11 +36,12 @@ export class AppComponent implements OnInit, OnDestroy {
     )
       .subscribe(
         json => {
-          console.log(`json=${JSON.stringify(json)}`);
+          
           this.empresa = json;
           document.title = this.empresa.nombre;
           this.shareEmpresaService.updateEmpresaMsg(this.empresa);
-          // swal.fire('Consulta Ok', 'empresa', 'success');
+          // console.log(`json=${JSON.stringify(json)}`);
+          console.log('enviado cambio datos empresa');
         }
         , err => {
           if (err.status === 400) {

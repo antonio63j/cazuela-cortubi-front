@@ -14,6 +14,7 @@ import { AuthService } from '../auth.service';
 import { Usuario } from '../../../shared/modelos/usuario';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { Location } from '@angular/common';
+import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.component';
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -25,8 +26,8 @@ const swalWithBootstrapButtons = Swal.mixin({
 });
 
 @Component({
- selector: 'app-login',
- templateUrl: './login.component.html',
+  selector: 'app-login',
+  templateUrl: './login.component.html',
   // styleUrls: ['./login.component.scss'],
   // animations: [routerTransition()]
 })
@@ -50,12 +51,12 @@ export class LoginComponent implements OnInit, OnDestroy {
       swal.fire('Aviso', `Ya estás autenticado! ${this.authService.usuario.username}`, 'info');
     } else {
       this.subscripcioneventoCerrarModalScrollable();
-      this.crearModal();
+      this.crearModalLogin();
     }
   }
 
 
-  crearModal(): void {
+  crearModalLogin(): void {
     this.usuario.username = null;
     this.usuario.password = null;
 
@@ -68,20 +69,57 @@ export class LoginComponent implements OnInit, OnDestroy {
       'Login'
     ).pipe(
       take(1) // take() manages unsubscription for us
-    ).subscribe(result => {
-      console.log({ confirmedResult: result });
-    });
+    ).subscribe((result: any) => {
+      if (result === 'resetPassword') {
+        this.crearModalResetPassword();
+      }
+    }
+      , err => {
+        console.log(err);
+        swal.fire('Error cierre modal ', '', 'error');
+      }
+    );
   }
+
+  crearModalResetPassword(): void {
+    this.usuario.username = null;
+    this.usuario.password = null;
+
+    this.modalConModeloService.openModalScrollable(
+      PwdResetModalComponent,
+      { size: 'sm', backdrop: 'static', scrollable: true, animation: true },
+      this.usuario,
+      'usuario',
+      'Los campos con * son obligatorios',
+      'Login'
+    ).pipe(
+      take(1) // take() manages unsubscription for us
+    ).subscribe(result => {
+       console.log(result);
+    }
+      , err => {
+        console.log(err);
+        swal.fire('Error en gestión de cambio de contraseña', err.message, 'error');
+      }
+    );
+  }
+
+
 
   subscripcioneventoCerrarModalScrollable(): void {
     this.modalService.eventoCerrarModalScrollable.pipe(
       takeUntil(this.unsubscribe$),
     ).subscribe(
-      () => {
-        console.log('recibido evento para cerrar modal');
+      (evento) => {
+        console.log('recibido evento para cerrar modal:');
+        console.log(evento);
         this.modalConModeloService.closeModalScrollable();
-       // this.location.back();
-      }
+        // this.location.back();
+      },
+      err => {
+        console.log(err);
+        swal.fire('Error gestion cambio contraseña', err.status, 'error');
+    }
     );
   }
 

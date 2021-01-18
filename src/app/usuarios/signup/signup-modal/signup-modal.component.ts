@@ -14,7 +14,7 @@ import { Usuario } from 'src/shared/modelos/usuario';
   templateUrl: './signup-modal.component.html',
   styleUrls: ['./signup-modal.component.scss']
 })
-export class SignupModalComponent implements OnInit, OnDestroy{
+export class SignupModalComponent implements OnInit, OnDestroy {
 
   public usuario: Usuario = new Usuario();
   public password2 = '';
@@ -35,33 +35,29 @@ export class SignupModalComponent implements OnInit, OnDestroy{
   }
 
   signup(usuario): void {
-    usuario.roles = [{id: 1, nombre: 'ROLE_USER'},
-                     {id: 2, nombre: 'ROLE_ADMIN'}
-                    ];
-    console.log(usuario);
+    usuario.roles = [{ id: 1, nombre: 'ROLE_USER' }
+      // ,{id: 2, nombre: 'ROLE_ADMIN'}
+    ];
     this.observ$ = this.authService.signup(usuario).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
                console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
                return throwError(err);
             }) */
-      ).subscribe(
+    ).subscribe(
       response => {
-        console.log(response);
-
         this.modalService.eventoCerrarModalScrollable.emit();
         swal.fire('Registro ok,', 'Se envió un email para activar la cuenta, por favor, revise la bandeja de spam', 'success');
-
       },
       err => {
-          console.log(err);
-          swal.fire('Error en registro', `status ${err.status}, ${err.error.mensaje} `, 'error');
-        }
-       );
+        console.log(err);
+        swal.fire('Error en registro', `status ${err.status}, ${err.error.mensaje} `, 'error');
+      }
+    );
     return;
   }
 
-  ngOnDestroy(): void{
+  ngOnDestroy(): void {
     this.location.back();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

@@ -21,6 +21,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.shareEmpresaService.getEmpresaMsg()
     .subscribe(msg => {
+        console.log('recibido cambio datos empresa');
         this.empresa = msg;
       });
   }

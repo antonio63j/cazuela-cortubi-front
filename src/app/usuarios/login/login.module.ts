@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
+import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { LoginComponent } from './login.component';
 
   declarations: [
     LoginComponent,
-    LoginModalComponent
+    LoginModalComponent,
+    PwdResetModalComponent
   ],
 
 })

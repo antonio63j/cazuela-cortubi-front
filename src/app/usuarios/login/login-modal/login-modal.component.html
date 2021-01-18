@@ -48,16 +48,21 @@
 
       <br>
 
-      <a class="boton-bajo" href="https://www.google.com/" 
-         target="_blank">pon tu cuenta para restaurar la contraseña</a>
+      <!-- <a class="boton-bajo" href="https://www.google.com/" 
+         target="_blank">pon tu cuenta para restaurar la contraseña</a> -->
       
+      <a class="boton-bajo" (click)="resetPassword()" href="javascript:void(0)">
+        Has olvidado tu contraseña?
+      </a>
+
+
     </form>
   </div>
 
   <div class="modal-footer grupo-botones">
     <button mat-raised-button class="margin-right" color="primary" (click)='login()' [disabled]="!variableForm.form.valid">iniciar
       sesión</button>
-    <button mat-raised-button color="primary" (click)="activeModal.close(true)">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="activeModal.close('cancelar')">Cancelar</button>
   </div>
 
 </form>

@@ -1,19 +1,23 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable, Subject, throwError } from 'rxjs';
+import { catchError, takeUntil, tap } from 'rxjs/operators';
 import { Empresa } from 'src/shared/modelos/empresa';
+import { Slider } from 'src/shared/modelos/slider';
+import { SliderData } from 'src/shared/modelos/slider-data';
 
 import { environment } from '../../../environments/environment';
+import { AdminSliderService } from '../admin-sliders/admin-slider.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpresaService {
-
+  
   constructor(
     private http: HttpClient
-  ) { }
+  ) { 
+  }
 
   get(id: number): Observable<any> {
     const parametros = new HttpParams()
@@ -45,6 +49,4 @@ export class EmpresaService {
         })
       )
   }
-
-
 }

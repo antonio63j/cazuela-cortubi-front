@@ -10,6 +10,7 @@ import { AdminSliderService } from './admin-slider.service';
 import swal from 'sweetalert2';
 import { SliderFormComponent } from './slider-form/slider-form.component';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -40,7 +41,8 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
     private adminSliderService: AdminSliderService,
     private modalService: ModalService,
     private modalConModeloService: ModalConModeloService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {
   }
 
@@ -52,7 +54,7 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
     this.adminSliderService.getSliders().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
-        console.log(response);
+        // console.log(response);
       }),
       // map((response: any) => {
 
@@ -70,6 +72,7 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
       }
       , err => {
         console.log(err);
+        this.router.navigate(['/dashborad']);
         swal.fire('Error carga de sliders', err.message, 'error');
       }
     );

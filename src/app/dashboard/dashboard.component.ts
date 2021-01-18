@@ -1,5 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
+import { Slider } from 'src/shared/modelos/slider';
+import { AdminSliderService } from '../pages-admin/admin-sliders/admin-slider.service';
 import { routerTransition } from '../router.animations';
+import swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
+import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
+import { Empresa } from 'src/shared/modelos/empresa';
 
 @Component({
     selector: 'app-dashboard',
@@ -7,111 +15,39 @@ import { routerTransition } from '../router.animations';
     styleUrls: ['./dashboard.component.scss'],
     animations: [routerTransition()]
 })
-export class DashboardComponent implements OnInit {
-    public alerts: Array<any> = [];
-    public sliders: Array<any> = [];
-    public utilidades: Array<any> = [];
+export class DashboardComponent implements OnInit, OnDestroy {
+    // public alerts: Array<any> = [];
+    // public sliders: Array<any> = [];
+    // public utilidades: Array<any> = [];
 
-    constructor() {
-        this.sliders.push(
-            {
-                imagePath: 'assets/images/sliders/slider1.jpg',
-                label: '',
-                text: 'tecv ad añslk adsñlk     adsfasñlkj '
-            },
-            {
-                imagePath: 'assets/images/sliders/slider2.jpg',
-                label: '',
-                text: 'Este plato es una maravilla, lo recomiendo '
-            },
-            {
-                imagePath: 'assets/images/sliders/slider3.jpg',
-                label: '',
-                text: 'Este plato es una maravilla, lo recomiendo un montón',
-            }
-        );
+    public sliders: Slider [];
 
-        this.utilidades.push(
-            {
-                imagePath: 'assets/images/utilidades/angular.png',
-                label: 'Angular 9',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/angular-material.jpg',
-                label: 'Angular material',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/bootstrap.jpg',
-                label: 'Bootstrap',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/vs-code.jpg',
-                label: 'Visual Studio Code',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/git.png',
-                label: 'Git',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/eclipse.png',
-                label: 'Eclipse',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/java.jpg',
-                label: 'Java 8',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/maven.png',
-                label: 'Maven',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/postgresql.jpg',
-                label: 'PostgreSQL',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/spring-boot.jpg',
-                label: 'Spring boot',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/spring-data.jpg',
-                label: 'Spring data',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/spring-oauth2.png',
-                label: 'Spring oauth2',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/spring-security.jpg',
-                label: 'Angular security',
-                text: ''
-            },
-            {
-                imagePath: 'assets/images/utilidades/jwt.png',
-                label: 'Angular security',
-                text: ''
-            }
+    private unsubscribe$ = new Subject();
+    public host: string = environment.urlEndPoint;
+    public loading: boolean;
+    public subscription: Subscription;
+    public empresa: Empresa = new Empresa();
 
-        );
+    constructor(
+      private sliderService: AdminSliderService,
+      public shareEmpresaService: ShareEmpresaService
+
+      ) {
     }
 
-    ngOnInit() {
-
+    ngOnInit(): void {
+      this.loading = true;
+      this.subscription = this.shareEmpresaService.getEmpresaMsg()
+      .subscribe(msg => {
+          console.log('recibido cambio datos empresa');
+          // console.log(JSON.stringify(msg));
+          this.empresa = msg;
+        });
     }
-
-    public closeAlert(alert: any) {
-        const index: number = this.alerts.indexOf(alert);
-        this.alerts.splice(index, 1);
+    
+    ngOnDestroy(): void {
+        console.log('ngOnDestroy (), realizando unsubscribes');
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
     }
 }

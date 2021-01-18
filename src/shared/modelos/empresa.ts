@@ -8,6 +8,7 @@ export class Empresa {
     urlWeb: string;
     descripcionBreve: string;
     horario: string;
+    portada: string;
     // cabeceraBienvenida: string;
     // bienvenida: string;
     // sliders: Slider;

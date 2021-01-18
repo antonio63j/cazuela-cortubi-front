@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  public get usuario (): Usuario {
+  public get usuario(): Usuario {
     if (this._usuario != null) {
       return this._usuario;
     } else if (this._usuario == null && sessionStorage.getItem('usuario')) {
@@ -23,7 +23,7 @@ export class AuthService {
     return new Usuario();
   }
 
-  public get token (): string {
+  public get token(): string {
     if (this._token != null) {
       return this._token;
     } else if (this._token == null && sessionStorage.getItem('token')) {
@@ -43,7 +43,7 @@ export class AuthService {
     params.set('grant_type', 'password');
     params.set('username', usuario.username);
     params.set('password', usuario.password);
-    console.log(params.toString());
+    // console.log(params.toString());
     return this.http.post<any>(urlEndpoint, params.toString(), { headers: httpHeaders});
   }
 
@@ -56,7 +56,7 @@ export class AuthService {
     );
   }
 
-  public guardarUsuario (accessToken: string): void {
+  public guardarUsuario(accessToken: string): void {
     const payload = this.obtenerDatosToken (accessToken);
     this._usuario = new Usuario();
     this._usuario.nombre = payload.nombre_usuario;
@@ -67,18 +67,18 @@ export class AuthService {
     sessionStorage.setItem ('usuario', JSON.stringify(this._usuario));
    }
 
-  public guardarToken (accessToken: string): void {
+  public guardarToken(accessToken: string): void {
     sessionStorage.setItem ('token', accessToken);
   }
 
-  public obtenerDatosToken (accessToken: string): any {
+  public obtenerDatosToken(accessToken: string): any {
     if (accessToken == null) {
       return null;
     }
     return JSON.parse(atob(accessToken.split('.') [1]));
   }
 
-  public isAuthenticated (): boolean {
+  public isAuthenticated(): boolean {
     const payload = this.obtenerDatosToken (this.token);
     if (payload != null && payload.user_name && payload.user_name.length > 0) {
       return true;
@@ -100,5 +100,24 @@ export class AuthService {
      }
      return false;
   }
+
+  resetPwd(usuario: Usuario): Observable<any> {
+     return this.http.put<Usuario>(environment.urlEndPoint + '/api/usuario/resetpwd', usuario).pipe(
+          catchError(err => {
+            console.log(`error capturado: ${err.status} `);
+            return throwError (err);
+          })
+      );
+  }
+
+  actualizarPwd(usuario: Usuario): Observable<any> {
+    return this.http.put<Usuario>(environment.urlEndPoint + '/api/usuario/changepwd', usuario).pipe(
+         catchError(err => {
+           console.log(`error capturado: ${err.status} `);
+           return throwError (err);
+         })
+     );
+ }
+
 
 }
