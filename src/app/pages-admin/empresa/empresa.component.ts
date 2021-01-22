@@ -6,9 +6,9 @@ import swal from 'sweetalert2';
 
 import { environment } from 'src/environments/environment';
 import { EmpresaService } from './empresa.service';
-import { Empresa } from 'src/shared/modelos/empresa';
+import { Empresa } from '../../shared/modelos/empresa';
 import { Subject, Subscription } from 'rxjs';
-import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
+import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
@@ -217,6 +217,6 @@ export class EmpresaComponent implements OnInit, OnDestroy {
       console.log('No necesario hacer: this.observ2$.unsubscribe()');
     }
 
-  } 
+  }
 
 }

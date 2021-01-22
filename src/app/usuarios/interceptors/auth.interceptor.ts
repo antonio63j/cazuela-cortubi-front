@@ -23,7 +23,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     this.authService.logout();
                 }
                 swal.fire('AuthInterceptor ha detectado que no estás autenticado', 'por favor Sign In', 'warning');
-                //this.router.navigate(['/login']);
+                // this.router.navigate(['/login']);
             }
             if (e.status == 403) {
                 swal.fire('AuthInterceptor ha detectado que no tienes permisos',
@@ -32,6 +32,6 @@ export class AuthInterceptor implements HttpInterceptor {
             }
             return throwError (e);
           })
-        )
+        );
     }
 }

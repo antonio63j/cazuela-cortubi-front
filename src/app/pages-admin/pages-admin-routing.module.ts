@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: 'admtipoplato', component: AdminTipoplatoComponent,
   }
-]
+];
 
   // {
   //   path: '', component: AdminIndexComponent,

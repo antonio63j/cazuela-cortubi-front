@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from 'src/shared/services/modal.service';
+import { ModalService } from '../../../shared/services/modal.service';
 import { AuthService } from '../../auth.service';
 import { Location } from '@angular/common';
 import swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Usuario } from 'src/shared/modelos/usuario';
+import { Usuario } from '../../../shared/modelos/usuario';
 
 @Component({
   selector: 'app-signup-modal',

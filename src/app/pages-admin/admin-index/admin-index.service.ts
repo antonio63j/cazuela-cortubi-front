@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AdminIndex } from 'src/shared/modelos/admin-index';
+import { AdminIndex } from '../../shared/modelos/admin-index';
 
 @Injectable({
   providedIn: 'root'

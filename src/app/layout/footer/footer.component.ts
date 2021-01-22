@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
-import { Empresa } from 'src/shared/modelos/empresa';
+import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
+import { Empresa } from '../../shared/modelos/empresa';
 import { Subscription } from 'rxjs';
 
 @Component({

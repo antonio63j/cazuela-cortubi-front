@@ -10,8 +10,8 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from '../../usuarios/auth.service';
-import { TiposHerramientasService } from '../../../shared/services/tipos-herramientas.service';
-import { TipoHerramienta } from '../../../shared/modelos/tipo-herramienta';
+import { TiposHerramientasService } from '../../shared/services/tipos-herramientas.service';
+import { TipoHerramienta } from '../../shared/modelos/tipo-herramienta';
 
 interface SubMenu {
     routLink: string;
@@ -53,19 +53,19 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.isActive = false;
         this.collapsed = false;
         this.showMenu = '';
         this.pushRightClass = 'push-right';
     }
 
-    eventCalled() {
+    eventCalled(): void {
         this.isActive = !this.isActive;
         console.log(this.isActive);
     }
 
-    addExpandClass(element: any) {
+    addExpandClass(element: any): void {
         if (element === this.showMenu) {
             this.showMenu = '0';
         } else {
@@ -84,27 +84,25 @@ export class SidebarComponent implements OnInit {
         return dom.classList.contains(this.pushRightClass);
     }
 
-    toggleSidebar() {
+    toggleSidebar(): void {
         const dom: any = document.querySelector('body');
         dom.classList.toggle(this.pushRightClass);
     }
 
-    rltAndLtr() {
+    rltAndLtr(): void {
         const dom: any = document.querySelector('body');
         dom.classList.toggle('rtl');
     }
 
-    changeLang(language: string) {
+    changeLang(language: string): void {
         this.translate.use(language);
     }
 
-    onLoggedout() {
+    onLoggedout(): void {
         // localStorage.removeItem('isLoggedin');
         this.authService.logout();
         this.router.navigate(['\dashboard']);
     }
-    onSelectAll(items: any) {
+    onSelectAll(items: any): void {
     }
-
-
   }

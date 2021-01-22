@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { Usuario } from 'src/shared/modelos/usuario';
-import { ModalConModeloService } from 'src/shared/services/modal-con-modelo.service';
-import { ModalService } from 'src/shared/services/modal.service';
+import { Usuario } from '../../shared/modelos/usuario';
+import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { AuthService } from '../auth.service';
 import { SignupModalComponent } from './signup-modal/signup-modal.component';
 // import { Location } from '@angular/common';
@@ -18,7 +18,7 @@ import { SignupModalComponent } from './signup-modal/signup-modal.component';
 export class SignupComponent implements OnInit, OnDestroy {
     usuario: Usuario = new Usuario();
     private unsubscribe$ = new Subject();
-  
+
     constructor(
       private router: Router,
       private modalService: ModalService,
@@ -33,12 +33,11 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.crearModal();
 
     }
-  
-  
+
     crearModal(): void {
       this.usuario.username = null;
       this.usuario.password = null;
-  
+
       this.modalConModeloService.openModalScrollable(
         SignupModalComponent,
         { size: 'lg', backdrop: 'static', scrollable: true },
@@ -52,7 +51,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         console.log({ confirmedResult: result });
       });
     }
-  
+
     subscripcioneventoCerrarModalScrollable(): void {
       this.modalService.eventoCerrarModalScrollable.pipe(
         takeUntil(this.unsubscribe$),
@@ -63,12 +62,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         }
       );
     }
-  
+
     ngOnDestroy(): void {
       console.log('realizando unsubscribes');
       this.unsubscribe$.next();
       this.unsubscribe$.complete();
     }
   }
- 
+
 

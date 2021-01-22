@@ -9,7 +9,7 @@ export class AdminRolesComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

@@ -8,10 +8,10 @@ import { map, takeUntil, tap, take } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
 
-import { ModalConModeloService } from '../../../shared/services/modal-con-modelo.service';
-import { ModalService } from '../../../shared/services/modal.service';
+import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { AuthService } from '../auth.service';
-import { Usuario } from '../../../shared/modelos/usuario';
+import { Usuario } from '../../shared/modelos/usuario';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { Location } from '@angular/common';
 import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.component';

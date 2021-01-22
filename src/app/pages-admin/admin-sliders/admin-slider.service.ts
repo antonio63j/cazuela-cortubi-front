@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Slider } from 'src/shared/modelos/slider';
+import { Slider } from '../../shared/modelos/slider';
 
 @Injectable({
   providedIn: 'root'

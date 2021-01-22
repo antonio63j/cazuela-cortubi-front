@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor (public authService: AuthService,
+  constructor(public authService: AuthService,
     private router: Router) {
   }
 
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     return false;
   }
 
-  public isTokenExpirado() {
+  public isTokenExpirado(): boolean {
     const token = this.authService.token;
     const payload = this.authService.obtenerDatosToken(token);
     const now = new Date().getTime() / 1000;

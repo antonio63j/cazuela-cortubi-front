@@ -6,8 +6,8 @@ import { AuthService } from '../../usuarios/auth.service';
 import { HttpParams } from '@angular/common/http';
 import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Empresa } from 'src/shared/modelos/empresa';
-import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
+import { Empresa } from '../../shared/modelos/empresa';
+import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
 
 @Component({
     selector: 'app-header',
@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
         });
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.pushRightClass = 'push-right';
         this.subscription = this.shareEmpresaService.getEmpresaMsg()
           .subscribe(msg => {
@@ -58,10 +58,10 @@ export class HeaderComponent implements OnInit, OnDestroy{
             });
     }
 
-    onItemSelect(item: any) {
+    onItemSelect(item: any): void {
         console.log(item);
     }
-    onSelectAll(items: any) {
+    onSelectAll(items: any): void {
         console.log(items);
     }
 
@@ -71,24 +71,23 @@ export class HeaderComponent implements OnInit, OnDestroy{
         return dom.classList.contains(this.pushRightClass);
     }
 
-    toggleSidebar() {
-        
+    toggleSidebar(): void {
         const dom: any = document.querySelector('body');
         dom.classList.toggle(this.pushRightClass);
     }
 
-    rltAndLtr() {
+    rltAndLtr(): void {
         const dom: any = document.querySelector('body');
         dom.classList.toggle('rtl');
     }
 
-    onLoggedout() {
+    onLoggedout(): void {
         // localStorage.removeItem('isLoggedin');
         this.authService.logout();
         this.router.navigate(['\dashboard']);
     }
 
-    changeLang(language: string) {
+    changeLang(language: string): void {
         this.translate.use(language);
     }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
-import { AdminIndex } from 'src/shared/modelos/admin-index';
+import { AdminIndex } from '../../shared/modelos/admin-index';
 import { AdminIndexService } from './admin-index.service';
 import { environment } from 'src/environments/environment';
 

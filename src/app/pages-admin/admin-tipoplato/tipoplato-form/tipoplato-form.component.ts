@@ -4,8 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import swal from 'sweetalert2';
 
-import { Tipoplato } from 'src/shared/modelos/tipoplato';
-import { ModalService } from 'src/shared/services/modal.service';
+import { Tipoplato } from '../../../shared/modelos/tipoplato';
+import { ModalService } from '../../../shared/services/modal.service';
 import { AdminTipoplatoService } from '../admin-tipoplato.service';
 import { environment } from 'src/environments/environment';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';

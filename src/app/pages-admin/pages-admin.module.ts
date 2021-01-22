@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
-import { UploadFotoComponent } from 'src/shared/componentes/upload-foto/upload-foto.component';
+import { UploadFotoComponent } from '../shared/componentes/upload-foto/upload-foto.component';
 import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';

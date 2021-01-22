@@ -4,8 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import swal from 'sweetalert2';
 
-import { Slider } from 'src/shared/modelos/slider';
-import { ModalService } from 'src/shared/services/modal.service';
+import { Slider } from '../../../shared/modelos/slider';
+import { ModalService } from '../../../shared/services/modal.service';
 import { AdminSliderService } from '../admin-slider.service';
 import { environment } from 'src/environments/environment';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -73,14 +73,14 @@ export class SliderFormComponent implements OnInit, OnDestroy {
           this.slider = json.data;
           // this.activeModal.close(true);
           // el cierre del modal se podría hacer con:
-          
+
           // se está utilizando activeModal.close(true) desde el template
           // this.modalService.eventoCerrarModalScrollable.emit();
 
-          // en lugar de activModal.close(true), se podría emitir evento 
+          // en lugar de activModal.close(true), se podría emitir evento
           // para cerrar modal con:
           // this.modalService.eventoCerrarModalScrollable.emit();
-          // podriamos emitir este evento para cerrar modal con la 
+          // podriamos emitir este evento para cerrar modal con la
           // subscripcion que se hace con subscripcioneventoCerrarModalScrollable()
           // desde ClientesComponent
 
@@ -110,6 +110,6 @@ export class SliderFormComponent implements OnInit, OnDestroy {
     } else {
       console.log('No necesario hacer: this.observ$.unsubscribe()');
     }
-  } 
+  }
 
 }

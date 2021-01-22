@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Empresa } from 'src/shared/modelos/empresa';
-import { ShareEmpresaService } from 'src/shared/services/share-empresa.service';
+import { Empresa } from './shared/modelos/empresa';
+import { ShareEmpresaService } from './shared/services/share-empresa.service';
 import { EmpresaService } from './pages-admin/empresa/empresa.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   
+
   }
 
   getEmpresa(id: number): void {
@@ -36,7 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
     )
       .subscribe(
         json => {
-          
           this.empresa = json;
           document.title = this.empresa.nombre;
           this.shareEmpresaService.updateEmpresaMsg(this.empresa);

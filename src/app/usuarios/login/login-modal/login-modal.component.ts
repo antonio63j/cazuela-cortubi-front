@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { AuthService } from '../../auth.service';
-import { Usuario } from '../../../../shared/modelos/usuario';
+import { Usuario } from '../../../shared/modelos/usuario';
 import swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalService } from '../../../../shared/services/modal.service';
+import { ModalService } from '../../../shared/services/modal.service';
 
 
 @Component({

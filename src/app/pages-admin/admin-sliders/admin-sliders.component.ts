@@ -3,9 +3,9 @@ import { Observable, Subject } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { map, take, takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/usuarios/auth.service';
-import { Slider } from 'src/shared/modelos/slider';
-import { ModalConModeloService } from 'src/shared/services/modal-con-modelo.service';
-import { ModalService } from 'src/shared/services/modal.service';
+import { Slider } from '../../shared/modelos/slider';
+import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { AdminSliderService } from './admin-slider.service';
 import swal from 'sweetalert2';
 import { SliderFormComponent } from './slider-form/slider-form.component';
@@ -58,7 +58,7 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
       }),
       // map((response: any) => {
 
-      //   ( 
+      //   (
       //     response as Slider[]).map(slider => {
       //     slider.label = slider.label.toLowerCase();
       //     return slider;

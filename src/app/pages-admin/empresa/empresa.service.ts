@@ -2,9 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, takeUntil, tap } from 'rxjs/operators';
-import { Empresa } from 'src/shared/modelos/empresa';
-import { Slider } from 'src/shared/modelos/slider';
-import { SliderData } from 'src/shared/modelos/slider-data';
+import { Empresa } from '../../shared/modelos/empresa';
+import { Slider } from '../../shared/modelos/slider';
+import { SliderData } from '../../shared/modelos/slider-data';
 
 import { environment } from '../../../environments/environment';
 import { AdminSliderService } from '../admin-sliders/admin-slider.service';
@@ -13,10 +13,10 @@ import { AdminSliderService } from '../admin-sliders/admin-slider.service';
   providedIn: 'root'
 })
 export class EmpresaService {
-  
+
   constructor(
     private http: HttpClient
-  ) { 
+  ) {
   }
 
   get(id: number): Observable<any> {
@@ -47,6 +47,6 @@ export class EmpresaService {
           console.log('error capturado ' + JSON.stringify(err));
           return throwError(err);
         })
-      )
+      );
   }
 }

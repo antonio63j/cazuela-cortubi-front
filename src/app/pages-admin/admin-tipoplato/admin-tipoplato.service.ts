@@ -3,7 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Tipoplato } from 'src/shared/modelos/tipoplato';
+import { Tipoplato } from '../../shared/modelos/tipoplato';
 
 @Injectable({
   providedIn: 'root'
