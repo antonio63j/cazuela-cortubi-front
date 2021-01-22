@@ -72,7 +72,7 @@ export class UploadFotoComponent implements OnInit, OnDestroy {
                 const response: any = event.body;
 
                 console.log('response=' + JSON.stringify(response));
-                this.fotoActual = response.slider.imgFileName;
+                this.fotoActual = response.data.imgFileName;
                 console.log('fotoActual=');
                 console.log(this.fotoActual);
                 // this.cliente = response.cliente as Cliente;

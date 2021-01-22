@@ -1,45 +1,44 @@
 <!-- <div class="text-center"> -->
   <div class="card-header">
-    <h3>Actualización imagenes de portada (sliders)</h3>
+    <h3>Definición de los tipos de platos</h3>
     <h5 class="card-title">{{tituloBody}}</h5>
   </div>
   <div class="card-title">
-    <div *ngIf="!sliders" class="alert alert-info">Esperando carga de imagenes</div> 
-    <div *ngIf="sliders?.length==0" class="alert alert-info"> Lista vacía
+    <div *ngIf="!tipoplatos" class="alert alert-info">Esperando carga de imagenes</div> 
+    <div *ngIf="tipoplatos?.length==0" class="alert alert-info"> Lista vacía
       <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-      style="margin-right: 8px" (click) = 'create()'>{{'Crear Slider' |translate}}</button>
+      style="margin-right: 8px" (click) = 'create()'>{{'Crear Tipo' |translate}}</button>
     </div> 
   </div>
   <div class="card-body table-responsive">
-
-
-    <div *ngFor="let slider of sliders">
+    <div *ngFor="let tipoplato of tipoplatos">
       <mat-card class="example-card">
         <mat-card-header>
           <!-- <div mat-card-avatar class="example-header-image" background-image= "http://localhost:8080/api/empresa/uploads/img/indra3.jpg"></div> -->
-          <img *ngIf="slider?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/home_peque.png">
+          <!-- <img *ngIf="tipoplato?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/tipos.png"> -->
+          <img *ngIf="tipoplato?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/tipos_peque.png">
       
-          <mat-card-title> Imagen para la página de entrada</mat-card-title>
+          <mat-card-title> Imagen asociada al tipo o grupo de platos</mat-card-title>
         </mat-card-header>
         <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-        <!-- <img *ngIf="slider?.imgFileName" mat-card-image  
-          src="{{host}}/api/empresa/uploads/img/{{slider.imgFileName}}">
+        <!-- <img *ngIf="tipoplato?.imgFileName" mat-card-image  
+          src="{{host}}/api/empresa/uploads/img/{{tipoplato.imgFileName}}">
        -->
-          <img *ngIf="slider?.imgFileName"  class="img-thumbnail"
-          src="{{host}}/api/empresa/uploads/img/sliders/{{slider.imgFileName}}">
+          <img *ngIf="tipoplato?.imgFileName"  class="img-thumbnail"
+          src="{{host}}/api/tipoplato/uploads/img/{{tipoplato.imgFileName}}">
       
           
         <mat-card-content>
-          <p> {{slider.label | slice:0:29}}...</p>
+          <p> {{tipoplato.label | slice:0:29}}...</p>
         </mat-card-content>
         <mat-card-actions>
 
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" 
-            style="margin-right: 8px" (click) = 'update(slider)'>{{'Edit' |translate}}</button>
+            style="margin-right: 8px" (click) = 'update(tipoplato)'>{{'Edit' |translate}}</button>
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
             style="margin-right: 8px" (click) = 'create()'>{{'Create' |translate}}</button>
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-          style="margin-right: 8px" (click) = 'delete(slider)'>{{'Delete' |translate}}</button>
+          style="margin-right: 8px" (click) = 'delete(tipoplato)'>{{'Delete' |translate}}</button>
         </mat-card-actions>
       </mat-card>
     </div>

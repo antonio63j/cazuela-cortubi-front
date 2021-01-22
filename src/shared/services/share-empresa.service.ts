@@ -66,7 +66,7 @@ export class ShareEmpresaService {
   getImage(slider: Slider) {
     let urlImg: string;
     urlImg =  environment.urlEndPoint +
-              '/api/empresa/uploads/img/' +
+              '/api/empresa/uploads/img/sliders/' +
               slider.imgFileName;
     this.slider = slider;
     this.imageService.getData(urlImg)

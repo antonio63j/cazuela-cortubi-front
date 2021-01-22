@@ -17,6 +17,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCardModule } from '@angular/material/card';
 import { SliderFormComponent } from './admin-sliders/slider-form/slider-form.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AdminTipoplatoComponent } from './admin-tipoplato/admin-tipoplato.component';
+import { TipoplatoFormComponent } from './admin-tipoplato/tipoplato-form/tipoplato-form.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AdminHomeComponent,
     AdminSlidersComponent,
     SliderFormComponent,
+    AdminTipoplatoComponent,
+    TipoplatoFormComponent,
     UploadFotoComponent
   ],
   imports: [
@@ -46,7 +50,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 
   ],
   exports: [
-    
+
   ]
 })
 export class PagesAdminModule { }
