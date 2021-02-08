@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminIndexComponent } from './admin-index/admin-index.component';
+import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
+import { AdminSugerenciaComponent } from './admin-sugerencia/admin-sugerencia.component';
 import { AdminTipoplatoComponent } from './admin-tipoplato/admin-tipoplato.component';
 import { EmpresaComponent } from './empresa/empresa.component';
 
@@ -24,6 +26,12 @@ const routes: Routes = [
   },
   {
     path: 'admtipoplato', component: AdminTipoplatoComponent,
+  },
+  {
+    path: 'admsugerencia', component: AdminSugerenciaComponent,
+  },
+  {
+    path: 'admmenu', component: AdminMenuComponent,
   }
 ];
 

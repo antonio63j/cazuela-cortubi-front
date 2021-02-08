@@ -1,0 +1,76 @@
+<!-- <div [@routerTransition]> -->
+<!-- <app-page-header heading="{{'Sugerencias' | translate}}" [icon]="'fa-book'"></app-page-header> -->
+
+<div class="row">
+  <!-- <div class="col col-xl-6 col-lg-12"> -->
+  <div class="col">
+    <div class="card mb-9 text-center">
+      <div class="card-header">
+        <h5>Aquí los filtros</h5>
+      </div>
+      <div class="card-title">
+        <div *ngIf="!sugerencias" class="alert alert-info">Espere un momento por favor</div>
+        <div *ngIf="sugerencias?.length==0" class="alert alert-info"> Lista vacía
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" style="margin-right: 8px"
+            (click)='crear()'>{{'Crear sugerencia' |translate}}</button>
+        </div>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-bordered table-striped" *ngIf="sugerencias?.length>0">
+          <thead>
+            <tr>
+              <th>img</th>
+              <th>label</th>
+              <th>tipo</th>
+              <th>precio</th>
+              <th>descripción</th>
+              <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-trash-o"></i></th>
+              <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-edit"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sugerencia of sugerencias">
+              <td style="width: 200px">
+              <img *ngIf="sugerencia?.imgFileName" (click)='update(sugerencia)'
+                src="{{host}}/api/sugerencia/uploads/img/{{sugerencia.imgFileName}}" alt="foto sugerencia"
+                class="img-thumbnail2 rounded" style="width: 200px; cursor: pointer;">
+              </td>
+              <td style="width: 300px !important ">{{ sugerencia.label}}</td>
+              <td>{{ sugerencia.tipo}}</td>
+              <td>{{ sugerencia.precio}}</td>
+              <td>{{ sugerencia.descripcion}}</td>
+              <!-- <td *ngIf = "authService.hasRole('ROLE_ADMIN')"> -->
+              <td class= "btncolumn" *ngIf="authService.hasRole('ROLE_USER')">
+                <button type="button" class="btn btn-danger btn-sm" (click)='delete(sugerencia)'>
+                  <i class="fa fa-trash-o"></i></button>
+              </td>
+              <td class= "btncolumn" *ngIf="authService.hasRole('ROLE_USER')">
+                <button type="button" class="btn btn-primary btn-sm" (click)='update(sugerencia)'>
+                  <i class="fa fa-edit"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> <!-- card-body -->
+
+
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col">
+            <paginator-nav *ngIf="paginador" [paginador]="paginador" (messageToEmit)="getPagina($event)">
+            </paginator-nav>
+          </div>
+          <div class="col">
+            <!-- <button type="button" name="crearCurso" (click)="crear()" class="btn btn-primary btn-sm">Crear
+                curso</button> -->
+            <button mat-raised-button color="primary" style="margin-right: 8px" (click)='crear()'>Crear
+              sugerencia</button>
+          </div>
+        </div>
+      </div> <!-- card-footer -->
+    </div> <!-- card -->
+  </div>
+  <!--col -->
+</div> <!-- row-->
+<!-- </div> -->

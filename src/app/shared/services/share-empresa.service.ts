@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminSliderService } from 'src/app/pages-admin/admin-sliders/admin-slider.service';
+import { AdminTipoplatoService } from 'src/app/pages-admin/admin-tipoplato/admin-tipoplato.service';
 import { environment } from 'src/environments/environment';
 import { Empresa } from '../modelos/empresa';
 import { Slider } from '../modelos/slider';
 import { SliderData } from '../modelos/slider-data';
+import { Tipoplato } from '../modelos/tipoplato';
 import { ImageService } from './image-service';
 
 @Injectable({
@@ -19,13 +21,18 @@ export class ShareEmpresaService {
   public sliders: Slider [];
   public slidersData: SliderData [] = [];
   public sliderData: SliderData = new SliderData();
+
+  public tipoplatos: Tipoplato [] = [];
+
   private unsubscribe$ = new Subject();
  
   constructor(
     private sliderService: AdminSliderService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private tipoplatoService: AdminTipoplatoService
     ) {
       this.cargaSliders();
+      this.cargaTipoplatos();
       console.log('en constructor');
 
      }
@@ -38,6 +45,24 @@ export class ShareEmpresaService {
     this.empresaMsg.next(empresa);
   }
 
+  cargaTipoplatos(): void {
+    this.tipoplatoService.getTipoplatos().pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe (
+      response => {
+        this.tipoplatos = (response as Tipoplato[]);
+        console.log(this.tipoplatos);
+      },
+      err => {
+        console.log('error en carga inicial de tipoplatos');
+        console.log(err);
+      }
+    );
+  }
+
+  getIipoplatosInMem(): Tipoplato [] {
+    return this.tipoplatos;
+  }
   cargaSliders(): void {
     this.sliderService.getSliders().pipe(
         takeUntil(this.unsubscribe$),

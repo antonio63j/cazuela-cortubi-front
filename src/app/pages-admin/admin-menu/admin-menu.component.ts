@@ -1,18 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 
 import swal from 'sweetalert2';
 
-import { Tipoplato } from '../../shared/modelos/tipoplato';
 import { ModalService } from '../../shared/services/modal.service';
-import { AdminTipoplatoService } from './admin-tipoplato.service';
-import { environment } from 'src/environments/environment';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminMenuService } from './admin-menu.service';
+import { environment } from '../../../environments/environment';
 import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
-import { AuthService } from 'src/app/usuarios/auth.service';
-import { Router } from '@angular/router';
-import { TipoplatoFormComponent } from './tipoplato-form/tipoplato-form.component';
+import { AuthService } from '../../usuarios/auth.service';
+import { Menu } from 'src/app/shared/modelos/menu';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -24,25 +23,24 @@ const swalWithBootstrapButtons = swal.mixin({
 });
 
 @Component({
-  selector: 'app-admin-tipoplato',
-  templateUrl: './admin-tipoplato.component.html',
-  styleUrls: ['./admin-tipoplato.component.scss']
+  selector: 'app-admin-menu',
+  templateUrl: './admin-menu.component.html',
+  styleUrls: ['./admin-menu.component.scss']
 })
+export class AdminMenuComponent implements OnInit {
 
-export class AdminTipoplatoComponent implements OnInit, OnDestroy {
-
-  tipoplatos: Tipoplato[];
-  tipoplato: Tipoplato = new Tipoplato();
+  menus: Menu[];
+  menu: Menu = new Menu();
 
   private unsubscribe$ = new Subject();
   private observ$: Subscription = null;
 
   public tituloBody: string;
   host: string = environment.urlEndPoint;
-  public tipoplatovacio: Tipoplato = new Tipoplato();
+  public menuvacio: Menu = new Menu();
 
   constructor(
-    private tipoplatoService: AdminTipoplatoService,
+    private menuService: AdminMenuService,
     private modalService: ModalService,
     private modalConModeloService: ModalConModeloService,
     public authService: AuthService,
@@ -51,36 +49,36 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subcripcionTipoplatos();
+    this.subcripcionMenus();
   }
 
-  subcripcionTipoplatos(): void {
-    this.tipoplatoService.getTipoplatos().pipe(
+  subcripcionMenus(): void {
+    this.menuService.getMenus().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
         // console.log(response);
       }),
     ).subscribe(
       response => {
-        this.tipoplatos = (response as Tipoplato[]);
+        this.menus = (response as Menu[]);
         // this.paginador = response;
       }
       , err => {
         console.log(err);
         this.router.navigate(['/dashborad']);
-        swal.fire('Error carga de Tipoplato', err.message, 'error');
+        swal.fire('Error carga de Menu', err.message, 'error');
       }
     );
   }
 
   public create(): void {
-    this.openModal(new Tipoplato());
+    this.openModal(new Menu());
   }
 
-  public delete(tipoplato: Tipoplato): void {
+  public delete(menu: Menu): void {
     swalWithBootstrapButtons.fire({
       title: '¿Estás seguro?',
-      text: `Eliminarás esta foto de la portada ${tipoplato.label}`,
+      text: `Eliminarás esta foto de la portada ${menu.label}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar!',
@@ -88,15 +86,15 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        this.tipoplatoService.delete(tipoplato.id).subscribe(
+        this.menuService.delete(menu.id).subscribe(
           response => {
-            this.tipoplatoService.getTipoplatos().subscribe(respon => {
-              this.tipoplatos = (respon as Tipoplato[]);
+            this.menuService.getMenus().subscribe(respon => {
+              this.menus = (respon as Menu[]);
             });
           }
           , err => {
             console.log(err);
-            swal.fire('Error al eliminar tipoplato', '', 'error');
+            swal.fire('Error al eliminar menu', '', 'error');
           }
         );
       }
@@ -104,28 +102,27 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
 
   }
 
-  public update(tipoplato: Tipoplato): void {
-    this.openModal(tipoplato);
+  public update(menu: Menu): void {
+    this.openModal(menu);
   }
 
-  public openModal(tipoplato: Tipoplato): void {
+  public openModal(menu: Menu): void {
 
-    this.modalConModeloService.openModalScrollable(
-      TipoplatoFormComponent,
-      { size: 'lg', backdrop: 'static', scrollable: true },
-      tipoplato,
-      'tipoplato',
-      'Los campos con * son obligatorios',
-      'Datos del tipoplato'
-    ).pipe(
-      take(1) // take() manages unsubscription for us
-    ).subscribe(result => {
-      console.log({ confirmedResult: result });
-      this.tipoplatoService.getTipoplatos().subscribe(respon => {
-        this.tipoplatos = respon as Tipoplato[];
-        // this.paginador = respon;
-      });
-    });
+    // this.modalConModeloService.openModalScrollable(
+    //   MenuFormComponent,
+    //   { size: 'lg', backdrop: 'static', scrollable: true },
+    //   menu,
+    //   'menu',
+    //   'Los campos con * son obligatorios',
+    //   'Datos del menu'
+    // ).pipe(
+    //   take(1) // take() manages unsubscription for us
+    // ).subscribe(result => {
+    //   console.log({ confirmedResult: result });
+    //   this.menuService.getMenus().subscribe(respon => {
+    //     this.menus = respon as Menu[];
+    //   });
+    // });
   }
 
   subscripcioneventoCerrarModalScrollable(): void {
@@ -143,13 +140,13 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
     this.modalService.eventoNotificacionUpload.pipe(
       takeUntil(this.unsubscribe$),
     ).subscribe(
-      tipoplato => {
+      menu => {
         console.log('recibido evento fin Upload');
-        this.tipoplatos.map(tipoplatoOriginal => {
-          if (tipoplatoOriginal.id === tipoplato.id) {
-            tipoplatoOriginal.imgFileName = tipoplato.imgFileName;
+        this.menus.map(menuOriginal => {
+          if (menuOriginal.id === menu.id) {
+            menuOriginal.imgFileName = menu.imgFileName;
           }
-          return tipoplatoOriginal;
+          return menuOriginal;
         }); // map
       }
     );

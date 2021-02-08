@@ -1,0 +1,28 @@
+// .img-thumbnail{
+//     padding:.25rem;
+//     background-color:#fff;
+//     border:1px solid #ddd;
+//     border-radius:.25rem;
+//     transition:all .2s ease-in-out;
+//     max-width:100%;
+//     height:auto}
+
+// .img-thumbnail {
+//     padding:.75rem;
+//     height: 120px;
+// }
+
+.btncolumn {
+    width: 60px;
+}
+
+tbody tr td {
+    vertical-align:middle;
+  }
+
+@media screen and (max-width: 600px) {
+    .img-thumbnail2 {
+      width: 120px !important ;
+      height: 80px !important ;
+    }
+  }

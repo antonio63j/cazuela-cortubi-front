@@ -17,6 +17,10 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
 import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 import { LoggingInterceptor } from './usuarios/interceptors/logging.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 export const MY_FORMATS = {
   parse: {
@@ -42,6 +46,8 @@ export const MY_FORMATS = {
     HttpClientModule,
     BrowserAnimationsModule,
     NgbModule,
+
+    MatSelectModule,  // en otro modulo lazy da error al utilizar mat-select
 
     // AllMaterialModule
 

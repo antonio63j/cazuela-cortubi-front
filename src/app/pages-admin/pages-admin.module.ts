@@ -19,6 +19,13 @@ import { SliderFormComponent } from './admin-sliders/slider-form/slider-form.com
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AdminTipoplatoComponent } from './admin-tipoplato/admin-tipoplato.component';
 import { TipoplatoFormComponent } from './admin-tipoplato/tipoplato-form/tipoplato-form.component';
+import { AdminSugerenciaComponent } from './admin-sugerencia/admin-sugerencia.component';
+import { AdminMenuComponent } from './admin-menu/admin-menu.component';
+import { SugerenciaFormComponent } from './admin-sugerencia/sugerencia-form/sugerencia-form.component';
+import { PaginatorComponent } from '../shared/componentes/paginator/paginator.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -29,7 +36,11 @@ import { TipoplatoFormComponent } from './admin-tipoplato/tipoplato-form/tipopla
     SliderFormComponent,
     AdminTipoplatoComponent,
     TipoplatoFormComponent,
-    UploadFotoComponent
+    UploadFotoComponent,
+    AdminSugerenciaComponent,
+    AdminMenuComponent,
+    SugerenciaFormComponent,
+    PaginatorComponent
   ],
   imports: [
     CommonModule,
@@ -39,14 +50,18 @@ import { TipoplatoFormComponent } from './admin-tipoplato/tipoplato-form/tipopla
     FormsModule,
 
     MatIconModule,
-
-    MatInputModule,
     MatButtonModule,
-    MatFormFieldModule,
-
-    MatSortModule,
     MatCardModule,
-    AngularEditorModule
+    MatSortModule,
+
+
+       MatFormFieldModule,
+       MatInputModule,
+      //  MatSelectModule,
+
+    //    ScrollingModule,
+
+    AngularEditorModule,
 
   ],
   exports: [
