@@ -1,6 +1,19 @@
 //@import '@angular/material/prebuilt-themes/indigo-pink.css';
 // @import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
+// Para cambiar color mat-slide-togge
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: rgb(235, 236, 135);
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: rgb(218, 161, 4);
+}
+// Para cambiar color mat-slide-togge
+
+
 @import '~bootstrap/scss/bootstrap';
 // @import '~bootstrap/scss/functions';
 @import "./styles/mis-variables";
@@ -53,8 +66,8 @@ button.margin-right {
 }
 
 .color-modal-header{
-    background-color: $oxido;
+    background-color: $oxido !important;
 }
   
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+// @import '~bootstrap/scss/bootstrap';

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PagesAdminRoutingModule } from './pages-admin-routing.module';
 import { AdminIndexComponent } from './admin-index/admin-index.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +26,8 @@ import { PaginatorComponent } from '../shared/componentes/paginator/paginator.co
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatSlider, MatSliderModule } from '@angular/material/slider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -54,11 +56,14 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatCardModule,
     MatSortModule,
 
+    MatSliderModule,
+    MatSlideToggleModule,
+
 
        MatFormFieldModule,
        MatInputModule,
-      //  MatSelectModule,
-
+       MatSelectModule,
+       ReactiveFormsModule,
     //    ScrollingModule,
 
     AngularEditorModule,

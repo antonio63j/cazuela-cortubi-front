@@ -2,8 +2,15 @@
   <div class="row" *ngIf="sugerencia">
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header card-header-danger">
+        <!-- <div class="card-header card-header-danger color-modal-header"> -->
+        <div class="card-header color-modal-header">
+
           <h4 class="card-title">Definición de sugerencias</h4>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close(true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
         </div>
         <div class="card-body">
           <form #variableForm="ngForm">
@@ -30,19 +37,36 @@
                 </mat-form-field>
               </div>
             </div>
-
+<!-- 
             <div class="row">
               <div class="col-md-12">
                 <mat-form-field appearance="fill">
                   <mat-label>Clasificación de la sugerencia</mat-label>
-                  <!-- <mat-select [FormControl]="tipoControl" required> -->
-                  <mat-select>
-                    <mat-option>--</mat-option>
-                    <mat-option *ngFor="let tipo of tipoPlatos" [value]="tipo.label">
-                      {{tipo.label}}
-                    </mat-option>
-                  </mat-select>
-                  <!-- <mat-error *ngIf="tipoControl.hasError('required')">Por favor, seleccione un tipo</mat-error> -->
+                  <select matNativeControl [formControl]="tipoControl" required> 
+
+                    <option label="--select something --"></option>  
+                    <option *ngFor="let tipo of tipoPlatos" [value]="tipo.nombre">
+                      {{tipo.nombre}} 
+                    </option>
+                  </select>
+                  <mat-error *ngIf="tipoControl.hasError('required')">Por favor, seleccione un tipo</mat-error>
+                </mat-form-field>
+              </div>
+            </div> -->
+
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field appearance="fill" class="example-full-width">
+                  <mat-label>Clasificación de la sugerencia</mat-label>
+                  <select matNativeControl class="form-control" id="tipoP" name="tipoP" 
+                  [(ngModel)]="sugerencia.tipo" #tipoP="ngModel" required> 
+
+                    <option label="-- clasificación de la sugerencia --"></option>  
+                    <option *ngFor="let tipo of tipoPlatos" [value]="tipo.nombre">
+                      {{tipo.nombre}} 
+                    </option>
+                  </select>
+                  <mat-error *ngIf="tipoP.hasError('required')">Por favor, seleccione un tipo</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -71,8 +95,9 @@
         <div class="card-footer grupo-botones">
           <button *ngIf="sugerencia.id" mat-raised-button class="margin-right" color="primary"
             (click)='update(sugerencia)' [disabled]="!variableForm.form.valid">update</button>
+            
           <button *ngIf="!sugerencia.id" mat-raised-button class="margin-right" color="primary"
-            (click)="create(sugerencia)">Crear</button>
+            (click)="create(sugerencia)" [disabled]="!variableForm.form.valid">Crear</button>
           <button mat-raised-button color="primary" (click)="activeModal.close(true)">Salir</button>
         </div>
       </div>

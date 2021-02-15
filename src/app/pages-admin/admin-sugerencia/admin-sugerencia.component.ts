@@ -18,6 +18,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../usuarios/auth.service';
 import { SugerenciaFormComponent } from './sugerencia-form/sugerencia-form.component';
 import { environment } from 'src/environments/environment';
+import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
+import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
+import { FiltroSugerencia } from 'src/app/shared/modelos/filtro-sugerencia';
+import { HttpParams } from '@angular/common/http';
 
 // import { debug } from 'util';
 
@@ -41,17 +45,19 @@ const swalWithBootstrapButtons = Swal.mixin({
 export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     sugerencias: Sugerencia[];
     sugerencia: Sugerencia = new Sugerencia();
-    private pagina: number;
+    // private pagina: number;
     host: string = environment.urlEndPoint;
-
-    // private observ$: Subscription;
     private unsubscribe$ = new Subject();
     public paginador: any;
-    // private subscriptionParams$: Subscription = null;
-    // private subscriptionEvents$: Subscription = null;
+
+    public tipoPlatos: Tipoplato[];
+
+    public filterChecked = false;
+    public filtroSugerencia: FiltroSugerencia = new FiltroSugerencia();
 
     constructor(
         private sugerenciaService: AdminSugerenciaService,
+        private shareEmpresaService: ShareEmpresaService,
         private modalConModeloService: ModalConModeloService,
         private modalService: ModalService,
         private translate: TranslateService,
@@ -59,6 +65,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
 
     ) {
         this.sugerencias = [];
+        this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
     }
 
     ngOnInit(): void {
@@ -66,14 +73,16 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         this.subscripcioneventoCerrarModalScrollable();
     }
 
+    // Es llamado por el paginator
     public getPagina(pagina: number): void {
         this.nuevaPagina(pagina);
     }
 
     nuevaPagina(pagina: number): void {
-        this.pagina = pagina;
+        // this.pagina = pagina;
+        this.filtroSugerencia.page = pagina.toString();
         this.sugerenciaService
-            .getSugerencias(pagina)
+            .getSugerencias(this.filtroSugerencia)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 tap((response: any) => {
@@ -112,7 +121,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
             take(1) // take() manages unsubscription for us
         ).subscribe(result => {
             console.log({ confirmedResult: result });
-            this.sugerenciaService.getSugerencias(this.pagina).subscribe(respon => {
+            this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
                 this.sugerencias = respon.content as Sugerencia[];
                 this.paginador = respon;
             });
@@ -120,22 +129,22 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     }
 
     public update(sugerencia: Sugerencia): void {
-        // this.modalConModeloService.openModalScrollable(
-        //     SugerenciaFormComponent,
-        //     { size: 'lg', backdrop: 'static', scrollable: true },
-        //     sugerencia,
-        //     'sugerencia',
-        //     'Los campos con * son obligatorios',
-        //     'Datos del sugerencia'
-        // ).pipe(
-        //     take(1) // take() manages unsubscription for us
-        // ).subscribe(result => {
-        //     console.log({ confirmedResult: result });
-        //     this.sugerenciaService.getSugerencias(this.pagina).subscribe(respon => {
-        //         this.sugerencias = respon.content as Sugerencia[];
-        //         this.paginador = respon;
-        //     });
-        // });
+        this.modalConModeloService.openModalScrollable(
+            SugerenciaFormComponent,
+            { size: 'lg', backdrop: 'static', scrollable: true },
+            sugerencia,
+            'sugerencia',
+            'Los campos con * son obligatorios',
+            'Datos del sugerencia'
+        ).pipe(
+            take(1) // take() manages unsubscription for us
+        ).subscribe(result => {
+            console.log({ confirmedResult: result });
+            this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
+                this.sugerencias = respon.content as Sugerencia[];
+                this.paginador = respon;
+            });
+        });
     }
 
     delete(sugerencia: Sugerencia): void {
@@ -152,9 +161,10 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                 this.sugerenciaService.delete(sugerencia).subscribe(
                     response => {
                         if (this.paginador.numberOfElements === 1) {
-                            this.pagina = 0;
+                            // this.pagina = 0;
+                            this.filtroSugerencia.page = '0';
                         }
-                        this.sugerenciaService.getSugerencias(this.pagina).subscribe(respon => {
+                        this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
                             this.sugerencias = respon.content as Sugerencia[];
                             this.paginador = respon;
                         });
@@ -201,7 +211,33 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         );
     }
 
+    changedFilter(): void {
+        console.log(this.filtroSugerencia);
 
+        if (this.filterChecked) {
+            this.nuevaPagina(0);
+        } else {
+            this.filtroSugerencia.init();
+            this.nuevaPagina(0);
+        }
+    }
+
+    public sortChangeColumn(colName: string): void {
+        console.log(colName);
+        if (colName === this.filtroSugerencia.order) {
+            if (this.filtroSugerencia.direction === 'asc') {
+                this.filtroSugerencia.direction = 'desc';
+            }
+            else {
+                this.filtroSugerencia.direction = 'asc';
+            }
+        } else {
+            this.filtroSugerencia.order = colName;
+            this.filtroSugerencia.direction = 'asc';
+        }
+        this.nuevaPagina(0);
+    }
+    
     ngOnDestroy(): void {
         console.log('realizando unsubscribes');
         this.unsubscribe$.next();

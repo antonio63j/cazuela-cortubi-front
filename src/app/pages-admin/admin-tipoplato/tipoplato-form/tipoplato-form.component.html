@@ -2,8 +2,11 @@
   <div class="row" *ngIf="tipoplato">
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header card-header-danger">
+        <div class="card-header card-header-danger color-modal-header">
           <h4 class="card-title">Definición del grupo de platos</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.close(true)">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
         <div class="card-body">
           <form #variableForm="ngForm">
@@ -12,7 +15,7 @@
                 <mat-form-field class="example-full-width">
                   <input matInput class="form-control" name="nombre"
                     placeholder="Nombre del tipo o grupo de platos" [(ngModel)]="tipoplato.nombre"
-                    #nombre="ngModel" maxlength="80">
+                    #nombre="ngModel" maxlength="80" required>
                   <mat-error *ngIf="nombre.hasError('maxlength')">
                     Debe tener máximo 80 posiciones
                   </mat-error>
@@ -24,7 +27,7 @@
                 <mat-form-field class="example-full-width">
                   <input matInput class="form-control" name="label"
                     placeholder="Etiqueta breve para instear en la foto" [(ngModel)]="tipoplato.label"
-                    #label="ngModel" maxlength="80">
+                    #label="ngModel" maxlength="80" required>
                   <mat-error *ngIf="label.hasError('maxlength')">
                     Debe tener máximo 80 posiciones
                   </mat-error>
@@ -53,10 +56,14 @@
           </form>
         </div>
         <div class="card-footer grupo-botones">
-          <button *ngIf="tipoplato.id" mat-raised-button class="margin-right" color="primary" (click)='update(tipoplato)'
+          <button *ngIf="tipoplato.id" mat-raised-button class="margin-right" 
+            color="primary" (click)='update(tipoplato)'
             [disabled]="!variableForm.form.valid">update</button>
-          <button *ngIf="!tipoplato.id" mat-raised-button class="margin-right" color="primary" (click)="create(tipoplato)">Crear</button>
-          <button mat-raised-button color="primary" (click)="activeModal.close(true)">Salir</button>
+          <button *ngIf="!tipoplato.id" mat-raised-button class="margin-right" 
+            color="primary" (click)="create(tipoplato)"
+            [disabled]="!variableForm.form.valid">Crear</button>
+          <button mat-raised-button color="primary" 
+            (click)="activeModal.close(true)">Salir</button>
         </div>
       </div>
     </div>

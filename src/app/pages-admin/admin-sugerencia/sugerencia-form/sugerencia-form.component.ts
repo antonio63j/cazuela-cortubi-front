@@ -37,13 +37,13 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
     public activeModal: NgbActiveModal
   ) {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
-    console.log(this.tipoPlatos);
   }
 
   ngOnInit(): void {
   }
 
   public update(sugerencia: Sugerencia): void {
+    this.erroresValidacion = [];
     this.observ$ = this.adminSugerenciaService.update(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
@@ -72,6 +72,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
       );
   }
   public create(sugerencia: Sugerencia): void {
+    this.erroresValidacion = [];
     this.observ$ = this.adminSugerenciaService.create(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
@@ -104,7 +105,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
           } else {
             // this.router.navigate(['/clientes']);
             console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en creación ', `error.status = ${err.status.toString()}`, 'error');
+            swal.fire('Error al crear sugerencia ', `error.status = ${err.status.toString()}`, 'error');
           }
         }
       );

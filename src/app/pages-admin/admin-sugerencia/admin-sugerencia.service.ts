@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Sugerencia } from '../../shared/modelos/sugerencia';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FiltroSugerencia } from 'src/app/shared/modelos/filtro-sugerencia';
 
 
 @Injectable({
@@ -14,16 +15,30 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export class AdminSugerenciaService implements OnDestroy {
   modal: any;
+
+  private filtroSugerencia: FiltroSugerencia;
+
   constructor(
     private http: HttpClient,
     private ngbModal: NgbModal) {
 
   }
 
-  getSugerencias(page: number): Observable<any> {
-    const parametros = new HttpParams().set('page', page.toString()).set('size', '12');
+  getSugerencias(filtroSugerencia: FiltroSugerencia): Observable<any> {
+    // const parametros = new HttpParams().set('page', page.toString()).set('size', '2');
+    let parametros = new HttpParams();
+
+    for (const key of Object.keys(filtroSugerencia)) {
+      const valor = filtroSugerencia[key];
+      if (valor != null) {
+        parametros = parametros.append(key, valor);
+      }
+      console.log(key, ':' + valor);
+    }
+
     return this.http
-      .get<Sugerencia[]>(environment.urlEndPoint + '/api/sugerencia/page', { params: parametros })
+      .get<Sugerencia[]>(environment.urlEndPoint + '/api/sugerencia/page',
+                        { params: parametros })
       .pipe(
         tap((response: any) => {
           // (response.content as Sugerencia[]).forEach(sugerencia => console.log(sugerencia));
