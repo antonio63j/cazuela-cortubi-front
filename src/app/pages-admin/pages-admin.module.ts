@@ -28,6 +28,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatSlider, MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MenuFormComponent } from './admin-menu/menu-form/menu-form.component';
+import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
+import { OrdenPlatoPipe } from '../shared/pipes/orden-plato.pipe';
 
 @NgModule({
   declarations: [
@@ -40,9 +43,15 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     TipoplatoFormComponent,
     UploadFotoComponent,
     AdminSugerenciaComponent,
+
     AdminMenuComponent,
+    MenuFormComponent,
+
     SugerenciaFormComponent,
-    PaginatorComponent
+    AdminMenuSugerenciaComponent,
+    OrdenPlatoPipe,
+
+    PaginatorComponent,
   ],
   imports: [
     CommonModule,
@@ -59,18 +68,30 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSliderModule,
     MatSlideToggleModule,
 
-
-       MatFormFieldModule,
-       MatInputModule,
-       MatSelectModule,
-       ReactiveFormsModule,
-    //    ScrollingModule,
-
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     AngularEditorModule,
-
   ],
   exports: [
+    TranslateModule,
 
+    FormsModule,
+
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSortModule,
+
+    MatSliderModule,
+    MatSlideToggleModule,
+
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    AngularEditorModule,
   ]
 })
 export class PagesAdminModule { }

@@ -11,7 +11,7 @@ export class FiltroSugerencia {
 
     constructor() {
        this.init();
-       this.initPage('0', '2', 'label', 'asc');
+       this.initPage('0', '5', 'label', 'asc');
     }
 
     init(): void{
@@ -28,6 +28,21 @@ export class FiltroSugerencia {
              direction: string): void{
       this.page = page;
       this.size = size;
+      this.order = order;
+      this.direction = direction;
+    } 
+}
+
+export class OrdenMenuSugerencia {
+    order: string;
+    direction: string;
+
+    constructor() {
+       this.initPage('label', 'asc');
+    }
+
+    initPage(order: string,
+             direction: string): void{
       this.order = order;
       this.direction = direction;
     }

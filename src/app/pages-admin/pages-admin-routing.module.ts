@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminIndexComponent } from './admin-index/admin-index.component';
+import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
 import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
 import { AdminSugerenciaComponent } from './admin-sugerencia/admin-sugerencia.component';
@@ -30,8 +31,15 @@ const routes: Routes = [
   {
     path: 'admsugerencia', component: AdminSugerenciaComponent,
   },
+
   {
     path: 'admmenu', component: AdminMenuComponent,
+  },
+
+  // { path: 'admmenu', loadChildren: () => import('./admin-menu/admin-menu.module').then((m) => m.AdminMenuModule)},
+
+  {
+    path: 'admmenusugerencia/:id', component: AdminMenuSugerenciaComponent,
   }
 ];
 

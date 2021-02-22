@@ -13,8 +13,9 @@ const routes: Routes = [
           { path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule)},
           { path: 'admin-index',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
             loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
-          { path: 'admin-sugerencia',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
-            loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
+          // { path: 'admin-sugerencia',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
+          //   loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
+
           { path: 'admin-menu',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
             loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
       ]

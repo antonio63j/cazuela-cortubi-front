@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Menu } from 'src/app/shared/modelos/menu';
+import { MenuSugerencia } from 'src/app/shared/modelos/menu-sugerencia';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,6 +13,15 @@ export class AdminMenuService implements OnDestroy {
 
   constructor(private http: HttpClient) {
 
+  }
+
+  getMenu(id: number): Observable<any> {
+    return this.http.get<Menu>(`${environment.urlEndPoint}/api/menu/${id}`).pipe(
+      catchError(err => {
+        console.error(`error lectura menu: ${err.status} `);
+        console.error(`error lectura menu: ${err.message} `);
+        return throwError(err);
+      }));
   }
 
   getMenus(): Observable<any> {
@@ -50,13 +60,44 @@ export class AdminMenuService implements OnDestroy {
     );
   }
 
-  delete(id: number): Observable<Menu> {
+  delete(id: number): Observable<any> {
     return this.http.delete<Menu>(`${environment.urlEndPoint}/api/menu/${id}`).pipe(
       catchError(err => {
         console.error(`error al eliminar menu: ${err.status} `);
         console.error(`error al eliminar menu: ${err.message} `);
         return throwError(err);
       }));
+  }
+
+  addMenuSugerencia(
+    menu: Menu, 
+    sugerenciaId: number,
+    primerPlato: boolean): Observable<any> {
+    const parametros = new HttpParams()
+      .set('menuId', menu.id.toString())
+      .set('sugerenciaId', sugerenciaId.toString())
+      .set('primerPlato', primerPlato.toString());
+
+    console.log('parametros:');
+    console.log(parametros);
+
+    return this.http.post<any>(`${environment.urlEndPoint}/api/menusugerencia/create`, menu, { params: parametros }).pipe(
+        catchError(err => {
+          console.error(`error al añadir menu-sugerencia: ${err.status} `);
+          console.error(`error al añadir menu-sugerencia: ${err.message} `);
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteMenuSugerencia(id: number): Observable<any> {
+    return this.http.delete<MenuSugerencia>(`${environment.urlEndPoint}/api/menusugerencia/${id}`).pipe(
+      catchError(err => {
+        console.error(`error al eliminar menu-sugerencia: ${err.status} `);
+        console.error(`error al eliminar menu-sugerencia: ${err.message} `);
+        return throwError(err);
+      })
+    );
   }
 
   ngOnDestroy(): void {

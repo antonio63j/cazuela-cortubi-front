@@ -22,8 +22,8 @@ import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { FiltroSugerencia } from 'src/app/shared/modelos/filtro-sugerencia';
 import { HttpParams } from '@angular/common/http';
+// import { DisableDirective } from 'src/app/shared/directivas/disable.directive';
 
-// import { debug } from 'util';
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -55,13 +55,16 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     public filterChecked = false;
     public filtroSugerencia: FiltroSugerencia = new FiltroSugerencia();
 
+    public disable = true;
+
     constructor(
         private sugerenciaService: AdminSugerenciaService,
         private shareEmpresaService: ShareEmpresaService,
         private modalConModeloService: ModalConModeloService,
         private modalService: ModalService,
         private translate: TranslateService,
-        private authService: AuthService
+        private authService: AuthService,
+        // public disableDirective: DisableDirective
 
     ) {
         this.sugerencias = [];
@@ -74,12 +77,15 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     }
 
     // Es llamado por el paginator
-    public getPagina(pagina: number): void {
+    public getPagina(paginaYSize: any): void {
+
+        const pagina: number = paginaYSize.pagina;
+        const size: number = paginaYSize.size;
+        this.filtroSugerencia.size = size.toString();
         this.nuevaPagina(pagina);
     }
 
     nuevaPagina(pagina: number): void {
-        // this.pagina = pagina;
         this.filtroSugerencia.page = pagina.toString();
         this.sugerenciaService
             .getSugerencias(this.filtroSugerencia)
@@ -87,14 +93,15 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                 takeUntil(this.unsubscribe$),
                 tap((response: any) => {
                     // console.log(response);
-                }),
-                map((response: any) => {
-                    (response.content as Sugerencia[]).map(sugerencia => {
-                        sugerencia.label = sugerencia.label.toUpperCase();
-                        return sugerencia;
-                    });
-                    return response;
                 })
+                // ,
+                // map((response: any) => {
+                //     (response.content as Sugerencia[]).map(sugerencia => {
+                //         sugerencia.label = sugerencia.label.toUpperCase();
+                //         return sugerencia;
+                //     });
+                //     return response;
+                // })
             )
             .subscribe(
                 response => {
@@ -169,8 +176,8 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                             this.paginador = respon;
                         });
                         swalWithBootstrapButtons.fire(
-                            `Eliminado el sugerencia ${sugerencia.label}!`,
-                            'uno menos',
+                            `Eliminada sugerencia ${sugerencia.label}!`,
+                            '',
                             'success'
                         );
                     }
@@ -212,8 +219,6 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     }
 
     changedFilter(): void {
-        console.log(this.filtroSugerencia);
-
         if (this.filterChecked) {
             this.nuevaPagina(0);
         } else {
@@ -222,8 +227,13 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         }
     }
 
+    quitarFiltros(): void {
+        this.filtroSugerencia.init();
+        this.filterChecked = !this.filterChecked;
+        this.nuevaPagina(0);
+    }
+
     public sortChangeColumn(colName: string): void {
-        console.log(colName);
         if (colName === this.filtroSugerencia.order) {
             if (this.filtroSugerencia.direction === 'asc') {
                 this.filtroSugerencia.direction = 'desc';
@@ -237,7 +247,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         }
         this.nuevaPagina(0);
     }
-    
+
     ngOnDestroy(): void {
         console.log('realizando unsubscribes');
         this.unsubscribe$.next();

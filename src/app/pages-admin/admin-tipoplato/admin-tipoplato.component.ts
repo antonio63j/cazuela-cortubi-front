@@ -80,7 +80,7 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
   public delete(tipoplato: Tipoplato): void {
     swalWithBootstrapButtons.fire({
       title: '¿Estás seguro?',
-      text: `Eliminarás esta foto de la portada ${tipoplato.label}`,
+      text: `Eliminarás el grupo de platos: ${tipoplato.label}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar!',

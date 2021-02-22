@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
 import { AuthService } from '../../usuarios/auth.service';
 import { Menu } from 'src/app/shared/modelos/menu';
+import { MenuFormComponent } from './menu-form/menu-form.component';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -27,7 +28,7 @@ const swalWithBootstrapButtons = swal.mixin({
   templateUrl: './admin-menu.component.html',
   styleUrls: ['./admin-menu.component.scss']
 })
-export class AdminMenuComponent implements OnInit {
+export class AdminMenuComponent implements OnInit, OnDestroy{
 
   menus: Menu[];
   menu: Menu = new Menu();
@@ -78,7 +79,7 @@ export class AdminMenuComponent implements OnInit {
   public delete(menu: Menu): void {
     swalWithBootstrapButtons.fire({
       title: '¿Estás seguro?',
-      text: `Eliminarás esta foto de la portada ${menu.label}`,
+      text: `Eliminarás el menú: ${menu.label}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar!',
@@ -107,22 +108,25 @@ export class AdminMenuComponent implements OnInit {
   }
 
   public openModal(menu: Menu): void {
+    this.modalConModeloService.openModalScrollable(
+      MenuFormComponent,
+      { size: 'lg', backdrop: 'static', scrollable: true },
+      menu,
+      'menu',
+      'Los campos con * son obligatorios',
+      'Datos del menu'
+    ).pipe(
+      take(1) // take() manages unsubscription for us
+    ).subscribe(result => {
+      console.log({ confirmedResult: result });
+      this.menuService.getMenus().subscribe(respon => {
+        this.menus = respon as Menu[];
+      });
+    });
+  }
 
-    // this.modalConModeloService.openModalScrollable(
-    //   MenuFormComponent,
-    //   { size: 'lg', backdrop: 'static', scrollable: true },
-    //   menu,
-    //   'menu',
-    //   'Los campos con * son obligatorios',
-    //   'Datos del menu'
-    // ).pipe(
-    //   take(1) // take() manages unsubscription for us
-    // ).subscribe(result => {
-    //   console.log({ confirmedResult: result });
-    //   this.menuService.getMenus().subscribe(respon => {
-    //     this.menus = respon as Menu[];
-    //   });
-    // });
+  composicion(menu: Menu): void {
+
   }
 
   subscripcioneventoCerrarModalScrollable(): void {

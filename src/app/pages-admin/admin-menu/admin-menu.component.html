@@ -18,7 +18,7 @@
           <!-- <img *ngIf="menu?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/tipos.png"> -->
           <img *ngIf="menu?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/menu_peque.png">
       
-          <mat-card-title> Imagen asociada al menú</mat-card-title>
+          <mat-card-title> {{menu.label | slice:0:35}}...</mat-card-title>
         </mat-card-header>
         <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
         <!-- <img *ngIf="menu?.imgFileName" mat-card-image  
@@ -29,12 +29,18 @@
       
           
         <mat-card-content>
-          <p> {{menu.label | slice:0:29}}...</p>
+          <p>  precio: {{menu.precio}}</p>
+          <p>  {{menu.descripcion | slice:0:59}}...</p>
         </mat-card-content>
         <mat-card-actions>
 
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" 
             style="margin-right: 8px" (click) = 'update(menu)'>{{'Edit' |translate}}</button>
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
+            style="margin-right: 8px" 
+            [routerLink]="['/admin-index/admmenusugerencia', menu.id]">
+            {{'Configurar platos' |translate}}
+          </button>
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
             style="margin-right: 8px" (click) = 'create()'>{{'Create' |translate}}</button>
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"

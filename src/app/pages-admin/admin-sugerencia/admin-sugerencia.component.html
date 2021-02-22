@@ -1,8 +1,10 @@
 <!-- <div [@routerTransition]> -->
 <!-- <app-page-header heading="{{'Sugerencias' | translate}}" [icon]="'fa-book'"></app-page-header> -->
 
+<!-- <div class="row" [appDisable]="true"> -->
+<!-- <div class="row my-disable"> -->
+<div [ngClass]="{'my-disable': !disable, 'my-invisible': !disable}"> 
 <div class="row">
-  <!-- <div class="col col-xl-6 col-lg-12"> -->
   <div class="col">
     <div class="card mb-9 text-center">
       <div class="card-header color-modal-header">
@@ -13,6 +15,8 @@
         <div *ngIf="sugerencias?.length==0" class="alert alert-info"> Lista vacía
           <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" style="margin-right: 8px"
             (click)='crear()'>{{'Crear sugerencia' |translate}}</button>
+          <button *ngIf="filterChecked" class="btn btn-primary btn-sm" style="margin-right: 8px"
+            (click)='quitarFiltros()'>{{'Desactivar filtros' |translate}}</button>  
         </div>
       </div>
       <div class="card-body table-responsive">
@@ -24,7 +28,7 @@
                   sugerencia</button>
               </th>
 
-              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}"
+              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
                 (click)='sortChangeColumn("label")'>
                 <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                             filtroSugerencia.order=="label"'></div>
@@ -33,7 +37,7 @@
                 label
               </th>
 
-              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}"
+              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
               (click)='sortChangeColumn("tipo")'>
               <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                           filtroSugerencia.order=="tipo"'></div>
@@ -42,7 +46,7 @@
               tipo
               </th>  
 
-              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}"
+              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
               (click)='sortChangeColumn("precio")'>
               <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                           filtroSugerencia.order=="precio"'></div>
@@ -51,7 +55,7 @@
               precio
               </th> 
 
-              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}"
+              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
               (click)='sortChangeColumn("descripcion")'>
               <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                           filtroSugerencia.order=="descripcion"'></div>
@@ -67,7 +71,7 @@
 
           <thead>
             <tr>
-              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}">      
+              <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}">      
                 <mat-slide-toggle [(ngModel)]="filterChecked" (change)="changedFilter()">
                   Filtro
                 </mat-slide-toggle>
@@ -134,10 +138,13 @@
 
           <tbody>
             <tr *ngFor="let sugerencia of sugerencias">
-              <td style="width: 200px">
+              <td style="width: 100px">
+                <!-- <img *ngIf="sugerencia?.imgFileName" (click)='update(sugerencia)'
+                  src="{{host}}/api/sugerencia/uploads/img/{{sugerencia.imgFileName}}" alt="foto sugerencia"
+                  class="img-thumbnail2 rounded" style="width: 200px; cursor: pointer;"> -->
                 <img *ngIf="sugerencia?.imgFileName" (click)='update(sugerencia)'
                   src="{{host}}/api/sugerencia/uploads/img/{{sugerencia.imgFileName}}" alt="foto sugerencia"
-                  class="img-thumbnail2 rounded" style="width: 200px; cursor: pointer;">
+                  class="rounded" style="width: 100px; cursor: pointer;">  
               </td>
               <td style="width: 300px !important ">{{ sugerencia.label}}</td>
               <td>{{ sugerencia.tipo}}</td>
@@ -162,12 +169,13 @@
       <div class="card-footer text-muted con-scroll">
         <div class="row">
           <div class="col">
-            <paginator-nav *ngIf="paginador" [paginador]="paginador" (messageToEmit)="getPagina($event)">
+            <paginator-nav *ngIf="paginador" [paginador]="paginador" 
+               [sizes]="[5, 10, 15, 30, 50]"
+               [sizePage]=+filtroSugerencia.size
+               (messageToEmit)="getPagina($event)">
             </paginator-nav>
           </div>
           <div class="col">
-            <!-- <button type="button" name="crearCurso" (click)="crear()" class="btn btn-primary btn-sm">Crear
-                curso</button> -->
             <button mat-raised-button color="primary" style="margin-right: 8px" (click)='crear()'>Crear
               sugerencia</button>
           </div>
@@ -177,4 +185,6 @@
   </div>
   <!--col -->
 </div> <!-- row-->
+</div> 
+
 <!-- </div> -->
