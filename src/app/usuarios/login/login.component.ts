@@ -46,6 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('en ngOnInt');
+
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
       swal.fire('Aviso', `Ya estás autenticado! ${this.authService.usuario.username}`, 'info');

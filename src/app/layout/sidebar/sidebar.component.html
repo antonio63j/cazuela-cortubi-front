@@ -1,76 +1,69 @@
 <!-- <nav [ngClass]="{ sidebarPushRight: isActive, collapsed: collapsed }" class="sidebar"> -->
-<nav [ngClass]="{ sidebarPushRight: isActive }" class="sidebar">
+<nav [ngClass]="{ sidebarPushRight: isActive }" class="sidebar" >
 
   <div class="list-group">
-    <!-- <div *ngIf="authService.hasRole('ROLE_USER')" class="admin-group"> -->
-    <!-- <div  class="admin-group">
-            <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/dashboard">
-                <i class="fa fa-fw fa-dashboard"></i>&nbsp;
-                <span>{{ 'Dashboard' | translate }}</span>
-            </a>
-
-            <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/clientes">
-                <i class="fa fa-fw fa-eur"></i>&nbsp;
-                <span>{{ 'Customers' | translate }}</span>
-            </a>
-
-            <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/cursos">
-                <i class="fa fa-fw fa-book"></i>&nbsp;
-                <span>{{ 'Courses' | translate }}</span>
-            </a>
-            <div class="nested-menu">
-                <a [routerLinkActive]="['router-link-active']" (click)="addExpandClass('pages')"
-                    class="list-group-item">
-                    <i class="fa fa-fw fa-wrench"></i>&nbsp;
-                    <span>{{ 'Tools' | translate }}</span>&nbsp;
-                    <i class="fa fa-caret-down"></i>&nbsp;
-                </a>
-                <li [class.expand]="showMenu === 'pages'" class="nested">
-                    <ul class="submenu">
-                        <div *ngFor="let item of subMenusHerramientas">
-                            <li>
-                                <a [routerLink]="['/herramientas/tipo', item.key]">
-                                    <i class="item.class"></i>&nbsp;
-                                    <span>{{ item.keyView}}</span>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                </li>
-            </div> 
-  
-
-            <a [routerLinkActive]="['router-link-active']" [routerLink]="['/proyectos']" class="list-group-item">
-                <i class="fa fa-fw fa-archive"></i>&nbsp;
-                <span>{{ 'Projects' | translate }}</span>
-            </a>
-            <a [routerLinkActive]="['router-link-active']" [routerLink]="['/perfil']" class="list-group-item">
-                <i class="fa fa-fw fa-id-card"></i>&nbsp;
-                <span>{{ 'Profile' | translate }}</span>
-            </a>
-
-            <a class="list-group-item" href="https://github.com/antonio63j/aflcv-front/" target="_blank">
-                <i class="fa fa-github"></i>&nbsp;
-                <span>{{ 'Front project on github' | translate }}</span>
-            </a>
-
-            <a class="list-group-item" href="https://github.com/antonio63j/aflcv-back/" target="_blank">
-                <i class="fa fa-github"></i>&nbsp;
-                <span>{{ 'Back project on github' | translate }}</span>
-            </a>
-        </div>  -->
-    <!-- class="admin-group -->
-
-    <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/clientes">
+    <!-- <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/clientes">
       <i class="fa fa-fw fa-eur"></i>&nbsp;
       <span>{{ 'Customers' | translate }}</span>
     </a>
     <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/clientes">
       <i class="fa fa-fw fa-eur"></i>&nbsp;
       <span>{{ 'Customers' | translate }}</span>
-    </a>
+    </a> -->
 
     <div class="header-fields">
+      <a [routerLink]="['/dashboard']" class="list-group-item">
+        <span><i class="fa fa-home"></i>&nbsp; Home</span>
+      </a>
+
+
+      <!-- login -->
+      <div class="nested-menu">
+        <a *ngIf="authService.usuario.username" (click)="addExpandClass('profile')" class="list-group-item">
+          <span><i class="fa fa-user"></i>&nbsp; {{authService.usuario.nombre}}</span>
+        </a>
+        <a *ngIf="!authService.usuario.username" (click)="addExpandClass('profile')" class="list-group-item">
+          <span><i class="fa fa-user"></i>&nbsp; Login</span>
+        </a>
+        <li [class.expand]="showMenu === 'profile'" class="nested">
+          <ul class="submenu">
+            <li>
+              <a href="javascript:void(0)">
+                <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
+              </a>
+            </li>
+            <li>
+              <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/admin-roles']">
+                <i class="fa fa-fw fa-gear"></i> {{ 'Manage user roles' | translate }}
+              </a>
+            </li>
+            <li>
+              <a *ngIf="authService.hasRole('ROLE_ADMIN')" [routerLink]="['/admin-index']">
+                <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}</span>
+              </a>
+            </li>
+            <li>
+              <a *ngIf="authService.usuario.username" (click)="onLoggedout()" class="dropdown-item"
+                href="javascript:void(0)">
+                <i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}
+              </a>
+            </li>
+            <li>
+              <a *ngIf="!authService.usuario.username" [routerLink]="['/login']" class="dropdown-item">
+                <i class="fa fa-fw fa-power-off"></i> {{ 'Log In' | translate }}
+              </a>
+            </li>
+            <li>
+              <a *ngIf="!authService.usuario.username" [routerLink]="['/registro']" class="dropdown-item">
+                <i class="fa fa-fw fa-power-off"></i> {{ 'Sing Up' | translate }}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </div>
+      <!-- login -->
+
+
       <!-- seleccion idioma-->
       <div class="nested-menu">
         <a (click)="addExpandClass('languages')" class="list-group-item">
@@ -93,49 +86,10 @@
       </div>
       <!-- seleccion idioma-->
 
-      <!-- login -->
-      <div class="nested-menu">
-        <a *ngIf="authService.usuario.username" (click)="addExpandClass('profile')" class="list-group-item">
-          <span><i class="fa fa-user"></i>&nbsp; {{authService.usuario.username}}</span>
-        </a>
-        <a *ngIf="!authService.usuario.username" (click)="addExpandClass('profile')" class="list-group-item">
-          <span><i class="fa fa-user"></i>&nbsp; Login</span>
-        </a>
-        <li [class.expand]="showMenu === 'profile'" class="nested">
-          <ul class="submenu">
-            <li>
-              <a href="javascript:void(0)">
-                <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
-              </a>
-            </li>
-            <li>
-              <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/admin-roles']">
-                <i class="fa fa-fw fa-gear"></i> {{ 'Manage user roles' | translate }}
-              </a>
-            </li>
-            <li>
-              <a *ngIf="authService.hasRole('ROLE_ADMIN')" href="javascript:void(0)">
-                <span><i class="fa fa-fw fa-gear"></i> {{ 'Settings' | translate }}</span>
-              </a>
-            </li>
-            <li>
-              <a *ngIf="authService.usuario.username" (click)="onLoggedout()" class="dropdown-item"
-                href="javascript:void(0)">
-                <i class="fa fa-fw fa-power-off"></i> {{ 'Log Out' | translate }}
-              </a>
-            </li>
-            <li>
-              <a *ngIf="!authService.usuario.username" [routerLink]="['/login']" class="dropdown-item">
-                <i class="fa fa-fw fa-power-off"></i> {{ 'Log In' | translate }}
-              </a>
-            </li>
-          </ul>
-        </li>
-      </div>
-      <!-- login -->
-      <a (click)="rltAndLtr()" class="list-group-item">
+
+      <!-- <a (click)="rltAndLtr()" class="list-group-item">
         <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
-      </a>
+      </a> -->
     </div> <!-- heder-fields-->
   </div> <!-- clase="group" -->
 </nav>

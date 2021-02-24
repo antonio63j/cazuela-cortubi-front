@@ -8,7 +8,8 @@
       </div>
 
       <div class="navbar-nav mt-0">
-        <h5><a style="margin-right: 17px" href="#"><i class="fa fa-phone" aria-hidden="true"></i>{{empresa.telefono}}</a></h5>
+        <h5><a style="margin-right: 17px" href="#"><i class="fa fa-phone"
+              aria-hidden="true"></i>{{empresa.telefono}}</a></h5>
 
       </div>
     </a>
@@ -23,35 +24,34 @@
       <div class="navbar-nav mb-lg-0">
         <!-- <h5><a href="#" style="margin-right: 10px"><i class="fa fa-envelope" aria-hidden="true"></i>info@cazuela-cortubi.es</a></h5> -->
         <h5><a href="#" style="margin-right: 10px">
-          <i class="fa fa-map-marker" aria-hidden="true"></i>
-          {{empresa.direccion}} {{empresa.provincia}}
-        </a></h5>
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+            {{empresa.direccion}} {{empresa.provincia}}
+          </a></h5>
       </div>
 
       <ul class="navbar-nav mt-0">
-        <li class="nav-item dropdown" ngbDropdown>
-          <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
-            <i class="fa fa-language"></i> {{ 'Language' | translate }} <b class="caret"></b>
+        <li class="nav-item" ngbDropdown>
+          <a class="nav-link" [routerLink]="['/dashboard']">
+            <i class="fa fa-home"></i> <b>Home</b>
           </a>
-          <div class="dropdown-menu-right" ngbDropdownMenu>
-            <a (click)="changeLang('en')" class="dropdown-item" href="javascript:void(0)">
-              {{ 'English' | translate }}
-            </a>
-            <a (click)="changeLang('es')" class="dropdown-item" href="javascript:void(0)">
-              {{ 'Spanish' | translate }}
-            </a>
-          </div>
         </li>
         <li class="nav-item dropdown" ngbDropdown>
-          <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
-            <i *ngIf="authService.usuario.username" class="fa fa-user"></i> {{authService.usuario.nombre}}<b
+          <!-- <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+            <i *ngIf="authService.isAuthenticated()" class="fa fa-user"></i> {{authService.usuario.nombre}}<b
               class="caret"></b>
-            <i *ngIf="!authService.isAuthenticated()" class="fa fa-user"></i> <b class="caret"></b>
+            <i *ngIf="!authService.isAuthenticated()" class="fa fa-user"></i><b class="caret"></b>
+          </a> -->
+
+          <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+            <i class="fa fa-user"></i>
+            <b *ngIf="authService.isAuthenticated()">{{authService.usuario.nombre}}</b> 
+            <b *ngIf="!authService.isAuthenticated()">Login</b>
           </a>
 
           <div class="dropdown-menu-right" ngbDropdownMenu>
             <a class="dropdown-item" href="javascript:void(0)">
-              <i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}
+              <i class="fa fa-fw fa-user"></i> 
+              <b>{{ 'Profile' | translate }}</b>
             </a>
             <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/admin-roles']">
               <i class="fa fa-fw fa-gear"></i> {{ 'Manage user roles' | translate }}
@@ -71,12 +71,30 @@
             </a>
           </div>
         </li>
-        <li class="nav-item">
-            <a (click)="rltAndLtr()" class="nav-link mt-1" href="javascript:void(0)"
-              style="padding: 0.375rem 1rem !important; border-color: #999;">
-              RTL/LTR
+
+        <!-- Idioma -->
+        <li class="nav-item dropdown" ngbDropdown>
+          <a class="nav-link" href="javascript:void(0)" ngbDropdownToggle>
+            <i class="fa fa-language"></i> <b>{{ 'Language' | translate }}</b> <b class="caret"></b>
+          </a>
+          <div class="dropdown-menu-right" ngbDropdownMenu>
+            <a (click)="changeLang('en')" class="dropdown-item" href="javascript:void(0)">
+              {{ 'English' | translate }}
             </a>
-          </li>
+            <a (click)="changeLang('es')" class="dropdown-item" href="javascript:void(0)">
+              {{ 'Spanish' | translate }}
+            </a>
+          </div>
+        </li>
+        <!-- Idioma -->
+
+
+        <!-- <li class="nav-item">
+          <a (click)="rltAndLtr()" class="nav-link mt-1" href="javascript:void(0)"
+            style="padding: 0.375rem 1rem !important; border-color: #999;">
+            RTL/LTR
+          </a>
+        </li> -->
 
       </ul>
     </div>

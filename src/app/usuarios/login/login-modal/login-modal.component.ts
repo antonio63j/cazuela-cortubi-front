@@ -5,6 +5,7 @@ import { Usuario } from '../../../shared/modelos/usuario';
 import swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '../../../shared/services/modal.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -22,10 +23,12 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public activeModal: NgbActiveModal,
     private modalService: ModalService,
-    private location: Location
+    private location: Location,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    console.log('en ngOninit');
   }
 
   login(): void {
@@ -37,17 +40,16 @@ export class LoginModalComponent implements OnInit, OnDestroy {
         const usuario = this.authService.usuario;
         console.log(`login con éxito de ${usuario.username}`);
         this.modalService.eventoCerrarModalScrollable.emit();
-
       },
       err => {
         console.log(err);
         if (err.status === 400) {
-        swal.fire('Error Login', 'Usuario o password incorrectas o cuenta no activada!', 'error');
+          swal.fire('Error Login', 'Usuario o password incorrectas o cuenta no activada!', 'error');
         } else {
           swal.fire('Error Login', err.status, 'error');
         }
       }
-      );
+    );
     return;
   }
 
@@ -56,7 +58,13 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     this.activeModal.close('resetPassword');
   }
 
-  ngOnDestroy(): void{
-    this.location.back();
+  ngOnDestroy(): void {
+    console.log('en ngOnDestroy()');
+    if (this.authService.hasRole('ROLE_ADMIN')) {
+      console.log('se redirige a admin-index');
+      this.router.navigate(['\admin-index']);
+    } else {
+      this.location.back();
+    }
   }
 }

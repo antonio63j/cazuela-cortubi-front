@@ -16,8 +16,8 @@ const routes: Routes = [
           // { path: 'admin-sugerencia',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
           //   loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
 
-          { path: 'admin-menu',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
-            loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
+          // { path: 'admin-menu',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
+          //   loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
       ]
   }
 ];

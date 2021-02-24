@@ -197,6 +197,12 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     }
   }
 
+  quitarFiltros(): void {
+    this.filtroSugerencia.init();
+    this.filterChecked = !this.filterChecked;
+    this.nuevaPagina(0);
+  }
+
   inicioSeleccionSugerencias(): void {
     this.sugerencias = [];
     this.filtroSugerencia.init();
