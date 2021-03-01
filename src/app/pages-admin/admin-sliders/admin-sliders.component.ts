@@ -69,6 +69,8 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
       response => {
         this.sliders = (response as Slider[]);
         // this.paginador = response;
+        console.log('sliders:');
+        console.log(response);
       }
       , err => {
         console.log(err);

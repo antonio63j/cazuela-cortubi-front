@@ -30,7 +30,7 @@ import { MatSlider, MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MenuFormComponent } from './admin-menu/menu-form/menu-form.component';
 import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
-import { OrdenPlatoPipe } from '../shared/pipes/orden-plato.pipe';
+import { LowerCasePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -49,8 +49,6 @@ import { OrdenPlatoPipe } from '../shared/pipes/orden-plato.pipe';
 
     SugerenciaFormComponent,
     AdminMenuSugerenciaComponent,
-    OrdenPlatoPipe,
-
     PaginatorComponent,
   ],
   imports: [

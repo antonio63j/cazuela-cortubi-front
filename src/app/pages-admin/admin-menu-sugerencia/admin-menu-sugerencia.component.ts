@@ -10,12 +10,14 @@ import { Sugerencia } from 'src/app/shared/modelos/sugerencia';
 import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { environment } from 'src/environments/environment';
+import { LowerCasePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
 
 import { AdminMenuService } from '../admin-menu/admin-menu.service';
 import { AdminSugerenciaService } from '../admin-sugerencia/admin-sugerencia.service';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
+import { ComponenteMenu } from 'src/app/shared/modelos/componente-menu.enum';
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -54,7 +56,9 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
 
   public disable = false;
 
-  public ordenPlato: string;
+  // public componenteMenu: string;
+  public componenteMenu: ComponenteMenu;
+
   public filterChecked = false;
   public filtroSugerencia: FiltroSugerencia = new FiltroSugerencia();
 
@@ -68,6 +72,11 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
 
   ) {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
+     
+    this.componenteMenu = ComponenteMenu.primero;
+    console.log('ComponenteMenu=');
+    console.log(this.componenteMenu);
+
   }
 
   ngOnInit(): void {
@@ -109,13 +118,16 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
       );
   }
 
-  public configurarMenu(ordenPlato: string): void {
+  public configurarMenu(componenteMenu: ComponenteMenu): void {
     // tabla menu pasa a invisible
     // tabla configuracion menu pasa a visible
     // carga de tabla menu configuracion
     this.disableMS = true;
     this.disable = false;
-    this.ordenPlato = ordenPlato;
+    this.componenteMenu = componenteMenu;
+
+    console.log('componenteMenu:');
+    console.log (this.componenteMenu);
 
     this.inicioSeleccionSugerencias();
 
@@ -165,6 +177,8 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
   }
 
   sortColumnMS(): void {
+
+
     if (this.ordenMenuSugerencia.order === 'label') {
       if (this.ordenMenuSugerencia.direction === 'asc') {
         this.menu.menuSugerencias.sort((a, b) =>
@@ -176,13 +190,13 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     } else {
       if (this.ordenMenuSugerencia.direction === 'asc') {
         this.menu.menuSugerencias.sort((a, b) =>
-          (a.primerPlato > b.primerPlato) ? 1 : -1);
+          (a.componenteMenu > b.componenteMenu) ? 1 : -1);
       } else {
         this.menu.menuSugerencias.sort((a, b) =>
-          (a.primerPlato < b.primerPlato) ? 1 : -1);
+          (a.componenteMenu < b.componenteMenu) ? 1 : -1);
       }
     }
-  
+
   }
 
 
@@ -257,12 +271,14 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
   }
 
   public addMenuSugerencia(sugerencia: Sugerencia): void {
-    let primerPlato = true;
-    if (this.ordenPlato === 'segundos') {
-      primerPlato = false;
-    }
+    // let primerPlato = true;
+    // if (this.componenteMenu === 'segundos') {
+    //   primerPlato = false;
+    // }
     this.menuService.addMenuSugerencia(
-      this.menu, sugerencia.id, primerPlato)
+      // this.menu, sugerencia.id, primerPlato)
+      this.menu, sugerencia.id, this.componenteMenu)
+
     .pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {

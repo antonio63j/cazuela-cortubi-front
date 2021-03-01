@@ -37,7 +37,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
       this.loading = true;
-      this.subscription = this.shareEmpresaService.getEmpresaMsg()
+      this.subscription = this.shareEmpresaService.getEmpresaMsg().pipe(
+        takeUntil(this.unsubscribe$))
       .subscribe(msg => {
           console.log('recibido cambio datos empresa');
           // console.log(JSON.stringify(msg));

@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { ComponenteMenu } from 'src/app/shared/modelos/componente-menu.enum';
 import { Menu } from 'src/app/shared/modelos/menu';
 import { MenuSugerencia } from 'src/app/shared/modelos/menu-sugerencia';
 import { environment } from 'src/environments/environment';
@@ -70,14 +71,15 @@ export class AdminMenuService implements OnDestroy {
   }
 
   addMenuSugerencia(
-    menu: Menu, 
+    menu: Menu,
     sugerenciaId: number,
-    primerPlato: boolean): Observable<any> {
+    // primerPlato: boolean): Observable<any> {
+    componenteMenu: ComponenteMenu): Observable<any> {
     const parametros = new HttpParams()
       .set('menuId', menu.id.toString())
       .set('sugerenciaId', sugerenciaId.toString())
-      .set('primerPlato', primerPlato.toString());
-
+      // .set('primerPlato', primerPlato.toString());
+      .set('componenteMenu', componenteMenu);
     console.log('parametros:');
     console.log(parametros);
 

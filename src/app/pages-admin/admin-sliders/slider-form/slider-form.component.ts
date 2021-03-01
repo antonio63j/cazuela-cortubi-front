@@ -33,6 +33,7 @@ export class SliderFormComponent implements OnInit, OnDestroy {
   }
 
   public update(slider: Slider): void {
+    this.erroresValidacion = [];
     this.observ$ = this.adminSliderService.update(slider).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
@@ -61,6 +62,7 @@ export class SliderFormComponent implements OnInit, OnDestroy {
       );
   }
   public create(slider: Slider): void {
+    this.erroresValidacion = [];
     this.observ$ = this.adminSliderService.create(slider).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {

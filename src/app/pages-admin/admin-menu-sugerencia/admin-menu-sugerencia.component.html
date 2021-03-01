@@ -1,9 +1,12 @@
 <div class="main-content">
   <div class="container-fluid">
 
-    <div class="row"> <!-- row para card con tabla platos y la tabla de seleccion -->
-      <div class="col-md-4" [ngClass]="{'my-disable': disableMS, 'my-invisible': invisibleMS}"> <!-- col-md-4 para las tablas de platos --> 
-        <div class="card" *ngIf="menu"> <!-- card para la tabla de platos -->
+    <div class="row">
+      <!-- row para card con tabla platos y la tabla de seleccion -->
+      <div class="col-md-4" [ngClass]="{'my-disable': disableMS, 'my-invisible': invisibleMS}">
+        <!-- col-md-4 para las tablas de platos -->
+        <div class="card" *ngIf="menu">
+          <!-- card para la tabla de platos -->
           <div class="card-header card-header-danger color-modal-header">
             <h2 class="card-title">Configuración</h2>
             <h4 class="card-title">{{menu.label}}</h4>
@@ -12,13 +15,13 @@
           <!-- tabla primer plato -->
           <div class="card-body table-responsive">
             <table class="table table-bordered table-striped">
-              <thead> <!-- Cabeceras y ordenacion -->
+              <thead>
+                <!-- Cabeceras y ordenacion -->
                 <tr>
                   <th>img
                   </th>
 
-                  <th
-                    (click)='sortChangeColumnMS("label")'>
+                  <th (click)='sortChangeColumnMS("label")'>
                     <div class="arrow-up" *ngIf='ordenMenuSugerencia.direction=="asc" &&
                     ordenMenuSugerencia.order=="label"'>
                     </div>
@@ -27,8 +30,7 @@
                     </div>
                     plato
                   </th>
-                  <th
-                    (click)='sortChangeColumnMS("plato")'>
+                  <th (click)='sortChangeColumnMS("plato")'>
                     <div class="arrow-up" *ngIf='ordenMenuSugerencia.direction=="asc" &&
                     ordenMenuSugerencia.order=="plato"'>
                     </div>
@@ -39,20 +41,22 @@
                   </th>
 
                 </tr>
-              </thead> <!-- Cabeceras y ordenacion fin --> 
-   
-              <tbody> <!-- filas con datos -->
+              </thead> <!-- Cabeceras y ordenacion fin -->
+
+              <tbody>
+                <!-- filas con datos -->
                 <tr *ngFor="let ms of menu.menuSugerencias">
                   <td style="width: 100px">
-                    <img *ngIf="ms.sugerencia.imgFileName" 
+                    <img *ngIf="ms.sugerencia.imgFileName"
                       src="{{host}}/api/sugerencia/uploads/img/{{ms.sugerencia.imgFileName}}" alt="foto sugerencia"
-                      class="rounded" style="width: 100px; cursor: pointer;">  
+                      class="rounded" style="width: 100px; cursor: pointer;">
                   </td>
                   <td style="width: 300px !important ">{{ms.sugerencia.label}}</td>
-                  <td style="width: 200px !important ">{{ms.primerPlato | ordenPlato}}</td>
+                  <!-- <td style="width: 200px !important ">{{ms.primerPlato | ordenPlato}}</td> -->
+                  <td style="width: 200px !important ">{{ms.componenteMenu}}</td>
+
                   <td class="btncolumn" *ngIf="authService.hasRole('ROLE_ADMIN')">
-                    <button type="button" class="btn btn-danger btn-sm" 
-                      (click)='deleteMenuSugerencia(ms)'>
+                    <button type="button" class="btn btn-danger btn-sm" (click)='deleteMenuSugerencia(ms)'>
                       <i class="fa fa-trash-o"></i></button>
                   </td>
 
@@ -63,33 +67,46 @@
           <!-- tabla primer plato fin -->
           <!-- </div> -->
           <div class="card-footer grupo-botones">
-            <button mat-raised-button style="margin-right:12px;" 
-              color="primary" (click)='configurarMenu("primeros")'>Primeros</button>
-              <button mat-raised-button style="margin-right:12px;" 
-              color="primary" (click)='configurarMenu("segundos")'>Segundos</button>  
-            <button mat-raised-button style="margin-right:12px;"
-              color="primary" (click)="salir()">Salir</button>
+            <div class="row">
+              <div class="col">
+                <button mat-raised-button style="margin-right:5px; margin-bottom: 4px;" color="primary"
+                  (click)='configurarMenu("PRIMERO")'>Primeros</button>
+              </div>
+              <div class="col">
+                <button mat-raised-button style="margin-right:5px; margin-bottom: 4px;" color="primary"
+                  (click)='configurarMenu("SEGUNDO")'>Segundos</button>
+              </div>
+              <div class="col">
+                <button mat-raised-button style="margin-right:5px; margin-bottom: 4px;" color="primary"
+                  (click)='configurarMenu("POSTRE")'>Postres</button>
+              </div>
+              <div class="col">
+                <button mat-raised-button style="margin-right:5px; margin-bottom: 4px;" color="primary" 
+                (click)="salir()">Salir</button>
+              </div>
+            </div>
           </div>
 
         </div> <!-- card para la tabla de platos -->
-      </div> <!-- col-md-4 para las tablas de platos --> 
+      </div> <!-- col-md-4 para las tablas de platos -->
 
-<!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
-<!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
-<!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
-<!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
-<!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
-      <div class="col-md-8" *ngIf="sugerencias" [ngClass]="{'my-disable': disable}">  <!-- tabla para la seleccion de sugerencias -->
+      <!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
+      <!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
+      <!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
+      <!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
+      <!-- +++++++++++++++++++ Tabla para la seleccion de sugerencias del menu ++++++++++++++++++++++ -->
+      <div class="col-md-8" *ngIf="sugerencias" [ngClass]="{'my-disable': disable}">
+        <!-- tabla para la seleccion de sugerencias -->
         <div class="card text-center" *ngIf="menu">
           <div class="card-header color-modal-header">
-            <h5>Selección {{ordenPlato}} para el menú <span>{{menu.label}}</span> </h5>
+            <h5>Selección "{{componenteMenu}}" para el menú <span>{{menu.label}}</span> </h5>
           </div>
           <div class="card-title">
             <div *ngIf="sugerencias?.length==0" class="alert alert-info"> Lista vacía
               <!-- <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" style="margin-right: 8px"
                 (click)='crear()'>{{'Crear sugerencia' |translate}}</button> -->
               <button *ngIf="filterChecked" class="btn btn-primary btn-sm" style="margin-right: 8px"
-                (click)='quitarFiltros()'>{{'Desactivar filtros' |translate}}</button>  
+                (click)='quitarFiltros()'>{{'Desactivar filtros' |translate}}</button>
             </div>
           </div>
           <div class="card-body table-responsive">
@@ -97,7 +114,7 @@
               <thead>
                 <tr>
                   <th>
-                  </th>  
+                  </th>
                   <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
                     (click)='sortChangeColumn("label")'>
                     <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
@@ -106,42 +123,42 @@
                                                 filtroSugerencia.order=="label"'></div>
                     label
                   </th>
-    
+
                   <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
-                  (click)='sortChangeColumn("tipo")'>
-                  <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
+                    (click)='sortChangeColumn("tipo")'>
+                    <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                               filtroSugerencia.order=="tipo"'></div>
-                  <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
+                    <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
                                               filtroSugerencia.order=="tipo"'></div>
-                  tipo
-                  </th>  
-    
+                    tipo
+                  </th>
+
                   <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
-                  (click)='sortChangeColumn("precio")'>
-                  <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
+                    (click)='sortChangeColumn("precio")'>
+                    <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                               filtroSugerencia.order=="precio"'></div>
-                  <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
+                    <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
                                               filtroSugerencia.order=="precio"'></div>
-                  precio
-                  </th> 
-    
+                    precio
+                  </th>
+
                   <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}"
-                  (click)='sortChangeColumn("descripcion")'>
-                  <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
+                    (click)='sortChangeColumn("descripcion")'>
+                    <div class="arrow-up" *ngIf='filtroSugerencia.direction=="asc" &&
                                               filtroSugerencia.order=="descripcion"'></div>
-                  <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
+                    <div class="arrow-down" *ngIf='filtroSugerencia.direction=="desc" &&
                                               filtroSugerencia.order=="descripcion"'></div>
-                  descripcion
-                  </th> 
-    
+                    descripcion
+                  </th>
+
                   <!-- <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-trash-o"></i></th> -->
                   <!-- <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-edit"></i></th> -->
                 </tr>
               </thead>
-    
+
               <thead>
                 <tr>
-                  <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}">      
+                  <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltro: !filterChecked}">
                     <mat-slide-toggle [(ngModel)]="filterChecked" (change)="changedFilter()">
                       Filtro
                     </mat-slide-toggle>
@@ -157,7 +174,7 @@
                       <!-- <mat-label>Filtro grupo sugerencia</mat-label> -->
                       <select matNativeControl class="form-control" id="tipoP" name="tipoP" [disabled]="filterChecked"
                         [(ngModel)]="filtroSugerencia.tipo" #tipoP="ngModel">
-    
+
                         <option label="-- filtro grupo de tipos --"></option>
                         <option *ngFor="let tipo of tipoPlatos" [value]="tipo.nombre">
                           {{tipo.nombre}}
@@ -165,20 +182,20 @@
                       </select>
                     </mat-form-field>
                   </th>
-    
+
                   <th style="width: 250px !important">
                     <mat-form-field style="width: 82px !important; margin-right: 6px;">
                       <input matInput type="number" class="form-control" name="precioMin" placeholder="Precio min"
                         [disabled]="filterChecked" [(ngModel)]="filtroSugerencia.precioMin" #precioMin="ngModel"
                         maxlength="7">
                     </mat-form-field>
-    
+
                     <mat-form-field style="width: 82px !important">
                       <input matInput type="number" class="form-control" name="precioMax" placeholder="Precio max"
                         [disabled]="filterChecked" [(ngModel)]="filtroSugerencia.precioMax" #precioMax="ngModel"
                         maxlength="7">
                     </mat-form-field>
-    
+
                   </th>
                   <th>
                     <mat-form-field class="example-full-width">
@@ -187,17 +204,17 @@
                         maxlength="80">
                     </mat-form-field>
                   </th>
-    
+
                   <th [ngClass]="{bloqueoFiltro: filterChecked, desbloqueoFiltroa: !filterChecked}">
                     Filtro
                     <mat-slide-toggle [(ngModel)]="filterChecked" (change)="changedFilter()">
-    
+
                     </mat-slide-toggle>
                   </th>
                 <tr>
                 </tr>
               </thead>
-    
+
               <tbody>
                 <tr *ngFor="let sugerencia of sugerencias">
                   <td style="width: 100px">
@@ -206,7 +223,7 @@
                       class="img-thumbnail2 rounded" style="width: 200px; cursor: pointer;"> -->
                     <img *ngIf="sugerencia?.imgFileName" (click)='addMenuSugerencia(sugerencia)'
                       src="{{host}}/api/sugerencia/uploads/img/{{sugerencia.imgFileName}}" alt="foto sugerencia"
-                      class="rounded" style="width: 100px; cursor: pointer;">  
+                      class="rounded" style="width: 100px; cursor: pointer;">
                   </td>
                   <td style="width: 300px !important ">{{ sugerencia.label}}</td>
                   <td>{{ sugerencia.tipo}}</td>
@@ -221,15 +238,13 @@
               </tbody>
             </table>
           </div> <!-- card-body -->
-    
-    
+
+
           <div class="card-footer text-muted con-scroll">
             <div class="row">
               <div class="col">
-                <paginator-nav *ngIf="paginador" [paginador]="paginador" 
-                    [sizes]="[5, 10, 15, 30, 50]"
-                    [sizePage]=+filtroSugerencia.size
-                    (messageToEmit)="getPagina($event)">
+                <paginator-nav *ngIf="paginador" [paginador]="paginador" [sizes]="[5, 10, 15, 30, 50]"
+                  [sizePage]=+filtroSugerencia.size (messageToEmit)="getPagina($event)">
                 </paginator-nav>
               </div>
               <div class="col">
@@ -240,7 +255,7 @@
             </div>
           </div> <!-- card-footer -->
         </div> <!-- card -->
-        
+
       </div> <!-- tabla para la seleccion de sugerencias fin -->
     </div> <!-- row para card con tabla platos y la tabla de seleccion -->
   </div>
