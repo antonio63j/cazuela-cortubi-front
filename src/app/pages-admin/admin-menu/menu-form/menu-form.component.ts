@@ -12,6 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { FormControl, Validators } from '@angular/forms';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-menu-form',
@@ -28,6 +29,63 @@ export class MenuFormComponent implements OnInit, OnDestroy {
   public erroresValidacion: string[];
 
   public tipoControl = new FormControl('', Validators.required);
+
+  configDescripcion: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '110',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '110',
+    translate: 'no',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Introducir texto que aparecerá en la portada',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    defaultFontSize: '3',
+    fonts: [
+      {class: 'arial', name: 'Arial'},
+      {class: 'times-new-roman', name: 'Times New Roman'},
+      {class: 'calibri', name: 'Calibri'},
+      {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+    ],
+    toolbarHiddenButtons: [
+      [
+       'strikeThrough',
+       'subscript',
+       'superscript',
+      ],
+      [
+       'link',
+       'unlink',
+       'insertImage',
+       'insertVideo',
+       'insertHorizontalRule',
+      ]
+    ],
+    customClasses: [
+    {
+      name: 'quote',
+      class: 'quote',
+    },
+    {
+      name: 'redText',
+      class: 'redText'
+    },
+    {
+      name: 'modalTitleText',
+      class: 'modalTitleText',
+      tag: 'h1',
+    },
+  ],
+  uploadUrl: 'v1/image',
+  sanitize: true,
+  toolbarPosition: 'top',
+  };
+
+
 
   constructor(
     private adminSugerenciaService: AdminMenuService,
@@ -107,6 +165,10 @@ export class MenuFormComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  changedVisible(): void {
+   //  this.menu.visible = !this.menu.visible;
   }
 
   ngOnDestroy(): void{

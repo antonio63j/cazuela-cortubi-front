@@ -72,7 +72,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
 
   ) {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
-     
+
     this.componenteMenu = ComponenteMenu.primero;
     console.log('ComponenteMenu=');
     console.log(this.componenteMenu);
@@ -127,7 +127,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     this.componenteMenu = componenteMenu;
 
     console.log('componenteMenu:');
-    console.log (this.componenteMenu);
+    console.log(this.componenteMenu);
 
     this.inicioSeleccionSugerencias();
 
@@ -250,6 +250,11 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
 
   nuevaPagina(pagina: number): void {
     this.filtroSugerencia.page = pagina.toString();
+
+    if (!this.filterChecked) {
+      this.filtroSugerencia.init();
+    }
+
     this.sugerenciaService
       .getSugerencias(this.filtroSugerencia)
       .pipe(
@@ -279,28 +284,28 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
       // this.menu, sugerencia.id, primerPlato)
       this.menu, sugerencia.id, this.componenteMenu)
 
-    .pipe(
-      takeUntil(this.unsubscribe$),
-      tap((response: any) => {
-        // console.log(response);
-      })
-    )
-    .subscribe(
-      response => {
-        this.menu = response.data as Menu;
-        this.sortColumnMS();
-      },
-      err => {
-        console.log(err);
-        swal.fire('Error en añadir sugerencia al menu', err.status, 'error');
-      }
-    );
-}
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((response: any) => {
+          // console.log(response);
+        })
+      )
+      .subscribe(
+        response => {
+          this.menu = response.data as Menu;
+          this.sortColumnMS();
+        },
+        err => {
+          console.log(err);
+          swal.fire('Error en añadir sugerencia al menu', err.status, 'error');
+        }
+      );
+  }
 
-salirSeleccion(): void{
-  this.disable = true;
-  this.disableMS = false;
-}
+  salirSeleccion(): void {
+    this.disable = true;
+    this.disableMS = false;
+  }
 
   // procedimientos comunes
   // +++++++++++++++++++++++++++++++++++++++++++++

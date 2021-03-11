@@ -36,8 +36,6 @@ const routes: Routes = [
     path: 'admmenu', component: AdminMenuComponent,
   },
 
-  // { path: 'admmenu', loadChildren: () => import('./admin-menu/admin-menu.module').then((m) => m.AdminMenuModule)},
-
   {
     path: 'admmenusugerencia/:id', component: AdminMenuSugerenciaComponent,
   }

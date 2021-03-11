@@ -39,6 +39,20 @@ export class AdminMenuService implements OnDestroy {
     );
   }
 
+  getMenusVisibles(): Observable<any> {
+    return this.http.get<Menu[]>(environment.urlEndPoint + '/api/menu/list-visible').pipe(
+      tap((response: any) => {
+        //  (response.content as menu[]).forEach (menu => console.log(menu));
+      }),
+      map((response: any) => {
+        (response as Menu[]).map(menu => {
+          return menu;
+        });
+        return response;
+      })
+    );
+  }
+
   create(menu: Menu): Observable<any> {
     /* se añade el token con TokenInterceptor
     return this.http.post<any>(this.urlEndPoint, menu, { headers: this.httpHeader }); */

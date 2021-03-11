@@ -1,52 +1,44 @@
-<!-- <div class="text-center"> -->
-  <div class="card-header">
-    <h3>Definición de menús</h3>
-    <h5 class="card-title">{{tituloBody}}</h5>
+<!-- <div class="container" style="border: 228rem;"> -->
+
+<div class="card contenedor">
+  <div class="card-header color-modal-header">
+    <h3>Configuración de menús</h3>
   </div>
   <div class="card-title">
-    <div *ngIf="!menus" class="alert alert-info">Esperando carga de imagenes</div> 
+    <div *ngIf="!menus" class="alert alert-info">Esperando carga de imagenes</div>
     <div *ngIf="menus?.length==0" class="alert alert-info"> Lista vacía
-      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-      style="margin-right: 8px" (click) = 'create()'>{{'Crear Menú' |translate}}</button>
-    </div> 
+      <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" style="margin-right: 8px"
+        (click)='create()'>{{'Crear Menú' |translate}}</button>
+    </div>
   </div>
-  <div class="card-body table-responsive">
-    <div *ngFor="let menu of menus">
-      <mat-card class="example-card">
+
+  <div class="card-body row">
+    <div *ngFor="let menu of menus" class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+      <mat-card style="margin-bottom: 30px;">
         <mat-card-header>
-          <!-- <div mat-card-avatar class="example-header-image" background-image= "http://localhost:8080/api/empresa/uploads/img/indra3.jpg"></div> -->
-          <!-- <img *ngIf="menu?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/tipos.png"> -->
-          <img *ngIf="menu?.imgFileName" mat-card-avatar src= "{{host}}/api/empresa/uploads/img/admin/menu_peque.png">
-      
-          <mat-card-title> {{menu.label | slice:0:35}}...</mat-card-title>
+          <!-- <img *ngIf="menu?.imgFileName" mat-card-avatar src="{{host}}/api/empresa/uploads/img/admin/menu_peque.png"> -->     
+          <!-- <mat-card-title>{{menu.label | slice:0:35}}...</mat-card-title> -->
         </mat-card-header>
-        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-        <!-- <img *ngIf="menu?.imgFileName" mat-card-image  
-          src="{{host}}/api/empresa/uploads/img/{{menu.imgFileName}}">
-       -->
-          <img *ngIf="menu?.imgFileName"  class="img-thumbnail"
-          src="{{host}}/api/menu/uploads/img/{{menu.imgFileName}}">
-      
-          
+        <img *ngIf="menu?.imgFileName" class="img-thumbnail" src="{{host}}/api/menu/uploads/img/{{menu.imgFileName}}">
         <mat-card-content>
-          <p>  precio: {{menu.precio}}</p>
-          <p>  {{menu.descripcion | slice:0:59}}...</p>
+          <!-- <p> precio: {{menu.precio}}</p> -->
+          <p>{{menu.label | slice:0:37}}</p>
         </mat-card-content>
         <mat-card-actions>
 
-          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm" 
-            style="margin-right: 8px" (click) = 'update(menu)'>{{'Edit' |translate}}</button>
-          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-            style="margin-right: 8px" 
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" mat-button style="margin-right: 1px"
+            (click)='update(menu)'>{{'Edit' |translate}}</button>
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" mat-button style="margin-right: 1px"
             [routerLink]="['/admin-index/admmenusugerencia', menu.id]">
-            {{'Configurar platos' |translate}}
+            {{'Platos' |translate}}
           </button>
-          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-            style="margin-right: 8px" (click) = 'create()'>{{'Create' |translate}}</button>
-          <button *ngIf="authService.hasRole('ROLE_ADMIN')" class="btn btn-primary btn-sm"
-          style="margin-right: 8px" (click) = 'delete(menu)'>{{'Delete' |translate}}</button>
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" mat-button style="margin-right: 1px"
+            (click)='create()'>{{'Create' |translate}}</button>
+          <button *ngIf="authService.hasRole('ROLE_ADMIN')" mat-button style="margin-right: 1px"
+            (click)='delete(menu)'>{{'Delete' |translate}}</button>
         </mat-card-actions>
       </mat-card>
     </div>
-  </div> <!-- card body -->
-<!-- </div> -->
+  </div>
+
+</div>

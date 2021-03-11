@@ -7,12 +7,12 @@ import { take, takeUntil, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 
 import { ModalService } from '../../shared/services/modal.service';
-import { AdminMenuService } from './admin-menu.service';
+import { AdminMenuService } from '../../pages-admin/admin-menu/admin-menu.service';
 import { environment } from '../../../environments/environment';
 import { ModalConModeloService } from '../../shared/services/modal-con-modelo.service';
 import { AuthService } from '../../usuarios/auth.service';
 import { Menu } from 'src/app/shared/modelos/menu';
-import { MenuFormComponent } from './menu-form/menu-form.component';
+import { MenuDetalleComponent } from './menu-detalle/menu-detalle.component';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -24,11 +24,11 @@ const swalWithBootstrapButtons = swal.mixin({
 });
 
 @Component({
-  selector: 'app-admin-menu',
-  templateUrl: './admin-menu.component.html',
-  styleUrls: ['./admin-menu.component.scss']
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.scss']
 })
-export class AdminMenuComponent implements OnInit, OnDestroy{
+export class MenuComponent implements OnInit, OnDestroy{
 
   menus: Menu[];
   menu: Menu = new Menu();
@@ -53,7 +53,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
   }
 
   subcripcionMenus(): void {
-    this.menuService.getMenus().pipe(
+    this.menuService.getMenusVisibles().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
         // console.log(response);
@@ -71,37 +71,17 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
     );
   }
 
-  public create(): void {
-    const menu: Menu = new Menu();
-    menu.visible = true;
-    this.openModal(menu);
+  public comprar(menu: Menu): void {
+     console.log('comprar');
+     this.openModal(menu);
   }
 
-  public delete(menu: Menu): void {
-    swalWithBootstrapButtons.fire({
-      title: '¿Estás seguro?',
-      text: `Eliminarás el menú: ${menu.label}`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar!',
-      cancelButtonText: 'No, cancelar!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.value) {
-        this.menuService.delete(menu.id).subscribe(
-          response => {
-            this.menuService.getMenus().subscribe(respon => {
-              this.menus = (respon as Menu[]);
-            });
-          }
-          , err => {
-            console.log(err);
-            swal.fire('Error al eliminar menu', '', 'error');
-          }
-        );
-      }
-    });
+  public salir(): void {
+    console.log('salir');
+  }
 
+  public create(): void {
+    this.openModal(new Menu());
   }
 
   public update(menu: Menu): void {
@@ -110,7 +90,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
 
   public openModal(menu: Menu): void {
     this.modalConModeloService.openModalScrollable(
-      MenuFormComponent,
+      MenuDetalleComponent,
       { size: 'lg', backdrop: 'static', scrollable: true },
       menu,
       'menu',
@@ -124,10 +104,6 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
         this.menus = respon as Menu[];
       });
     });
-  }
-
-  composicion(menu: Menu): void {
-
   }
 
   subscripcioneventoCerrarModalScrollable(): void {

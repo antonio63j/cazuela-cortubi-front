@@ -21,6 +21,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { RecortarPipe } from './shared/pipes/recortar.pipe';
+import { PaginatorComponent } from './shared/componentes/paginator/paginator.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -37,7 +39,10 @@ export const MY_FORMATS = {
 @NgModule({
   declarations: [
     AppComponent,
+    RecortarPipe,
+
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -49,11 +54,6 @@ export const MY_FORMATS = {
 
     MatSelectModule,  // en otro modulo lazy da error al utilizar mat-select
 
-    // AllMaterialModule
-
-    // NgbModule,
-    // ModalFormModule,
-    // FormsModule,
   ],
 
   exports: [

@@ -14,9 +14,9 @@
               <div class="col-md-12">
                 <mat-form-field class="example-full-width">
                   <input matInput class="form-control" name="label" placeholder="nombre o etiqueta del menu"
-                    [(ngModel)]="menu.label" #label="ngModel" maxlength="80">
-                  <mat-error *ngIf="label.hasError('maxlength')">
-                    Debe tener máximo 80 posiciones
+                    [(ngModel)]="menu.label" #label="ngModel" maxlength="38" minlength="5" required>
+                  <mat-error *ngIf="label.hasError('maxlength') || label.hasError('minlength')">
+                    Debe tener entre 5 y 38 posiciones
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -24,24 +24,36 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput class="form-control" name="precio" placeholder="Precio"
-                    [(ngModel)]="menu.precio" #precio="ngModel" maxlength="8">
+                  <input matInput class="form-control" name="precio" placeholder="Precio" [(ngModel)]="menu.precio"
+                    #precio="ngModel" maxlength="8" required>
                   <mat-error *ngIf="precio.hasError('maxlength')">
                     Debe tener máximo 10 posiciones
                   </mat-error>
                 </mat-form-field>
               </div>
-            </div>
 
+              <div class="col-md-6">
+                <mat-slide-toggle [(ngModel)]="menu.visible" [ngModelOptions]="{standalone: true}"
+                  (change)="changedVisible()">
+                  Visible
+                </mat-slide-toggle>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-12">
-                <mat-form-field class="example-full-width">
+
+                <!-- <mat-form-field class="example-full-width">
                   <input matInput class="form-control" id="descripcion" name="descripcion" placeholder="descripción"
                     [(ngModel)]="menu.descripcion" #descripcion="ngModel" maxlength="120">
                   <mat-error *ngIf="descripcion.hasError('maxlength')">
                     Debe tener máximo 120 posiciones
                   </mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
+                <label style="color: grey;">Descripcion</label>
+                <angular-editor id="editor1" name="descripcion" 
+                  [config]="configDescripcion" 
+                  [(ngModel)]="menu.descripcion">
+                </angular-editor>
               </div>
             </div>
 
@@ -54,11 +66,11 @@
           </form>
         </div>
         <div class="card-footer grupo-botones">
-          <button *ngIf="menu.id" mat-raised-button class="margin-right" color="primary"
-            (click)='update(menu)' [disabled]="!variableForm.form.valid">update</button>
-            
-          <button *ngIf="!menu.id" mat-raised-button class="margin-right" color="primary"
-            (click)="create(menu)" [disabled]="!variableForm.form.valid">Crear</button>
+          <button *ngIf="menu.id" mat-raised-button class="margin-right" color="primary" (click)='update(menu)'
+            [disabled]="!variableForm.form.valid">update</button>
+
+          <button *ngIf="!menu.id" mat-raised-button class="margin-right" color="primary" (click)="create(menu)"
+            [disabled]="!variableForm.form.valid">Crear</button>
           <button mat-raised-button color="primary" (click)="activeModal.close(true)">Salir</button>
         </div>
       </div>
@@ -68,8 +80,7 @@
         <div class="card-body">
           <h4 class="card-title">Selección de imagen</h4>
           <p *ngIf="menu.id" class="card-description">
-            <app-upload-foto [fotoActual]=menu.imgFileName [id]=menu.id
-              sufijoController="api/menu/uploads/img">
+            <app-upload-foto [fotoActual]=menu.imgFileName [id]=menu.id sufijoController="api/menu/uploads/img">
             </app-upload-foto>
           </p>
         </div>

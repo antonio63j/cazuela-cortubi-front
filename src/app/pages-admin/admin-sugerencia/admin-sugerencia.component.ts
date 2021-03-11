@@ -87,6 +87,13 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
 
     nuevaPagina(pagina: number): void {
         this.filtroSugerencia.page = pagina.toString();
+
+        // test
+        if (!this.filterChecked) {
+            this.filtroSugerencia.init();
+        }
+        // test
+
         this.sugerenciaService
             .getSugerencias(this.filtroSugerencia)
             .pipe(

@@ -9,6 +9,7 @@ import { LayoutRoutingModule } from './layout-routing.module';
 import { LayoutComponent } from './layout.component';
 import { FooterComponent } from './footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PaginatorComponent } from '../shared/componentes/paginator/paginator.component';
 
 @NgModule({
     imports: [CommonModule,
@@ -19,7 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     declarations: [LayoutComponent,
         SidebarComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
     ],
 })
 export class LayoutModule { }
