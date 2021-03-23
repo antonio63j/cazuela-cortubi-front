@@ -267,6 +267,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
         response => {
           this.sugerencias = response.content as Sugerencia[];
           this.paginador = response;
+          window.scrollTo(0, 0);
         },
         err => {
           console.log(err);

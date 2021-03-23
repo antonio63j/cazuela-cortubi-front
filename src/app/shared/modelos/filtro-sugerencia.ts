@@ -11,7 +11,7 @@ export class FiltroSugerencia {
 
     constructor() {
        this.init();
-       this.initPage('0', '5', 'label', 'asc');
+       this.initPage('0', '12', 'label', 'asc');
     }
 
     init(): void{

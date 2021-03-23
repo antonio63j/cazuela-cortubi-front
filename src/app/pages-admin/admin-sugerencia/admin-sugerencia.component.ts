@@ -69,6 +69,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
     ) {
         this.sugerencias = [];
         this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
+
     }
 
     ngOnInit(): void {
@@ -114,6 +115,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                 response => {
                     this.sugerencias = response.content as Sugerencia[];
                     this.paginador = response;
+                    window.scrollTo(0, 0);
                 },
                 err => {
                     console.log(err);

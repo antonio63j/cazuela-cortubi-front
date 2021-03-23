@@ -40,13 +40,13 @@ export class MenuDetalleComponent implements OnInit {
         this.segundo === undefined || 
         this.postre === undefined ) {
       swal.fire('Aviso', 'Falta opción por seleccionar', 'warning');
-    } else { 
-        if (this.cantidad < 1 || this.cantidad >20) {
-          swal.fire('Aviso', 'Ponga cantidad entre 1 y 20', 'warning');
+    } else {
+        if (this.cantidad < 1 || this.cantidad > 20) {
+          swal.fire('Aviso', 'Cantidad deber estar entre 1 y 20', 'warning');
         } else {
             console.log('getion pedido');
            this.activeModal.close('con accept');
-        } 
+        }
     }
   }
 

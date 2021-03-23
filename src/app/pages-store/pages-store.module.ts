@@ -24,13 +24,18 @@ import { MenuDetalleComponent } from './menu/menu-detalle/menu-detalle.component
 import { BrowserModule } from '@angular/platform-browser';
 import { PaginatorModule } from '../shared/componentes/paginator/paginator.module';
 import {MatRadioModule} from '@angular/material/radio';
+import { FiltroModule } from '../shared/componentes/filtro/filtro.module';
+import { DynamicFormComponent } from '../shared/componentes/filtro/dynamic-form/dynamic-form.component';
+import { DynamicFieldDirective } from '../shared/componentes/filtro/dynamic-field/dynamic-field.directive';
 
 @NgModule({
   declarations: [
     CartaComponent,
     MenuComponent,
     MenuDetalleComponent,
-
+    
+    DynamicFieldDirective,
+    DynamicFormComponent
   ],
 
   imports: [
@@ -56,7 +61,7 @@ import {MatRadioModule} from '@angular/material/radio';
     AngularEditorModule,
 
     PaginatorModule,
-
+    FiltroModule,
     MatRadioModule
 
 
