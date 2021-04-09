@@ -8,6 +8,7 @@ export class FiltroSugerencia {
     label: string;
     tipo: string;
     descripcion: string;
+    visible?: string;
 
     constructor() {
        this.init();
@@ -22,6 +23,10 @@ export class FiltroSugerencia {
         this.descripcion = null;
     }
 
+    setSoloVisibles(): void {
+        this.visible = 'si';
+    }
+
     initPage(page: string,
              size: string,
              order: string,
@@ -30,7 +35,7 @@ export class FiltroSugerencia {
       this.size = size;
       this.order = order;
       this.direction = direction;
-    } 
+    }
 }
 
 export class OrdenMenuSugerencia {

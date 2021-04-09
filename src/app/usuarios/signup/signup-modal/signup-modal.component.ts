@@ -29,6 +29,7 @@ export class SignupModalComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private translate: TranslateService,
     private location: Location
+
   ) { }
 
   ngOnInit(): void {

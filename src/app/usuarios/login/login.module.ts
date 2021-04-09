@@ -6,6 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
+import { SignupModalComponent } from '../signup/signup-modal/signup-modal.component';
+import { SignupModule } from '../signup/signup.module';
 
 // import { ModalFormModule } from 'src/shared/modules/modal-form/modal-form.module';
 import { LoginModalComponent } from './login-modal/login-modal.component';
@@ -25,13 +27,14 @@ import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.compon
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
-
+    SignupModule
   ],
 
   declarations: [
     LoginComponent,
     LoginModalComponent,
-    PwdResetModalComponent
+    PwdResetModalComponent,
+    
   ],
 
 })

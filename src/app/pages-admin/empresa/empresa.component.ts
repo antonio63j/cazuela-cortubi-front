@@ -96,10 +96,6 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   getEmpresa(id: number): void {
     this.observ$ = this.empresaService.get(id).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

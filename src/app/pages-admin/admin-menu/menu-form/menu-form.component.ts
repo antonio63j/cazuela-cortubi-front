@@ -41,7 +41,7 @@ export class MenuFormComponent implements OnInit, OnDestroy {
     translate: 'no',
     enableToolbar: true,
     showToolbar: true,
-    placeholder: 'Introducir texto que aparecerá en la portada',
+    placeholder: 'Introducir descripción del menú',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
     defaultFontSize: '3',
@@ -167,8 +167,8 @@ export class MenuFormComponent implements OnInit, OnDestroy {
       );
   }
 
-  changedVisible(): void {
-   //  this.menu.visible = !this.menu.visible;
+  changedVisible(valor: any): void {
+
   }
 
   ngOnDestroy(): void{

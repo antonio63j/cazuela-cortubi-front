@@ -10,12 +10,16 @@ import { LayoutComponent } from './layout.component';
 import { FooterComponent } from './footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorComponent } from '../shared/componentes/paginator/paginator.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
     imports: [CommonModule,
         LayoutRoutingModule,
         TranslateModule,
-        NgbModule
+        NgbModule,
+        MatIconModule,
+        MatBadgeModule
     ],
     declarations: [LayoutComponent,
         SidebarComponent,

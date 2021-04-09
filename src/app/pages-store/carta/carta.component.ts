@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
@@ -37,13 +37,13 @@ const swalWithBootstrapButtons = Swal.mixin({
     styleUrls: ['./carta.component.scss']
 })
 
-export class CartaComponent implements OnInit {
+export class CartaComponent implements OnInit, OnDestroy {
 
     @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
     sugerencias: Sugerencia[];
     sugerencia: Sugerencia = new Sugerencia();
-    // private pagina: number;
+
     host: string = environment.urlEndPoint;
     private unsubscribe$ = new Subject();
     public paginador: any;
@@ -68,9 +68,9 @@ export class CartaComponent implements OnInit {
         private modalService: ModalService,
         private translate: TranslateService,
         private authService: AuthService,
-        // public disableDirective: DisableDirective
 
     ) {
+        this.filtroSugerencia.setSoloVisibles();
         this.sugerencias = [];
         this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
 
@@ -91,18 +91,18 @@ export class CartaComponent implements OnInit {
 
         this.regConfig = [
             {
-                type: "input",
+                type: 'input',
                 label: 'Nombre',
-                inputType: "text",
+                inputType: 'text',
                 class: 'demo-15-width',
-                name: "label",
+                name: 'label',
                 validations: [
                 ]
             },
             {
-                type: "select",
-                label: "Tipo plato",
-                name: "tipo",
+                type: 'select',
+                label: 'Tipo plato',
+                name: 'tipo',
                 value: null,
                 class: 'demo-15-width',
                 options: this.opcionesPlatos,
@@ -110,27 +110,27 @@ export class CartaComponent implements OnInit {
                 ]
             },
             {
-                type: "input",
+                type: 'input',
                 label: 'Precio mim.',
                 class: 'demo-10-width',
-                inputType: "number",
-                name: "precioMin",
+                inputType: 'number',
+                name: 'precioMin',
                 validations: [
                 ]
             },
             {
-                type: "input",
+                type: 'input',
                 label: 'Precio max.',
                 class: 'demo-10-width',
-                inputType: "number",
-                name: "precioMax",
+                inputType: 'number',
+                name: 'precioMax',
                 validations: [
                 ]
             },
             {
-                type: "select",
-                label: "Ordenación",
-                name: "ordenacion",
+                type: 'select',
+                label: 'Ordenación',
+                name: 'ordenacion',
                 class: 'campoOrdenacion',
                 value: 'label',
                 options: this.opcionesOrdenacion,
@@ -148,8 +148,8 @@ export class CartaComponent implements OnInit {
                 ]
             },
             {
-                type: "button",
-                label: "Aplicar y ordenación"
+                type: 'button',
+                label: 'Aplicar y ordenación'
             }
         ];
 
@@ -163,7 +163,6 @@ export class CartaComponent implements OnInit {
 
     // Es llamado por el paginator
     public getPagina(paginaYSize: any): void {
-
         const pagina: number = paginaYSize.pagina;
         const size: number = paginaYSize.size;
         this.filtroSugerencia.size = size.toString();
@@ -227,6 +226,11 @@ export class CartaComponent implements OnInit {
         });
     }
 
+    public comprar(sugerencia: Sugerencia): void {
+        console.log('comprar');
+        this.cartaDetalle(sugerencia);
+     }
+
     subscripcioneventoCerrarModalScrollable(): void {
         this.modalService.eventoCerrarModalScrollable.pipe(
             takeUntil(this.unsubscribe$),
@@ -269,36 +273,30 @@ export class CartaComponent implements OnInit {
         this.nuevaPagina(0);
     }
 
-    public sortChangeColumn(colName: string): void {
-        if (colName === this.filtroSugerencia.order) {
-            if (this.filtroSugerencia.direction === 'asc') {
-                this.filtroSugerencia.direction = 'desc';
-            }
-            else {
-                this.filtroSugerencia.direction = 'asc';
-            }
-        } else {
-            this.filtroSugerencia.order = colName;
-            this.filtroSugerencia.direction = 'asc';
-        }
-        this.nuevaPagina(0);
-    }
+    // public sortChangeColumn(colName: string): void {
+    //     if (colName === this.filtroSugerencia.order) {
+    //         if (this.filtroSugerencia.direction === 'asc') {
+    //             this.filtroSugerencia.direction = 'desc';
+    //         }
+    //         else {
+    //             this.filtroSugerencia.direction = 'asc';
+    //         }
+    //     } else {
+    //         this.filtroSugerencia.order = colName;
+    //         this.filtroSugerencia.direction = 'asc';
+    //     }
+    //     this.nuevaPagina(0);
+    // }
 
-    submit(value: any) {
-        console.log('submit:' + JSON.stringify(value));
-        // this.filtroSugerencia = value
+    submit(value: any): void {
         this.filtroSugerencia.label = value.label;
         this.filtroSugerencia.tipo  = value.tipo;
         this.filtroSugerencia.precioMin = value.precioMin;
         this.filtroSugerencia.precioMax = value.precioMax;
         this.filtroSugerencia.order = value.ordenacion;
         this.filtroSugerencia.direction = value.sentidoOrdenacion;
-
-
-        console.log(this.filtroSugerencia);
+        // console.log(this.filtroSugerencia);
         this.nuevaPagina(0);
-
-
     }
 
     ngOnDestroy(): void {

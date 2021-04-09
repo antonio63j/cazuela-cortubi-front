@@ -27,15 +27,20 @@ import {MatRadioModule} from '@angular/material/radio';
 import { FiltroModule } from '../shared/componentes/filtro/filtro.module';
 import { DynamicFormComponent } from '../shared/componentes/filtro/dynamic-form/dynamic-form.component';
 import { DynamicFieldDirective } from '../shared/componentes/filtro/dynamic-field/dynamic-field.directive';
+import { CartaDetalleComponent } from './carta/carta-detalle/carta-detalle.component';
+import { CarritoComponent } from './carrito/carrito.component';
 
 @NgModule({
   declarations: [
     CartaComponent,
+    CartaDetalleComponent,
     MenuComponent,
     MenuDetalleComponent,
     
     DynamicFieldDirective,
-    DynamicFormComponent
+    DynamicFormComponent,
+
+    CarritoComponent
   ],
 
   imports: [

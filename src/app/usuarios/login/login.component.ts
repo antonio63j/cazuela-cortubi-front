@@ -15,6 +15,7 @@ import { Usuario } from '../../shared/modelos/usuario';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { Location } from '@angular/common';
 import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.component';
+import { SignupModalComponent } from '../signup/signup-modal/signup-modal.component';
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -75,6 +76,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (result === 'resetPassword') {
         this.crearModalResetPassword();
       }
+      if (result === 'signup') {
+        this.crearModalSignup();
+      }
     }
       , err => {
         console.log(err);
@@ -104,6 +108,24 @@ export class LoginComponent implements OnInit, OnDestroy {
         swal.fire('Error en gestión de cambio de contraseña', err.message, 'error');
       }
     );
+  }
+
+  crearModalSignup(): void {
+    this.usuario.username = null;
+    this.usuario.password = null;
+
+    this.modalConModeloService.openModalScrollable(
+      SignupModalComponent,
+      { size: 'lg', backdrop: 'static', scrollable: true },
+      this.usuario,
+      'usuario',
+      'Los campos con * son obligatorios',
+      'Login'
+    ).pipe(
+      take(1) // take() manages unsubscription for us
+    ).subscribe(result => {
+      console.log({ confirmedResult: result });
+    });
   }
 
 

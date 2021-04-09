@@ -8,6 +8,7 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Empresa } from '../../shared/modelos/empresa';
 import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
+import { PedidoService } from 'src/app/shared/services/pedido.service';
 
 @Component({
     selector: 'app-header',
@@ -27,13 +28,16 @@ export class HeaderComponent implements OnInit, OnDestroy{
     // public dropdownSettings: any = {};
 
     public empresa: Empresa = new Empresa();
-    public subscription: Subscription;
+    public subscripcionDatosEmpresa: Subscription;
+    public hiddenProductosEnCarrito = false;
+    public productosCarrito = 0;
 
     constructor(
         private translate: TranslateService,
         public router: Router,
         public authService: AuthService,
-        public shareEmpresaService: ShareEmpresaService
+        public shareEmpresaService: ShareEmpresaService,
+        public pedidoService: PedidoService
     ) {
         this.router.events.subscribe((val) => {
             // console.log('en gestion router.events');
@@ -50,12 +54,20 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
     ngOnInit(): void {
         this.pushRightClass = 'push-right';
-        this.subscription = this.shareEmpresaService.getEmpresaMsg()
+        this.subscripcionDatosEmpresa = this.shareEmpresaService.getEmpresaMsg()
           .subscribe(msg => {
               console.log('recibido cambio datos empresa');
-              // console.log(JSON.stringify(msg));
               this.empresa = msg;
             });
+        // this.subcripcionNumProductos = this.pedidoService.getNumProductosMsg()
+        //   .subcribe(msg => {
+        //       console.log('recibido cambio numero de productos en carrito');
+        //       this.productosCarrito = msg;
+        //   })    
+    }
+
+    getNumProductos(): number {
+        return this.pedidoService.getNumProductos();
     }
 
     onItemSelect(item: any): void {
@@ -92,7 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
     }
 
     ngOnDestroy(): void {
-        this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
+        this.subscripcionDatosEmpresa.unsubscribe(); // onDestroy cancels the subscribe request
     }
 
 }

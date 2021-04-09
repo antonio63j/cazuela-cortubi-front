@@ -33,8 +33,8 @@ export class PaginatorComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         const paginadorActualizado = changes.paginador;
-        console.log('paginadorActualizado:');
-        console.log(JSON.stringify(paginadorActualizado));
+        // console.log('paginadorActualizado:');
+        // console.log(JSON.stringify(paginadorActualizado));
         if (paginadorActualizado.previousValue) {
             this.initPaginador();
         }
@@ -64,8 +64,8 @@ export class PaginatorComponent implements OnInit, OnChanges {
         this.cargaPagina(0);
     }
 
-    public cargaPagina(pagina: number) {
-        let params: {[k: string]: any} = {};
+    public cargaPagina(pagina: number): void {
+        const params: {[k: string]: any} = {};
         params.pagina = pagina;
         params.size = this.sizePage;
         this.messageToEmit.emit(params);

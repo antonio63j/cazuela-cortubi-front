@@ -12,6 +12,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { FormControl, Validators } from '@angular/forms';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-sugerencia-form',
@@ -23,12 +24,68 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
 
   host: string = environment.urlEndPoint;
   public sugerencia: Sugerencia;
+  public visualBoolean: boolean;
   private observ$: Subscription = null;
   private unsubscribe$ = new Subject();
   public erroresValidacion: string[];
   public tipoPlatos: Tipoplato [];
 
   public tipoControl = new FormControl('', Validators.required);
+
+  configDescripcion: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: 'auto',
+    minHeight: '110',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '110',
+    translate: 'no',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: 'Introducir la descripción de la sugerencia',
+    defaultParagraphSeparator: 'p',
+    defaultFontName: 'Arial',
+    defaultFontSize: '3',
+    fonts: [
+      {class: 'arial', name: 'Arial'},
+      {class: 'times-new-roman', name: 'Times New Roman'},
+      {class: 'calibri', name: 'Calibri'},
+      {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+    ],
+    toolbarHiddenButtons: [
+      [
+       'strikeThrough',
+       'subscript',
+       'superscript',
+      ],
+      [
+       'link',
+       'unlink',
+       'insertImage',
+       'insertVideo',
+       'insertHorizontalRule',
+      ]
+    ],
+    customClasses: [
+    {
+      name: 'quote',
+      class: 'quote',
+    },
+    {
+      name: 'redText',
+      class: 'redText'
+    },
+    {
+      name: 'modalTitleText',
+      class: 'modalTitleText',
+      tag: 'h1',
+    },
+  ],
+  uploadUrl: 'v1/image',
+  sanitize: true,
+  toolbarPosition: 'top',
+  };
 
   constructor(
     private adminSugerenciaService: AdminSugerenciaService,
@@ -40,10 +97,16 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.visualBoolean = this.setVisualBoolean(this.sugerencia);
   }
 
   public update(sugerencia: Sugerencia): void {
     this.erroresValidacion = [];
+    this.setSugerenciaVisualPeticion(sugerencia);
+    console.log('sugerencia:');
+    console.log(sugerencia);
+    console.log(this.visualBoolean);
+
     this.observ$ = this.adminSugerenciaService.update(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
@@ -54,7 +117,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
       .subscribe(
         json => {
           this.sugerencia = json.data;
-
+          this.visualBoolean = this.setVisualBoolean(this.sugerencia);
           // se está utilizando activeModal.close(true) en template
           // this.modalService.eventoCerrarModalScrollable.emit();
           swal.fire('sugerencia actualizada', `${json.mensaje}, label: ${json.data.label}`, 'success');
@@ -73,6 +136,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
   }
   public create(sugerencia: Sugerencia): void {
     this.erroresValidacion = [];
+    this.setSugerenciaVisualPeticion(sugerencia);
     this.observ$ = this.adminSugerenciaService.create(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
       /*      , catchError(err => {
@@ -83,6 +147,8 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
       .subscribe(
         json => {
           this.sugerencia = json.data;
+          this.visualBoolean = this.setVisualBoolean(this.sugerencia);
+
           // this.activeModal.close(true);
           // el cierre del modal se podría hacer con:
 
@@ -109,6 +175,25 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  setVisualBoolean(sugerencia: Sugerencia): boolean {
+    if (sugerencia.visible === 'no') {
+      return false;
+    } else { return true; }
+  }
+
+  setSugerenciaVisualPeticion(sugerencia: Sugerencia): void {
+     if (!this.visualBoolean) {
+       sugerencia.visible = 'no';
+     }
+     else {
+       sugerencia.visible = 'si';
+     }
+  }
+
+  changedVisible(valor: boolean): void {
+
   }
 
   ngOnDestroy(): void{

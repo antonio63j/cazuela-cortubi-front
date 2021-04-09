@@ -29,6 +29,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     declarations: [
         SignupComponent,
         SignupModalComponent
+    ],
+    exports: [
+        SignupModalComponent
     ]
 })
 export class SignupModule {}

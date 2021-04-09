@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Empresa } from './shared/modelos/empresa';
 import { ShareEmpresaService } from './shared/services/share-empresa.service';
 import { EmpresaService } from './pages-admin/empresa/empresa.service';
+import { PedidoService } from './shared/services/pedido.service';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private empresaService: EmpresaService,
-    private shareEmpresaService: ShareEmpresaService) {
+    private shareEmpresaService: ShareEmpresaService,
+    private pedidoService: PedidoService
+    ) {
       this.getEmpresa(1);
+      this.pedidoService.cargaPedido();
   }
 
   ngOnInit(): void {

@@ -43,24 +43,41 @@
 
   }
 
-  
 .boton-bajo {
 
-        font-size: 14px;
+        font-size: 15px;
         line-height: 3px;
         text-align: center;
         // margin:0 auto;
         height:2px;
-        display:inline-block;
+       // display:inline-block;
+        display:inline-flex;
         color: $oxido;
+        
         // padding: 5px;
- 
+        cursor:pointer; cursor: hand;
+
         text-decoration: underline;
         -webkit-text-decoration-color: orange; /* Safari */  
-        text-decoration-color: orange;
-
- 
+        text-decoration-color: orange; 
 }
+
+.label-bajo {
+  font-size: 15px;
+  line-height: 3px;
+  text-align: center;
+  // margin:0 auto;
+  height:2px;
+ // display:inline-block;
+  display:inline-flex;
+  color: $oxido;
+  
+  // padding: 5px;
+
+  -webkit-text-decoration-color: orange; /* Safari */  
+  text-decoration-color: orange; 
+}
+
 
 button.margin-right {
     margin-right: 20px;

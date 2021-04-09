@@ -96,6 +96,13 @@
         </li>
         <!-- Idioma -->
 
+        <!-- carrito -->
+        <li class="nav-item" ngbDropdown>
+          <a class="nav-link" [routerLink]="['/store/carrito']">
+            <mat-icon [matBadge]= "pedidoService.getNumProductos()" matBadgeColor="warn" [matBadgeHidden]="hiddenProductosEnCarrito">shopping_cart</mat-icon>
+          </a>
+        </li>
+        <!-- carrito -->
 
         <!-- <li class="nav-item">
           <a (click)="rltAndLtr()" class="nav-link mt-1" href="javascript:void(0)"

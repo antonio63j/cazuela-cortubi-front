@@ -281,6 +281,11 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     // if (this.componenteMenu === 'segundos') {
     //   primerPlato = false;
     // }
+
+    if (sugerencia.visible === 'no') {
+      swal.fire('La sugerencia está configurada a "no visible"', '', 'warning');
+      return;
+    }
     this.menuService.addMenuSugerencia(
       // this.menu, sugerencia.id, primerPlato)
       this.menu, sugerencia.id, this.componenteMenu)

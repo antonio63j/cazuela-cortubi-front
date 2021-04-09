@@ -58,6 +58,10 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     this.activeModal.close('resetPassword');
   }
 
+  signup(): void {
+    this.activeModal.close('signup');
+  }
+
   ngOnDestroy(): void {
     console.log('en ngOnDestroy()');
     if (this.authService.hasRole('ROLE_ADMIN')) {
