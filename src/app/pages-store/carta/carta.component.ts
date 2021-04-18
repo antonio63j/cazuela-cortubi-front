@@ -19,6 +19,7 @@ import swal from 'sweetalert2';
 
 import { CartaDetalleComponent } from './carta-detalle/carta-detalle.component';
 import { TiposHerramientasService } from 'src/app/shared/services/tipos-herramientas.service';
+import { CarritoService } from '../carrito/carrito.service';
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -68,6 +69,7 @@ export class CartaComponent implements OnInit, OnDestroy {
         private modalService: ModalService,
         private translate: TranslateService,
         private authService: AuthService,
+        private carritoService: CarritoService
 
     ) {
         this.filtroSugerencia.setSoloVisibles();
@@ -149,7 +151,7 @@ export class CartaComponent implements OnInit, OnDestroy {
             },
             {
                 type: 'button',
-                label: 'Aplicar y ordenación'
+                label: 'Aplicar filtros y ordenación'
             }
         ];
 
@@ -159,6 +161,10 @@ export class CartaComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.nuevaPagina(0);
         this.subscripcioneventoCerrarModalScrollable();
+
+        // indicamos al servicio que carge su carrito temporal
+        // this.carritoService.cargaCarrito();
+
     }
 
     // Es llamado por el paginator
@@ -227,7 +233,6 @@ export class CartaComponent implements OnInit, OnDestroy {
     }
 
     public comprar(sugerencia: Sugerencia): void {
-        console.log('comprar');
         this.cartaDetalle(sugerencia);
      }
 
@@ -273,21 +278,6 @@ export class CartaComponent implements OnInit, OnDestroy {
         this.nuevaPagina(0);
     }
 
-    // public sortChangeColumn(colName: string): void {
-    //     if (colName === this.filtroSugerencia.order) {
-    //         if (this.filtroSugerencia.direction === 'asc') {
-    //             this.filtroSugerencia.direction = 'desc';
-    //         }
-    //         else {
-    //             this.filtroSugerencia.direction = 'asc';
-    //         }
-    //     } else {
-    //         this.filtroSugerencia.order = colName;
-    //         this.filtroSugerencia.direction = 'asc';
-    //     }
-    //     this.nuevaPagina(0);
-    // }
-
     submit(value: any): void {
         this.filtroSugerencia.label = value.label;
         this.filtroSugerencia.tipo  = value.tipo;
@@ -295,7 +285,6 @@ export class CartaComponent implements OnInit, OnDestroy {
         this.filtroSugerencia.precioMax = value.precioMax;
         this.filtroSugerencia.order = value.ordenacion;
         this.filtroSugerencia.direction = value.sentidoOrdenacion;
-        // console.log(this.filtroSugerencia);
         this.nuevaPagina(0);
     }
 

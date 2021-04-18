@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     EventEmitter,
     Input,
@@ -27,11 +28,15 @@ export class PaginatorComponent implements OnInit, OnChanges {
 
     constructor() {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.initPaginador();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+
+        if (changes.paginador === undefined) {
+            return;
+        }
         const paginadorActualizado = changes.paginador;
         // console.log('paginadorActualizado:');
         // console.log(JSON.stringify(paginadorActualizado));
@@ -60,7 +65,7 @@ export class PaginatorComponent implements OnInit, OnChanges {
         }
     }
 
-    public selectedSize (size: number): void {
+    public selectedSize(): void {
         this.cargaPagina(0);
     }
 

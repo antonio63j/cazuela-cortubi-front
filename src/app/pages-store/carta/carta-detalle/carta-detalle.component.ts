@@ -7,7 +7,8 @@ import { Sugerencia } from 'src/app/shared/modelos/sugerencia';
 import { environment } from 'src/environments/environment';
 import { ComponenteMenu } from 'src/app/shared/modelos/componente-menu.enum';
 import { AuthService } from 'src/app/usuarios/auth.service';
-import { PedidoService } from 'src/app/shared/services/pedido.service';
+import { CarritoService } from '../../../pages-store/carrito/carrito.service';
+import { PedidoLineaSugerencia, CantidadesOpciones, Pedido } from 'src/app/shared/modelos/pedido';
 
 @Component({
   selector: 'app-carta-detalle',
@@ -17,12 +18,16 @@ import { PedidoService } from 'src/app/shared/services/pedido.service';
 export class CartaDetalleComponent implements OnInit {
   host: string = environment.urlEndPoint;
   public sugerencia: Sugerencia;
-  public cantidad = 0;
+  public cantidad = 1;
+
+  private carrito: Pedido;
+  public cantidades: number[] = CantidadesOpciones.cantidades;
+  public cantidadMax = this.cantidades.length;
 
   constructor(
     public activeModal: NgbActiveModal,
     public authService: AuthService,
-    public pedidoService: PedidoService
+    public carritoService: CarritoService
   ) {
 
   }
@@ -30,19 +35,20 @@ export class CartaDetalleComponent implements OnInit {
 
   aceptar(sugerencia: Sugerencia): void {
 
-    if (this.cantidad < 1 || this.cantidad > 20) {
-      swal.fire('Aviso', 'Cantidad deber estar entre 1 y 20', 'warning');
+    if (this.cantidad < 1 || this.cantidad > this.cantidadMax) {
+      swal.fire('Aviso', `Cantidad deber estar entre 1 y ${this.cantidadMax}`, 'warning');
     } else {
-      console.log('getion pedido');
-      console.log('sugerencia:' + sugerencia.id);
-      this.pedidoService.setSugerenciaCantidad (sugerencia, this.cantidad);
+      const pedidoLineaSugerencia: PedidoLineaSugerencia = new PedidoLineaSugerencia();
+      pedidoLineaSugerencia.sugerencia = sugerencia;
+      pedidoLineaSugerencia.cantidad = this.cantidad;
+      this.carritoService.addPedidoLineaSugerencia(pedidoLineaSugerencia);
       this.activeModal.close('con accept');
     }
 
   }
 
   cambioCantidad(): void {
-    console.log('cambioCantidad =' + this.cantidad);
+    // console.log('cambioCantidad =' + this.cantidad);
   }
 
   ngOnInit(): void {

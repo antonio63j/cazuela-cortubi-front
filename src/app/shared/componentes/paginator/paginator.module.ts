@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 
@@ -10,7 +11,9 @@ import { PaginatorComponent } from './paginator.component';
     imports: [
         CommonModule,
         RouterModule,
-        MatSelectModule
+        MatSelectModule,
+        
+        FormsModule
     ],
     declarations: [PaginatorComponent],
     exports: [PaginatorComponent]

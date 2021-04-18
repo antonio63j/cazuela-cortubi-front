@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '../../../shared/services/modal.service';
 import { Router } from '@angular/router';
+import { CarritoService } from 'src/app/pages-store/carrito/carrito.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     public activeModal: NgbActiveModal,
     private modalService: ModalService,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private carritoService: CarritoService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,8 @@ export class LoginModalComponent implements OnInit, OnDestroy {
         this.authService.guardarToken(response.access_token);
         const usuario = this.authService.usuario;
         console.log(`login con éxito de ${usuario.username}`);
+        this.carritoService.cargaCarrito();
+
         this.modalService.eventoCerrarModalScrollable.emit();
       },
       err => {

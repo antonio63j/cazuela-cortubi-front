@@ -5,7 +5,7 @@ import { FieldConfig } from "../field.interface";
   selector: "app-button",
   template: `
 <div class="demo-full-width margin-top" [formGroup]="group">
-<button mat-button type="submit">{{field.label}}</button>
+<button  mat-stroked-button color="success" type="submit">{{field.label}}</button>
 </div>
 `,
    styleUrls: ['../style.scss']
@@ -17,6 +17,4 @@ export class ButtonComponent implements OnInit {
   ngOnInit() {}
 }
 
-// <div class="demo-full-width margin-top" [formGroup]="group">
-// <button type="submit" mat-raised-button color="primary">{{field.label}}</button>
-// </div>
+// <button mat-button type="submit">{{field.label}}</button>

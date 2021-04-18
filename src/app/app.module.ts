@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -63,6 +63,11 @@ export const MY_FORMATS = {
         ModalService,
         ModalConModeloService,
         AuthService,
+
+        // {provide: DEFAULT_CURRENCY_CODE, useValue: 'es'},
+        { provide: LOCALE_ID, useValue: 'es' // 'de' for Germany, 'fr' for France ...
+         },
+
         {provide: MAT_DATE_LOCALE, useValue: 'es'},
         {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
         {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

@@ -29,6 +29,7 @@ import { DynamicFormComponent } from '../shared/componentes/filtro/dynamic-form/
 import { DynamicFieldDirective } from '../shared/componentes/filtro/dynamic-field/dynamic-field.directive';
 import { CartaDetalleComponent } from './carta/carta-detalle/carta-detalle.component';
 import { CarritoComponent } from './carrito/carrito.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,9 @@ import { CarritoComponent } from './carrito/carrito.component';
 
     PaginatorModule,
     FiltroModule,
-    MatRadioModule
+    MatRadioModule,
+    
+    FlexLayoutModule
 
 
   ],

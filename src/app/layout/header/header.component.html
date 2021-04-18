@@ -97,9 +97,9 @@
         <!-- Idioma -->
 
         <!-- carrito -->
-        <li class="nav-item" ngbDropdown>
+        <li *ngIf="authService.isAuthenticated()" class="nav-item" ngbDropdown>
           <a class="nav-link" [routerLink]="['/store/carrito']">
-            <mat-icon [matBadge]= "pedidoService.getNumProductos()" matBadgeColor="warn" [matBadgeHidden]="hiddenProductosEnCarrito">shopping_cart</mat-icon>
+            <mat-icon [matBadge]= "numArticulosCarrito" matBadgeColor="warn" [matBadgeHidden]="hiddenProductosEnCarrito">shopping_cart</mat-icon>
           </a>
         </li>
         <!-- carrito -->

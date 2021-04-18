@@ -8,7 +8,7 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Empresa } from '../../shared/modelos/empresa';
 import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
-import { PedidoService } from 'src/app/shared/services/pedido.service';
+import { CarritoService } from '../../pages-store/carrito/carrito.service';
 
 @Component({
     selector: 'app-header',
@@ -30,14 +30,16 @@ export class HeaderComponent implements OnInit, OnDestroy{
     public empresa: Empresa = new Empresa();
     public subscripcionDatosEmpresa: Subscription;
     public hiddenProductosEnCarrito = false;
-    public productosCarrito = 0;
+    public numArticulosCarrito = 0;
+    public subscripcionNumArticulosEnCarrito: Subscription;
+
 
     constructor(
         private translate: TranslateService,
         public router: Router,
         public authService: AuthService,
         public shareEmpresaService: ShareEmpresaService,
-        public pedidoService: PedidoService
+        public carritoService: CarritoService
     ) {
         this.router.events.subscribe((val) => {
             // console.log('en gestion router.events');
@@ -59,15 +61,11 @@ export class HeaderComponent implements OnInit, OnDestroy{
               console.log('recibido cambio datos empresa');
               this.empresa = msg;
             });
-        // this.subcripcionNumProductos = this.pedidoService.getNumProductosMsg()
-        //   .subcribe(msg => {
-        //       console.log('recibido cambio numero de productos en carrito');
-        //       this.productosCarrito = msg;
-        //   })    
-    }
-
-    getNumProductos(): number {
-        return this.pedidoService.getNumProductos();
+        this.subscripcionNumArticulosEnCarrito = this.carritoService.getNumArticulosCarritoMsg()
+          .subscribe(num => {
+              console.log('recibido cambios datos carrito, numArticulos= ' + num);
+              this.numArticulosCarrito = num;
+          });
     }
 
     onItemSelect(item: any): void {

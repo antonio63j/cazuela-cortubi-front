@@ -8,6 +8,9 @@ import { MenuSugerencia } from 'src/app/shared/modelos/menu-sugerencia';
 import { environment } from 'src/environments/environment';
 import { ComponenteMenu } from 'src/app/shared/modelos/componente-menu.enum';
 import { AuthService } from 'src/app/usuarios/auth.service';
+import { CarritoService } from '../../carrito/carrito.service';
+import { CantidadesOpciones, PedidoLineaMenu } from 'src/app/shared/modelos/pedido';
+import { Sugerencia } from 'src/app/shared/modelos/sugerencia';
 
 
 @Component({
@@ -19,35 +22,53 @@ import { AuthService } from 'src/app/usuarios/auth.service';
 export class MenuDetalleComponent implements OnInit {
   host: string = environment.urlEndPoint;
   public menu: Menu;
-  public cantidad = 0;
+  public cantidad = 1;
+
+  public cantidades: number[] = CantidadesOpciones.cantidades;
+
+  public cantidadMax = this.cantidades.length;
 
   primeros: MenuSugerencia[] = [];
   segundos: MenuSugerencia[] = [];
   postres: MenuSugerencia[] = [];
 
-  primero: any;
-  segundo: any;
-  postre: any;
+  // primero: MenuSugerencia;
+  // segundo: MenuSugerencia;
+  // postre: MenuSugerencia;
+
+  primero: Sugerencia;
+  segundo: Sugerencia;
+  postre: Sugerencia;
 
   constructor(
     public activeModal: NgbActiveModal,
-    public authService: AuthService
-
+    public authService: AuthService,
+    public carritoService: CarritoService
   ) {
 
    }
 
 
-  aceptar(): void {
+  aceptar(menu: Menu): void {
     if (this.primero === undefined ||
         this.segundo === undefined ||
         this.postre === undefined ) {
       swal.fire('Aviso', 'Falta opción por seleccionar', 'warning');
     } else {
         if (this.cantidad < 1 || this.cantidad > 20) {
-          swal.fire('Aviso', 'Cantidad deber estar entre 1 y 20', 'warning');
+          swal.fire('Aviso', `Cantidad deber estar entre 1 y ${this.cantidadMax}`, 'warning');
         } else {
-            console.log('getion pedido');
+            const pedidoLineaMenu: PedidoLineaMenu = new PedidoLineaMenu();
+            pedidoLineaMenu.cantidad = this.cantidad;
+            pedidoLineaMenu.menu = this.menu;
+            pedidoLineaMenu.primero = this.primero;
+            pedidoLineaMenu.segundo = this.segundo;
+            pedidoLineaMenu.postre = this.postre;
+
+            console.log('pedidoLineaMenu:');
+            console.log(pedidoLineaMenu);
+
+            this.carritoService.addPedidoLineaMenu(pedidoLineaMenu);
             this.activeModal.close('con accept');
         }
     }

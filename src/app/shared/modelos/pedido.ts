@@ -9,6 +9,9 @@ export enum EstadoPedidoEnum {
     pagado = 'PAGADO'
 }
 
+export class CantidadesOpciones {
+  static cantidades: number [] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+}
 
 export class PedidoLineaSugerencia {
     id: number;
@@ -40,5 +43,10 @@ export class Pedido {
     numArticulos: number;
     pedidoLineaSugerencias: PedidoLineaSugerencia [] = [];
     pedidoLineaMenus: PedidoLineaMenu [] = [];
+
+    constructor(usuario: string) {
+       this.usuario = usuario;
+      // this.inicializarPedido();
+    }
 
 }

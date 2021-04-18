@@ -1,18 +1,16 @@
+
+
+@import "../../../../styles/mis-variables";
+
 .con-scroll {
-    overflow: scroll;
+  overflow: scroll;
 }
 
-.corto {
-    width: 80px !important;
-}
 
-.example-radio-group {
-    display: flex;
-    flex-direction: column;
-    margin: 15px 0;
-}
+select option {
+  background-color: $oxido-claro !important;
 
-.example-radio-button {
-    margin: 5px;
+  // font-weight: bold !important;
+  color: rgb(49, 45, 4) !important;
 }
 

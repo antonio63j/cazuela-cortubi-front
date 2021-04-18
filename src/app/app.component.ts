@@ -4,7 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 import { Empresa } from './shared/modelos/empresa';
 import { ShareEmpresaService } from './shared/services/share-empresa.service';
 import { EmpresaService } from './pages-admin/empresa/empresa.service';
-import { PedidoService } from './shared/services/pedido.service';
+import { CarritoService } from './pages-store/carrito/carrito.service';
+import { AuthService } from './usuarios/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -20,10 +21,12 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private empresaService: EmpresaService,
     private shareEmpresaService: ShareEmpresaService,
-    private pedidoService: PedidoService
+    private carritoService: CarritoService,
+    private authService: AuthService
     ) {
+      console.log('arranque app.component, username: ---------------------------');
+      console.log(this.authService.usuario.username);
       this.getEmpresa(1);
-      this.pedidoService.cargaPedido();
   }
 
   ngOnInit(): void {
@@ -42,8 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
         json => {
           this.empresa = json;
           document.title = this.empresa.nombre;
+          this.carritoService.cargaCarrito();
           this.shareEmpresaService.updateEmpresaMsg(this.empresa);
-          // console.log(`json=${JSON.stringify(json)}`);
           console.log('enviado cambio datos empresa');
         }
         , err => {
