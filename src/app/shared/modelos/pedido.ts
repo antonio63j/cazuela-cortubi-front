@@ -3,7 +3,7 @@ import { Sugerencia } from './sugerencia';
 
 export enum EstadoPedidoEnum {
     creacion = 'CREACION',
-    confirmado = 'PREPARACION',
+    confirmado = 'CONFIRMADO',
     rechazado = 'RECHAZADO',
     listo = 'LISTO',
     pagado = 'PAGADO'
@@ -16,11 +16,13 @@ export class CantidadesOpciones {
 export class PedidoLineaSugerencia {
     id: number;
     cantidad: number;
+    precioInicio: number;
     sugerencia: Sugerencia;
 
     constructor() {
         this.id = null;
         this.cantidad = 0;
+        this.precioInicio = 0;
         this.sugerencia = new Sugerencia();
         this.sugerencia.id = null;
     }
@@ -29,6 +31,7 @@ export class PedidoLineaSugerencia {
 export class PedidoLineaMenu {
     id: number;
     cantidad: number;
+    precioInicio: number;
     menu: Menu;
     primero: Sugerencia;
     segundo: Sugerencia;
@@ -41,12 +44,15 @@ export class Pedido {
     estadoPedido: EstadoPedidoEnum;
     total: number;
     numArticulos: number;
+
+    fechaRegistro: Date;
+    fhRecogidaSolicitada: Date;
+    nota: string;
     pedidoLineaSugerencias: PedidoLineaSugerencia [] = [];
     pedidoLineaMenus: PedidoLineaMenu [] = [];
 
     constructor(usuario: string) {
        this.usuario = usuario;
-      // this.inicializarPedido();
     }
 
 }

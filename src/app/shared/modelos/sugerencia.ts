@@ -5,6 +5,7 @@ export class Sugerencia {
     descripcion: string;
     imgFileName: string;
     precio: number;
+    precioAnterior: number;
     visible: string;
 
 }

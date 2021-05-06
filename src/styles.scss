@@ -116,5 +116,14 @@ button.margin-right {
   color:#155724;
 }
 
-/* Importing Bootstrap SCSS file. */
-// @import '~bootstrap/scss/bootstrap';
+
+// V Necesario para que se totalmente visible ngx-material-timepicker (móvil)
+.timepicker-overlay {
+  z-index: 10000000 !important;
+}
+
+.timepicker-backdrop-overlay {
+  z-index: 10000000 !important;
+}
+
+// ^ Necesario para que se totalmente visible ngx-material-timepicker (móvil)

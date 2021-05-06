@@ -32,7 +32,7 @@ import { MenuFormComponent } from './admin-menu/menu-form/menu-form.component';
 import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
 import { LowerCasePipe } from '@angular/common';
 import { RecortarPipe } from '../shared/pipes/recortar.pipe';
-import { SharedPipesModule } from '../shared';
+// import { SharedPipesModule } from '../shared';
 import { LayoutModule } from '../layout/layout.module';
 import { PaginatorModule } from '../shared/componentes/paginator/paginator.module';
 

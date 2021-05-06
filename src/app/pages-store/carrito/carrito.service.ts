@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, Subject, Subscription, throwError } from 'rxjs';
+import { from, Observable, ReplaySubject, Subject, Subscription, throwError } from 'rxjs';
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { Pedido, PedidoLineaMenu, PedidoLineaSugerencia } from '../../shared/modelos/pedido';
 import { Sugerencia } from '../../shared/modelos/sugerencia';
@@ -10,6 +10,9 @@ import { EstadoPedidoEnum } from '../../shared/modelos/pedido';
 import swal from 'sweetalert2';
 import { LoginComponent } from 'src/app/usuarios/login/login.component';
 import { LoadingComponent } from 'src/app/shared/componentes/loading/loading.component';
+import { PedidoConfirmacion } from 'src/app/shared/modelos/pedido-confirmacion';
+import { isTemplateExpression } from 'typescript';
+import { NullTemplateVisitor } from '@angular/compiler';
 
 // Este servicio deberá tener el carrito actualizado reflejando cambios de desde carta-component,
 // menu-component y carrito-componet. Carrito-component deberá tener tambien tener una 
@@ -44,15 +47,21 @@ export class CarritoService implements OnDestroy {
     this.inicializaCarrito(this.carrito);
 
     // para notificar a subscriptores del carrito (header.component)
-    this.carrito = this.cargaCarrito();
+    // this.carrito = this.cargaCarrito();
+    this.cargaCarrito();
   }
 
   public inicializaCarrito(carrito: Pedido): void {
+    carrito.id = undefined;
     carrito.estadoPedido = EstadoPedidoEnum.creacion;
     carrito.total = 0;
     carrito.numArticulos = 0;
+    carrito.fechaRegistro = new Date();
     carrito.pedidoLineaSugerencias = [];
     carrito.pedidoLineaMenus = [];
+
+    this.sendNumArticulosCarritoMsg(carrito.numArticulos);
+
   }
 
 
@@ -71,11 +80,16 @@ export class CarritoService implements OnDestroy {
     return this.carrito;
   }
 
-  // llamado por app.component con cada arranque de la app. y
-  // login-modal-component
-  cargaCarrito(): Pedido {
+  // llamado por:
+  // - app.component con cada arranque de la app. y
+  // - login-modal-component
+  // - por este mismo servicio en el constructor
+  // Tiene la funcion de actulizar el numero de articulos
+  // que se muestran en header.component
+
+  cargaCarrito(): void {
     if (!this.authService.isAuthenticated()) {
-      return this.carrito;
+      return;
     }
     this.get()
       .pipe(
@@ -94,16 +108,15 @@ export class CarritoService implements OnDestroy {
             console.log('carrito:');
             console.log(this.carrito);
           }
-          this.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
         },
         err => {
           console.log(err);
           swal.fire('Error carga de carrito', err.status, 'error');
         }
       );
-    return this.carrito;
   }
 
+  // llamado desde carta-detalle.component->this.addPedidoLineaSugerencia
   private actualizarLineaSugerenciaEnCarrito(
     carrito: Pedido,
     pedidoLineaSugerencia: PedidoLineaSugerencia): void {
@@ -117,6 +130,7 @@ export class CarritoService implements OnDestroy {
     }
   }
 
+  // llamado desde menu-detalle.component->this.addPedidoLineaMenu
   private actualizarLineaMenuEnCarrito(
     carrito: Pedido,
     pedidoLineaMenu: PedidoLineaMenu): void {
@@ -137,7 +151,7 @@ export class CarritoService implements OnDestroy {
     }
   }
 
-  // llamado desde carta-detalle.component
+  // llamado desde sugerencia-detalle.component
   addPedidoLineaSugerencia(pedidoLineaSugerencia: PedidoLineaSugerencia): void {
     this.actualizarLineaSugerenciaEnCarrito(this.carrito, pedidoLineaSugerencia);
     this.saveCarrito();
@@ -149,6 +163,7 @@ export class CarritoService implements OnDestroy {
     this.saveCarrito();
   }
 
+  // LLamado desde this.addPedidoLineaSugerecia / .. menu
   saveCarrito(): void {
     this.erroresValidacion = [];
 
@@ -160,7 +175,7 @@ export class CarritoService implements OnDestroy {
       .subscribe(
         json => {
           this.carrito = json.data;
-          this.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          this.calculosCarrito(this.carrito);
         }
         , err => {
           if (err.status === 400) {
@@ -176,7 +191,7 @@ export class CarritoService implements OnDestroy {
       );
   }
 
-  // llamado desde carrito-component
+  // llamado desde carrito-component debido a un cambio en cantidad
   saveLineaSugerencia(pedidoLineaSugerencia: PedidoLineaSugerencia): Observable<any> {
     this.actualizarLineaSugerenciaEnCarrito(this.carrito, pedidoLineaSugerencia);
     return this.save(this.carrito).pipe(
@@ -186,7 +201,7 @@ export class CarritoService implements OnDestroy {
     );
   }
 
-  // llamado desde carrito-component
+  // llamado desde carrito-component debido a un cambio en cantidad
   saveLineaMenu(pedidoLineaMenu: PedidoLineaMenu): Observable<any> {
     this.actualizarLineaMenuEnCarrito(this.carrito, pedidoLineaMenu);
     return this.save(this.carrito).pipe(
@@ -196,27 +211,54 @@ export class CarritoService implements OnDestroy {
     );
   }
 
+  sortCarrito(carrito: Pedido): void {
+    (carrito.pedidoLineaSugerencias.sort((a, b) => {
+      return a.sugerencia.label < b.sugerencia.label ? -1 : 1;
+    }
+    ));
+    (carrito.pedidoLineaMenus.sort((a, b) => {
+      return a.menu.label.localeCompare(b.menu.label) || b.id - a.id;
+    }
+    ));
+  }
+
   save(carrito: Pedido): Observable<any> {
+    // Ojo que no actualiza this.carrito con la peticion
+    // lo actualiza con la respuesta
     return this.http.post<Pedido>(environment.urlEndPoint + '/api/pedido/save', carrito).pipe(
       catchError(err => {
         console.log(`error capturado: ${err.status} `);
         return throwError(err);
       }), map((response: any) => {
-        (response.data.pedidoLineaSugerencias.sort((a, b) => {
-          return a.sugerencia.label < b.sugerencia.label ? -1 : 1;
+        if (response === null) {
+          return response;
         }
-        ));
 
-        (response.data.pedidoLineaMenus.sort((a, b) => {
-          return a.menu.label.localeCompare(b.menu.label) || b.id - a.id;
-        }
-        ));
+        this.sortCarrito(response.data);
         this.carrito = response.data;
-        this.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+        this.calculosCarrito(this.carrito);
         return response;
 
       })
     );
+  }
+
+  public calculosCarrito(carrito: Pedido): void {
+    carrito.total = 0;
+    carrito.numArticulos = 0;
+
+    carrito.pedidoLineaSugerencias.forEach(element => {
+      carrito.numArticulos = carrito.numArticulos + element.cantidad;
+      carrito.total = carrito.total + (element.cantidad * element.sugerencia.precio);
+    });
+
+    carrito.pedidoLineaMenus.forEach(element => {
+      carrito.numArticulos = carrito.numArticulos + element.cantidad;
+      carrito.total = carrito.total + (element.cantidad * element.menu.precio);
+    });
+
+    this.sendNumArticulosCarritoMsg(carrito.numArticulos);
+
   }
 
   get(): Observable<any> {
@@ -228,18 +270,17 @@ export class CarritoService implements OnDestroy {
         catchError(err => {
           console.log(`error capturado: ${err.status} `);
           return throwError(err);
-        }), map((response: any) => {
+        }), tap((response: any) => {
+        }
+        )
+        , map((response: any) => {
           if (response === null) {
             return response;
           }
-          (response.data.pedidoLineaSugerencias.sort((a, b) => {
-            return a.sugerencia.label < b.sugerencia.label ? -1 : 1;
-          }
-          ));
-          (response.data.pedidoLineaMenus.sort((a, b) => {
-            return a.menu.label.localeCompare(b.menu.label) || b.id - a.id;
-          }
-          ));
+
+          this.sortCarrito(response.data);
+          this.carrito = response.data;
+          this.calculosCarrito(this.carrito);
           return response;
         })
       );
@@ -259,16 +300,10 @@ export class CarritoService implements OnDestroy {
           if (response === null) {
             return response;
           }
-          (response.data.pedidoLineaSugerencias.sort((a, b) => {
-            return a.sugerencia.label < b.sugerencia.label ? -1 : 1;
-          }
-          ));
-          (response.data.pedidoLineaMenus.sort((a, b) => {
-            return a.menu.label.localeCompare(b.menu.label) || b.id - a.id;
-          }
-          ));
+
+          this.sortCarrito(response.data);
           this.carrito = response.data;
-          this.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          this.calculosCarrito(this.carrito);
           return response;
         })
       );
@@ -289,24 +324,38 @@ export class CarritoService implements OnDestroy {
           if (response === null) {
             return response;
           }
-          (response.data.pedidoLineaSugerencias.sort((a, b) => {
-            return a.sugerencia.label < b.sugerencia.label ? -1 : 1;
-          }
-          ));
-          (response.data.pedidoLineaMenus.sort((a, b) => {
-            return a.menu.label.localeCompare(b.menu.label) || b.id - a.id;
-          }
-          ));
+
+          this.sortCarrito(response.data);
           this.carrito = response.data;
-          this.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          this.calculosCarrito(this.carrito);
           return response;
         })
       );
-
   }
 
   public getTotal(): number {
     return this.carrito.total;
+  }
+
+  confirmar(carrito: Pedido): Observable<any> {
+    return this.http.post<PedidoConfirmacion>(environment.urlEndPoint + '/api/pedido/confirmacion', carrito).pipe(
+      catchError(err => {
+        console.log(`error capturado: ${err.status} `);
+        return throwError(err);
+      }), map((response: any) => {
+
+        if (response === null) {
+          this.inicializaCarrito(this.carrito);
+          return response;
+        }
+
+        this.sortCarrito(response.data);
+        this.carrito = response.data;
+        this.calculosCarrito(this.carrito);
+        return response;
+
+      })
+    );
   }
 
   ngOnDestroy(): void {

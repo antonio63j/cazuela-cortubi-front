@@ -113,7 +113,7 @@ export class MenuFormComponent implements OnInit, OnDestroy {
 
           // se está utilizando activeModal.close(true) en template
           // this.modalService.eventoCerrarModalScrollable.emit();
-          swal.fire('menu actualizada', `${json.mensaje}, label: ${json.data.label}`, 'success');
+          swal.fire('menu actualizado', `${json.mensaje}, label: ${json.data.label}`, 'success');
         }
         , err => {
           if (err.status === 400) {

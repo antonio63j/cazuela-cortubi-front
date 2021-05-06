@@ -1,3 +1,67 @@
+
+    /*
+
+    A tener en cuenta:
+    - Puede haber varias sesiones del mismo usuario actualizando el carrito.
+      la DB mantiene el carrito actualizado únicamente con la última acción realizada
+      desde cualquiera de las sesiones. Podemos decir que un update, borrar el carrito
+      anterior y crea uno nuevo.
+    - Gestion en servidor web para establcer que diferentes sesiones simultáneas con el 
+      mismo usuario, tengan el mismo id de pedido:
+      Cuando le llega al servidor web una peticion de actualización del carrito con 
+      carrito.id = null, busca en la tabla de pedidos, utilizando cód. de usuario y 
+      estado=CREACION, y si existe, asigna a la peticion de actualización el id obtenido 
+      en la tabla.
+
+    Nomenclatura:
+    - Carrito-component.carrito, carrito-component.carritoCheck, carrito-service.carrito.
+    - Carrito-component tiene su propio carrito (carrito-component.carrito, que está
+      asociado al template html) y actualiza carrito-component.carritoCheck con las
+      respuestas de component-service para gesti¢n de chequeo de precios.
+    - Carta-component y men£-component utilizan el carrito-service para incluir art¡culos
+      en el carrito (carrito-service.carrito).
+    - Carrito-component utiliza carrito-service para eliminar art¡culos, cambiar cantidades
+      y confirmar carrito.
+
+    Cuando se actualiza el carrito-service.carrito con la DB:
+    - Con el login
+    - Con el propio arranque del servidor
+    - Con el arranque de componente principal? (main.app). Comprobar si necesario
+
+    El objetivo principal de "controlCambioPrecio"‚ es detectar cambios en los precios
+    mientras el usuario está en carrito.component. Para ello se trabaja con
+    carrito.component.carrito y con carrito.service.carrito o carritoCheck.
+
+    Los cambios en los precios sólo se mostrarán en carrito.component:
+    1. Gestión al entrar en carrito.component:
+       Al entrar en carrito.component, se inicializa carrito-componet.carrito
+       con carrito-service.carrito (copia). Para inicializar carrito-component.carritoCheck,
+       se hace subscripcion a carrito-service para sincronizarse con DB.
+    - Un art¡culo que est  en carritoCheck y no en carrito-component.carrrito:
+      Se a¤ade
+    - Un artículo que está en carritoCheck y component-carrito.carrito:
+      se comprueba posible cambio de precio
+    - Un artículo que no está en carritoCheck y sí en component-carrito.carrito:
+      Se mantiene, con lo que se podrá confirmar el carrito con este articulo.
+      Si se solicita eliminar el articulo, se elimina solo en memoria (carrito-component.carrito)
+
+    2. Gestión con las acciones de usuario dentro de carrito-component
+    - Eliminar un artíulo.
+      Si el articulo no está en carrito-component.carritoCheck, se elimina del
+      array component-carrito.carrito. En el caso de existir en carritoCheck,
+      se solicita la eliminación al servidor web.
+    - Cambio en la cantidad de un artículo.
+      Esté o no el artículo en carrito-component.carritoCheck, se envía la petición al
+      servidor web.
+    - Entrada en tramitar.
+      No se act£a sobre DB
+    - Confirmación del pedido.
+      Con esta petición el servidor web chequea si ha cambiado algún precio y en ese caso,
+      actualiza DB y puede devolver el carrito ya con los precios actualizados, si no ha
+      cambiado ningún precio, actualiza DB pasando a CONFIRMADO y devuelve null en lugar de
+      carrito actualizado.
+*/
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Pedido, PedidoLineaSugerencia, CantidadesOpciones, PedidoLineaMenu } from 'src/app/shared/modelos/pedido';
 import { environment } from 'src/environments/environment';
@@ -9,6 +73,7 @@ import localeEs from '@angular/common/locales/es';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/usuarios/auth.service';
+import { PedidoConfirmacion } from 'src/app/shared/modelos/pedido-confirmacion';
 registerLocaleData(localeEs, 'es');
 
 
@@ -19,8 +84,9 @@ registerLocaleData(localeEs, 'es');
 })
 export class CarritoComponent implements OnInit, OnDestroy {
 
-  // public carrito: Pedido = new Pedido(this.authService.usuario.username);
   carrito: Pedido;
+  carritoCheck: Pedido;
+
   host: string = environment.urlEndPoint;
   public erroresValidacion: string[];
   public observ$: Subscription = null;
@@ -30,26 +96,209 @@ export class CarritoComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
   public cantidades: number[] = CantidadesOpciones.cantidades;
 
+  private preciosModificados: any[];
+
   constructor(
     public carritoService: CarritoService,
     private authService: AuthService
   ) {
-       this.carrito = this.carritoService.copiaCarrito();
+    this.carrito = this.carritoService.copiaCarrito();
+    this.subscripcionCarritoCheck();
   }
 
   ngOnInit(): void {
-   // this.get();
+
   }
 
+  tramitar(pedidoConfirmacion: PedidoConfirmacion): void {
+    this.carrito.nota = pedidoConfirmacion.nota;
+    this.carrito.fhRecogidaSolicitada = pedidoConfirmacion.fhRecogidaSolicitada;
 
+    this.observ$ = this.carritoService.confirmar(this.carrito).pipe(
+      takeUntil(this.unsubscribe$)
+    )
+      .subscribe(
+        response => {
+          if (response == null) {
+            this.carritoService.inicializaCarrito(this.carrito);
+            this.carrito.id = undefined;
+            console.log('carrito = null');
+          } else {
+            // this.carrito = response.data;
+            this.carritoCheck = response.data;
+            this.controlCambioPrecio();
+
+            swal.fire('Actualizado precio de alguno de los articulos', 'Por favor, revise carrito y vuelva a Confirmar', 'warning');
+
+          }
+          // this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+        },
+        err => {
+          if (err.status === 400) {
+            this.erroresValidacion = err.error.errors as string[];
+            console.log(this.erroresValidacion);
+            swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
+
+          } else {
+            console.log(`error=${JSON.stringify(err)}`);
+            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          }
+        }
+      );
+  }
+
+  subscripcionCarritoCheck(): void {
+    this.carritoService.get().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe(
+      response => {
+        if (response == null) {
+          this.carritoService.inicializaCarrito(this.carrito);
+          console.log('carrito = null');
+        } else {
+          this.carritoCheck = response.data;
+          this.controlCambioPrecio();
+        }
+      }, err => {
+        switch (err) {
+          case 401: {
+            swal.fire(`La sesión ha caducado, inicie sesión `, err.status, 'warning');
+            break;
+          }
+          case 501: {
+            console.log(`error en la peticion ${JSON.stringify(err)}`);
+            break;
+          }
+          default: {
+            swal.fire('Error carga de artículos del carrito ', err.status, 'error');
+            console.log(err);
+            swal.fire(err.mensaje, '', 'error');
+            break;
+          }
+        }
+      }
+    );
+  }
+
+  private getLineaSugerencia(arr: PedidoLineaSugerencia[], id: number): PedidoLineaSugerencia {
+    return arr.find(x => x.sugerencia.id === id);
+  }
+
+  private getLineaSugerenciaIndex(arr: PedidoLineaSugerencia[], elemento: PedidoLineaSugerencia): number {
+    // devuele -1 como findIndex() si no se encuentra
+    return arr.findIndex(item => item.sugerencia.id === elemento.sugerencia.id);
+  }
+
+  private getLineaMenu(arr: PedidoLineaMenu[], id: number): PedidoLineaMenu {
+    return arr.find(x => x.menu.id === id);
+  }
+
+  private getLineaMenuIndex(arr: PedidoLineaMenu[], elemento: PedidoLineaMenu): number {
+    // devuele -1 como findIndex() si no se encuentra
+    return arr.findIndex(item => item.menu.id === elemento.menu.id);
+  }
+
+  controlCambioPrecio(eliminando: boolean = false): void {
+
+    let lineaSug: PedidoLineaSugerencia;
+    let lineaMen: PedidoLineaMenu;
+    let lineasAdd = 0;
+
+    this.preciosModificados = [];
+
+    // console.log(`carrito antes: ${JSON.stringify(this.carrito)}`);
+    // console.log(`carritoCheck antes: ${JSON.stringify(this.carritoCheck)}`);
+
+    for (const lSugx of this.carrito.pedidoLineaSugerencias) {
+      lineaSug = this.getLineaSugerencia(this.carritoCheck.pedidoLineaSugerencias, lSugx.sugerencia.id);
+      if (lineaSug === undefined) {
+        if (eliminando) {
+          console.log(`eliminando sugerencia: ${lSugx.sugerencia.label}`);
+          this.carrito.pedidoLineaSugerencias.splice(
+            this.getLineaSugerenciaIndex(this.carrito.pedidoLineaSugerencias, lSugx), 1);
+        } else {
+          console.log(`se mantiene sugerencia: ${lSugx.sugerencia.label}`);
+        }
+      } else {
+        // ver for .. of de carritoCheck
+      }
+    }
+
+    for (const lMenx of this.carrito.pedidoLineaMenus) {
+      lineaMen = this.getLineaMenu(this.carritoCheck.pedidoLineaMenus, lMenx.menu.id);
+      if (lineaMen === undefined) {
+        if (eliminando) {
+          console.log(`eliminando menu: ${lMenx.menu.label}`);
+          this.carrito.pedidoLineaMenus.splice(
+            this.getLineaMenuIndex(this.carrito.pedidoLineaMenus, lMenx), 1);
+        } else {
+          console.log(`se mantiene menu: ${lMenx.menu.label}`);
+        }
+      }
+    }
+
+    for (const lSugx of this.carritoCheck.pedidoLineaSugerencias) {
+      lineaSug = this.getLineaSugerencia(this.carrito.pedidoLineaSugerencias, lSugx.sugerencia.id);
+      if (lineaSug !== undefined) {
+        if (lineaSug.precioInicio !== lSugx.sugerencia.precio) {
+          this.preciosModificados.push({
+            producto: lineaSug.sugerencia.label,
+            precioAnterior: lineaSug.precioInicio,
+            precioNuevo: lSugx.sugerencia.precio
+          });
+          // lineaSug.sugerencia.precioAnterior = lineaSug.sugerencia.precio;
+          lineaSug.sugerencia.precio = lSugx.sugerencia.precio;
+        }
+      } else {
+        this.carrito.pedidoLineaSugerencias.push(lSugx);
+        ++lineasAdd;
+      }
+    }
+
+    for (const lMenx of this.carritoCheck.pedidoLineaMenus) {
+      lineaMen = this.getLineaMenu(this.carrito.pedidoLineaMenus, lMenx.menu.id);
+      if (lineaMen !== undefined) {
+        if (lineaMen.precioInicio !== lMenx.menu.precio) {
+          this.preciosModificados.push({
+            producto: lineaMen.menu.label,
+            precioAnterior: lineaMen.precioInicio,
+            precioNuevo: lMenx.menu.precio
+          });
+          // lineaMen.menu.precioAnterior = lineaMen.menu.precio;
+          lineaMen.menu.precio = lMenx.menu.precio;
+        }
+      } else {
+        this.carrito.pedidoLineaMenus.push(lMenx);
+        ++lineasAdd;
+      }
+    }
+
+    if (lineasAdd > 0) {this.carritoService.sortCarrito(this.carrito);
+    }
+
+    if (this.preciosModificados.length > 0) {
+      console.log(`carrito Modificado: ${JSON.stringify(this.preciosModificados)}`);
+    }
+
+    this.carritoService.calculosCarrito(this.carrito);
+
+    // console.log(`carrito despues: ${JSON.stringify(this.carrito)}`);
+    // console.log(`carritoCheck despues: ${JSON.stringify(this.carritoCheck)}`);
+  }
 
   cambioCantidadSugerencia(pedidoLineaSugerencia: PedidoLineaSugerencia): void {
     this.observSugerencia$ = this.carritoService.saveLineaSugerencia(pedidoLineaSugerencia).pipe(
       takeUntil(this.unsubscribe$)
     )
       .subscribe(
-        json => {
-          this.carrito = json.data;
+        response => {
+          if (response == null) {
+            this.carritoService.inicializaCarrito(this.carrito);
+            console.log('carrito = null');
+          } else {
+            this.carritoCheck = response.data;
+            this.controlCambioPrecio();
+          }
         }
         , err => {
           if (err.status === 400) {
@@ -65,15 +314,19 @@ export class CarritoComponent implements OnInit, OnDestroy {
       );
   }
 
-
-
   cambioCantidadMenu(pedidoLineaMenu: PedidoLineaMenu): void {
     this.observMenu$ = this.carritoService.saveLineaMenu(pedidoLineaMenu).pipe(
       takeUntil(this.unsubscribe$)
     )
       .subscribe(
-        json => {
-          this.carrito = json.data;
+        response => {
+          if (response == null) {
+            this.carritoService.inicializaCarrito(this.carrito);
+            console.log('carrito = null');
+          } else {
+            this.carritoCheck = response.data;
+            this.controlCambioPrecio();
+          }
         }
         , err => {
           if (err.status === 400) {
@@ -90,7 +343,15 @@ export class CarritoComponent implements OnInit, OnDestroy {
   }
 
   deleteLineaSugerencia(lineaSugerencia: PedidoLineaSugerencia): void {
-    // el servicio debe devolver el pedido
+
+    const index = this.getLineaSugerenciaIndex(this.carritoCheck.pedidoLineaSugerencias, lineaSugerencia);
+
+    if (index < 0) {
+      this.carrito.pedidoLineaSugerencias.splice(
+        this.getLineaSugerenciaIndex(this.carrito.pedidoLineaSugerencias, lineaSugerencia), 1);
+      this.carritoService.calculosCarrito(this.carrito);
+      return;
+    }
     this.erroresValidacion = [];
     this.observ$ = this.carritoService.deleteLineaSugerencia(this.carrito.id, lineaSugerencia.id).pipe(
       takeUntil(this.unsubscribe$)
@@ -99,13 +360,11 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
           } else {
-            this.carrito = response.data;
-            console.log('carrito:');
-            console.log(this.carrito);
+            this.carritoCheck = response.data;
+            this.controlCambioPrecio(true);
           }
-          this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          //  this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
         },
         err => {
           if (err.status === 400) {
@@ -123,7 +382,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
   }
 
   deleteLineaMenu(lineaMenu: PedidoLineaMenu): void {
-    // el servicio debe devolver el pedido
     this.erroresValidacion = [];
     this.observ$ = this.carritoService.deleteLineaMenu(this.carrito.id, lineaMenu.id).pipe(
       takeUntil(this.unsubscribe$)
@@ -134,11 +392,10 @@ export class CarritoComponent implements OnInit, OnDestroy {
             this.carritoService.inicializaCarrito(this.carrito);
             console.log('carrito = null');
           } else {
-            this.carrito = response.data;
-            console.log('carrito:');
-            console.log(this.carrito);
+            this.carritoCheck = response.data;
+            this.controlCambioPrecio(true);
           }
-          this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          // this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
         },
         err => {
           if (err.status === 400) {
@@ -155,9 +412,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
   }
 
- // LLamadas al servicio:
-// save ---------------------------
-
   save(): void {
     this.erroresValidacion = [];
     this.observ$ = this.carritoService.save(this.carrito).pipe(
@@ -173,7 +427,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log('carrito:');
             console.log(this.carrito);
           }
-          this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
+          // this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
         },
         err => {
           if (err.status === 400) {
@@ -187,36 +441,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
           }
         }
       );
-  }
-
-  get(): void {
-    if (this.authService.isAuthenticated()) {
-
-      this.carritoService.get()
-        .pipe(
-          takeUntil(this.unsubscribe$),
-          tap((response: any) => {
-            // console.log(response);
-          })
-        )
-        .subscribe(
-          response => {
-            if (response == null) {
-              this.carritoService.inicializaCarrito(this.carrito);
-              console.log('carrito = null');
-
-            } else {
-              this.carrito = response.data;
-              console.log('carrito:');
-              console.log(this.carrito);
-            }
-          },
-          err => {
-            console.log(err);
-            swal.fire('Error carga de carrito', err.status, 'error');
-          }
-        );
-    }
   }
 
   ngOnDestroy(): void {

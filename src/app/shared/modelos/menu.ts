@@ -7,5 +7,6 @@ export class Menu {
     visible: boolean;
     descripcion: string;
     imgFileName: string;
+    precioAnterior: number;
     menuSugerencias: MenuSugerencia[] = [];
 }

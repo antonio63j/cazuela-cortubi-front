@@ -19,7 +19,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CartaComponent } from './carta/carta.component';
 import { MenuComponent } from './menu/menu.component';
 import { RecortarPipe } from '../shared/pipes/recortar.pipe';
-import { SharedPipesModule } from '../shared';
+// import { SharedPipesModule } from '../shared';
 import { MenuDetalleComponent } from './menu/menu-detalle/menu-detalle.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { PaginatorModule } from '../shared/componentes/paginator/paginator.module';
@@ -30,6 +30,13 @@ import { DynamicFieldDirective } from '../shared/componentes/filtro/dynamic-fiel
 import { CartaDetalleComponent } from './carta/carta-detalle/carta-detalle.component';
 import { CarritoComponent } from './carrito/carrito.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { TramitarCarritoComponent } from './carrito/tramitar-carrito/tramitar-carrito.component';
+// import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DateAdapter } from '@angular/material/core';
+import { CustomDateAdapter } from '../shared/adapters/custom-date-adapter';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 @NgModule({
   declarations: [
@@ -37,11 +44,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     CartaDetalleComponent,
     MenuComponent,
     MenuDetalleComponent,
-    
+
     DynamicFieldDirective,
     DynamicFormComponent,
 
-    CarritoComponent
+    CarritoComponent,
+    TramitarCarritoComponent,
+
   ],
 
   imports: [
@@ -69,11 +78,18 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PaginatorModule,
     FiltroModule,
     MatRadioModule,
-    
-    FlexLayoutModule
+
+    FlexLayoutModule,
+
+    MatDatepickerModule,
+    NgxMaterialTimepickerModule
 
 
   ],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+  ],
+
   exports: [
     TranslateModule,
 
@@ -92,6 +108,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSelectModule,
     ReactiveFormsModule,
     AngularEditorModule,
+    // MatDatepickerModule
   ]
 })
 export class PagesStoreModule { }

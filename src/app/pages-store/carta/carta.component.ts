@@ -18,7 +18,6 @@ import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
 
 import { CartaDetalleComponent } from './carta-detalle/carta-detalle.component';
-import { TiposHerramientasService } from 'src/app/shared/services/tipos-herramientas.service';
 import { CarritoService } from '../carrito/carrito.service';
 
 const swalWithBootstrapButtons = Swal.mixin({
@@ -58,9 +57,9 @@ export class CartaComponent implements OnInit, OnDestroy {
 
     regConfig: FieldConfig[];
 
-    public opcionesPlatos: OpcionesSelect [];
-    public opcionesOrdenacion: OpcionesSelect [];
-    public sentidoOrdenacion: OpcionesSelect [];
+    public opcionesPlatos: OpcionesSelect[];
+    public opcionesOrdenacion: OpcionesSelect[];
+    public sentidoOrdenacion: OpcionesSelect[];
 
     constructor(
         private sugerenciaService: AdminSugerenciaService,
@@ -76,19 +75,20 @@ export class CartaComponent implements OnInit, OnDestroy {
         this.sugerencias = [];
         this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
 
-        this.opcionesPlatos = [{value: null, viewValue: 'sin filtro'}].concat (this.tipoPlatos.map(item => ({
-               value: item.nombre, viewValue: item.nombre})
-             ));
+        this.opcionesPlatos = [{ value: null, viewValue: 'sin filtro' }].concat(this.tipoPlatos.map(item => ({
+            value: item.nombre, viewValue: item.nombre
+        })
+        ));
 
         this.opcionesOrdenacion = [
-            {value: 'label', viewValue: 'Nombre'},
-            {value: 'tipo', viewValue: 'Tipo Plato'},
-            {value: 'precio', viewValue: 'Precio'},
+            { value: 'label', viewValue: 'Nombre' },
+            { value: 'tipo', viewValue: 'Tipo Plato' },
+            { value: 'precio', viewValue: 'Precio' },
         ];
 
         this.sentidoOrdenacion = [
-            {value: 'asc', viewValue: 'Ascendente'},
-            {value: 'desc', viewValue: 'Descendente'}
+            { value: 'asc', viewValue: 'Ascendente' },
+            { value: 'desc', viewValue: 'Descendente' }
         ];
 
         this.regConfig = [
@@ -162,9 +162,9 @@ export class CartaComponent implements OnInit, OnDestroy {
         this.nuevaPagina(0);
         this.subscripcioneventoCerrarModalScrollable();
 
-        // indicamos al servicio que carge su carrito temporal
+        // Suponemos que el servicio es singleton por lo que no hay que 
+        // invocar a cargaCarrito()
         // this.carritoService.cargaCarrito();
-
     }
 
     // Es llamado por el paginator
@@ -207,8 +207,27 @@ export class CartaComponent implements OnInit, OnDestroy {
                     window.scrollTo(0, 0);
                 },
                 err => {
-                    console.log(err);
-                    swal.fire('Error carga de sugerencias ', err.status, 'error');
+                    switch (err) {
+                        case 400: {
+                            console.log(`Errores de validacion: ${err.errores}`);
+                            break;
+                        }
+                        case 401: {
+                            swal.fire(`La sesión ha caducado, inicie sesión `, err.status, 'warning');
+                            break;
+                        }
+                        case 501: {
+                            console.log(`error en la peticion ${JSON.stringify(err)}`);
+                            break;
+                        }
+                        default: {
+                            swal.fire('Error carga de sugerencias ', err.status, 'error');
+                            console.log(err);
+                            swal.fire(err.mensaje, '', 'error');
+                            break;
+                        }
+                    }
+
                 }
             );
     }
@@ -234,7 +253,7 @@ export class CartaComponent implements OnInit, OnDestroy {
 
     public comprar(sugerencia: Sugerencia): void {
         this.cartaDetalle(sugerencia);
-     }
+    }
 
     subscripcioneventoCerrarModalScrollable(): void {
         this.modalService.eventoCerrarModalScrollable.pipe(
@@ -264,12 +283,12 @@ export class CartaComponent implements OnInit, OnDestroy {
     }
 
     changedFilter(): void {
-         if (this.filterChecked) {
-        //     this.nuevaPagina(0);
-         } else {
-             this.filtroSugerencia.init();
-             this.nuevaPagina(0);
-         }
+        if (this.filterChecked) {
+            //     this.nuevaPagina(0);
+        } else {
+            this.filtroSugerencia.init();
+            this.nuevaPagina(0);
+        }
     }
 
     quitarFiltros(): void {
@@ -280,7 +299,7 @@ export class CartaComponent implements OnInit, OnDestroy {
 
     submit(value: any): void {
         this.filtroSugerencia.label = value.label;
-        this.filtroSugerencia.tipo  = value.tipo;
+        this.filtroSugerencia.tipo = value.tipo;
         this.filtroSugerencia.precioMin = value.precioMin;
         this.filtroSugerencia.precioMax = value.precioMax;
         this.filtroSugerencia.order = value.ordenacion;

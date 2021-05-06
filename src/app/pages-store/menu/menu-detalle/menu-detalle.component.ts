@@ -60,6 +60,8 @@ export class MenuDetalleComponent implements OnInit {
         } else {
             const pedidoLineaMenu: PedidoLineaMenu = new PedidoLineaMenu();
             pedidoLineaMenu.cantidad = this.cantidad;
+            pedidoLineaMenu.precioInicio = menu.precio;
+
             pedidoLineaMenu.menu = this.menu;
             pedidoLineaMenu.primero = this.primero;
             pedidoLineaMenu.segundo = this.segundo;

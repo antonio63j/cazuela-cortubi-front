@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgbAlertModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingComponent } from '../shared/componentes/loading/loading.component';
-import { StatModule } from '../shared';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -14,7 +13,6 @@ import { DashboardComponent } from './dashboard.component';
         NgbCarouselModule,
         NgbAlertModule,
         DashboardRoutingModule,
-        StatModule,
         MatProgressSpinnerModule
 
     ],

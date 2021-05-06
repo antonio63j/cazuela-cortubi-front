@@ -10,8 +10,6 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from '../../usuarios/auth.service';
-import { TiposHerramientasService } from '../../shared/services/tipos-herramientas.service';
-import { TipoHerramienta } from '../../shared/modelos/tipo-herramienta';
 
 interface SubMenu {
     routLink: string;
@@ -32,7 +30,6 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
-    subMenusHerramientas: TipoHerramienta [];
     private observ$: Subscription = null;
     private unsubscribe$ = new Subject();
 
@@ -41,15 +38,12 @@ export class SidebarComponent implements OnInit {
   constructor(
     private translate: TranslateService,
     public router: Router,
-    public tiposHerramientasService: TiposHerramientasService,
     public authService: AuthService,
   ) {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
         this.toggleSidebar();
       }
-      this.subMenusHerramientas = tiposHerramientasService.getTipoHerramientas();
-
     });
   }
 

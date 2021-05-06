@@ -41,6 +41,7 @@ export class CartaDetalleComponent implements OnInit {
       const pedidoLineaSugerencia: PedidoLineaSugerencia = new PedidoLineaSugerencia();
       pedidoLineaSugerencia.sugerencia = sugerencia;
       pedidoLineaSugerencia.cantidad = this.cantidad;
+      pedidoLineaSugerencia.precioInicio = sugerencia.precio;
       this.carritoService.addPedidoLineaSugerencia(pedidoLineaSugerencia);
       this.activeModal.close('con accept');
     }
