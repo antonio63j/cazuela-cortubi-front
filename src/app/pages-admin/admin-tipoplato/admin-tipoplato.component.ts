@@ -58,12 +58,10 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
     this.tipoplatoService.getTipoplatos().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
-        // console.log(response);
       }),
     ).subscribe(
       response => {
         this.tipoplatos = (response as Tipoplato[]);
-        // this.paginador = response;
       }
       , err => {
         console.log(err);
@@ -120,10 +118,8 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
     ).pipe(
       take(1) // take() manages unsubscription for us
     ).subscribe(result => {
-      console.log({ confirmedResult: result });
       this.tipoplatoService.getTipoplatos().subscribe(respon => {
         this.tipoplatos = respon as Tipoplato[];
-        // this.paginador = respon;
       });
     });
   }

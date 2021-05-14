@@ -1,3 +1,13 @@
+<ng-template #cancelBtn>
+  <button mat-stroked-button color="success" style="margin-right: 7px">{{'Cancelar'
+    | translate}}</button>
+</ng-template>
+<ng-template #confirmBtn>
+  <button mat-stroked-button color="success" style="margin-right: 7px">{{'Confirmar'
+    | translate}}</button>
+</ng-template>
+
+
 <div class="main-content">
   <div class="container-fluid">
 
@@ -63,7 +73,7 @@
                 <div class="col-md-5">
                   <mat-form-field class="example-full-width">
                     <mat-label>url de la web</mat-label>
-                    <input matInput class="form-control" id="url" name="url" placeholder="https://ejemplo.com"            
+                    <input matInput class="form-control" id="url" name="url" placeholder="https://ejemplo.com"
                       [(ngModel)]="empresa.urlWeb" #url="ngModel" required>
                     <!-- <mat-error *ngIf="url.hasError('pattern')">
                       Error en formato de correo
@@ -84,26 +94,74 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-md-3">
                   <mat-form-field class="example-full-width">
                     <input matInput class="form-control" id="horario" name="horario" placeholder="horario"
                       [(ngModel)]="empresa.horario" #horario="ngModel">
                   </mat-form-field>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="row container" style="margin-top: 30px;">
+              <div class="row container" style="margin-top: 5px;">
                 <div class="col-md-12">
                   <label style="color: grey;">Portada</label>
                   <angular-editor id="editor1" name="portada" [config]="configPortada" [(ngModel)]="empresa.portada">
                   </angular-editor>
                 </div>
               </div>
+              <br>
 
-              <!-- <button mat-raised-button type="submit" class="btn btn-danger pull-right">Update Profile</button>
-                          <div class="clearfix"></div> -->
+              <div class="row container" style="text-align: center;">
+                <div class="col-md-4">
+                  <mat-form-field   class="my-select-panel-class" 
+                  appearance="fill">
+                    <mat-label>Día de descanso</mat-label>
+                    <mat-select [(value)]="empresa.diasDescanso" multiple placeholder="día de descanso"
+                      panelClass="my-long-panel" (selectionChange)="cambioDiaDescanso(empresa.diasDescanso)">
+                      <mat-option *ngFor="let dia of diasDescanso" [value]="dia">{{dia}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
 
+                <div class="col-md-4">
+                  <mat-form-field class="my-select-panel-class">
+                    <mat-select [(value)]="empresa.horasMinPreparacionPedido"
+                      placeholder="Mínimo horas preparación pedido" panelClass="my-long-panel">
+                      <mat-option [value]="cantidad" *ngFor="let cantidad of cantidades">{{ cantidad }}                  
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-4">
+                  <mat-form-field class="my-select-panel-class">
+                    <mat-select [(value)]="empresa.diasMaxRecogidaPedido" placeholder="Máximo dias recogida de pedido"
+                      panelClass="my-long-panel">
+                      <mat-option [value]="cantidad" *ngFor="let cantidad of cantidades">{{ cantidad }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+
+
+              <div class="row container">
+                <div class="col-md-6">
+                  <mat-label style="font-size: 12px;">hora Apertura</mat-label>
+                  <ngx-timepicker-field [format]="24" [clockTheme]="oktTheme" #myPickerRef [confirmBtnTmpl]="confirmBtn"
+                    [(ngModel)]="empresa.horaApertura" name="apertura" [cancelBtnTmpl]="cancelBtn" [disabled]="false">
+                  </ngx-timepicker-field>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-label style="font-size: 12px;">hora Cierre</mat-label>
+                  <ngx-timepicker-field [format]="24" [clockTheme]="oktTheme" #myPickerRef [confirmBtnTmpl]="confirmBtn"
+                    [(ngModel)]="empresa.horaCierre" name="cierre" [cancelBtnTmpl]="cancelBtn" [disabled]="false">
+                  </ngx-timepicker-field>
+                </div>
+
+              </div>
 
               <ul class="alert alert-danger" *ngIf="erroresValidacion?.length > 0">
                 <h6>Errores de validación detectados por el backend</h6>
@@ -112,7 +170,7 @@
                 </li>
               </ul>
             </form>
-          </div>
+          </div> <!-- card-body-->
           <div class="card-footer grupo-botones">
             <button mat-raised-button class="margin-right" color="primary" (click)='update(empresa)'
               [disabled]="!variableForm.form.valid">update</button>
@@ -121,6 +179,7 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="help" class="col-md-3">
         <div class="card card-profile">
           <div class="card-avatar">
@@ -141,7 +200,8 @@
 
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+        <!--  </div> -->
+        <!-- col-md9-->
+      </div> <!-- row-->
+    </div> <!-- container fluid-->
+  </div> <!-- main container-->

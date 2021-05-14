@@ -89,7 +89,6 @@ export class DynamicFormComponent implements OnInit {
 
   onValueChanges(): void {
     this.form.valueChanges.subscribe(val => {
-      // console.log(val);
     // this.submit.emit(this.form.value);
 
     });

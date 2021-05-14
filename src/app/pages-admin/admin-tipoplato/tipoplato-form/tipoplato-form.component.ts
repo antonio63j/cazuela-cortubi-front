@@ -36,10 +36,6 @@ export class TipoplatoFormComponent implements OnInit, OnDestroy {
   public update(tipoplato: Tipoplato): void {
     this.observ$ = this.adminTipoplatoService.update(tipoplato).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

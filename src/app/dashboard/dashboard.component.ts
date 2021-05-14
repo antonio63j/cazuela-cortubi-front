@@ -41,7 +41,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$))
       .subscribe(msg => {
           console.log('recibido cambio datos empresa');
-          // console.log(JSON.stringify(msg));
           this.empresa = msg;
         });
     }

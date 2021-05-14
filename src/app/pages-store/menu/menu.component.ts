@@ -56,12 +56,10 @@ export class MenuComponent implements OnInit, OnDestroy{
     this.menuService.getMenusVisibles().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
-        // console.log(response);
       }),
     ).subscribe(
       response => {
         this.menus = (response as Menu[]);
-        // this.paginador = response;
       }
       , err => {
         console.log(err);
@@ -72,12 +70,10 @@ export class MenuComponent implements OnInit, OnDestroy{
   }
 
   public comprar(menu: Menu): void {
-     console.log('comprar');
      this.openModal(menu);
   }
 
   public salir(): void {
-    console.log('salir');
   }
 
   public create(): void {
@@ -99,7 +95,6 @@ export class MenuComponent implements OnInit, OnDestroy{
     ).pipe(
       take(1) // take() manages unsubscription for us
     ).subscribe(result => {
-      console.log({ confirmedResult: result });
       this.menuService.getMenus().subscribe(respon => {
         this.menus = respon as Menu[];
       });

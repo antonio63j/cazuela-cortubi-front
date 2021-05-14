@@ -103,16 +103,9 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
   public update(sugerencia: Sugerencia): void {
     this.erroresValidacion = [];
     this.setSugerenciaVisualPeticion(sugerencia);
-    console.log('sugerencia:');
-    console.log(sugerencia);
-    console.log(this.visualBoolean);
 
     this.observ$ = this.adminSugerenciaService.update(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {
@@ -139,10 +132,6 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
     this.setSugerenciaVisualPeticion(sugerencia);
     this.observ$ = this.adminSugerenciaService.create(sugerencia).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

@@ -67,8 +67,7 @@ export class MenuDetalleComponent implements OnInit {
             pedidoLineaMenu.segundo = this.segundo;
             pedidoLineaMenu.postre = this.postre;
 
-            console.log('pedidoLineaMenu:');
-            console.log(pedidoLineaMenu);
+            console.log(`pedidoLinaMenu: ${JSON.stringify(pedidoLineaMenu)}`);
 
             this.carritoService.addPedidoLineaMenu(pedidoLineaMenu);
             this.activeModal.close('con accept');
@@ -77,7 +76,6 @@ export class MenuDetalleComponent implements OnInit {
   }
 
   cambioCantidad(): void {
-     // console.log(JSON.stringify(this.menu.menuSugerencias));
   }
 
   ngOnInit(): void {

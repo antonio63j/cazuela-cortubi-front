@@ -56,7 +56,6 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
     this.menuService.getMenus().pipe(
       takeUntil(this.unsubscribe$),
       tap((response: any) => {
-        // console.log(response);
       }),
     ).subscribe(
       response => {
@@ -119,7 +118,6 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
     ).pipe(
       take(1) // take() manages unsubscription for us
     ).subscribe(result => {
-      console.log({ confirmedResult: result });
       this.menuService.getMenus().subscribe(respon => {
         this.menus = respon as Menu[];
       });
@@ -135,7 +133,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
       takeUntil(this.unsubscribe$),
     ).subscribe(
       () => {
-        console.log('recibido evento para cerrar modal');
+        // console.log('recibido evento para cerrar modal');
         this.modalConModeloService.closeModalScrollable();
       }
     );
@@ -146,7 +144,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
       takeUntil(this.unsubscribe$),
     ).subscribe(
       menu => {
-        console.log('recibido evento fin Upload');
+        // console.log('recibido evento fin Upload');
         this.menus.map(menuOriginal => {
           if (menuOriginal.id === menu.id) {
             menuOriginal.imgFileName = menu.imgFileName;

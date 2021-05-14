@@ -12,7 +12,6 @@ export class RecortarPipe implements PipeTransform {
     console.log('numBytes=' + numBytes);
     console.log('len value=' + value.length);
 
-    
     return null;
   }
 

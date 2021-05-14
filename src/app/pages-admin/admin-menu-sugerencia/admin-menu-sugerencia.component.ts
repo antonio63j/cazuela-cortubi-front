@@ -74,9 +74,6 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
 
     this.componenteMenu = ComponenteMenu.primero;
-    console.log('ComponenteMenu=');
-    console.log(this.componenteMenu);
-
   }
 
   ngOnInit(): void {
@@ -92,7 +89,6 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
   }
 
   gestionParams(params: any): void {
-    console.log(params);
     const menuId = params.id;
     this.getMenu(menuId);
   }
@@ -125,10 +121,6 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     this.disableMS = true;
     this.disable = false;
     this.componenteMenu = componenteMenu;
-
-    console.log('componenteMenu:');
-    console.log(this.componenteMenu);
-
     this.inicioSeleccionSugerencias();
 
   }
@@ -225,7 +217,6 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
   }
 
   public sortChangeColumn(colName: string): void {
-    console.log(colName);
     if (colName === this.filtroSugerencia.order) {
       if (this.filtroSugerencia.direction === 'asc') {
         this.filtroSugerencia.direction = 'desc';

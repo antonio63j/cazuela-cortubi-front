@@ -36,10 +36,6 @@ export class SliderFormComponent implements OnInit, OnDestroy {
     this.erroresValidacion = [];
     this.observ$ = this.adminSliderService.update(slider).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {
@@ -65,10 +61,6 @@ export class SliderFormComponent implements OnInit, OnDestroy {
     this.erroresValidacion = [];
     this.observ$ = this.adminSliderService.create(slider).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

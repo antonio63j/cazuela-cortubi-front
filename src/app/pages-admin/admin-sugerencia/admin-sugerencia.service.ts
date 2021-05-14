@@ -33,7 +33,6 @@ export class AdminSugerenciaService implements OnDestroy {
       if (valor != null) {
         parametros = parametros.append(key, valor);
       }
-      console.log(key, ':' + valor);
     }
 
     return this.http
@@ -41,7 +40,6 @@ export class AdminSugerenciaService implements OnDestroy {
                         { params: parametros })
       .pipe(
         tap((response: any) => {
-          // (response.content as Sugerencia[]).forEach(sugerencia => console.log(sugerencia));
         })
       );
   }

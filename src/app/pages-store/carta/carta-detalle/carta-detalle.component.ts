@@ -49,11 +49,9 @@ export class CartaDetalleComponent implements OnInit {
   }
 
   cambioCantidad(): void {
-    // console.log('cambioCantidad =' + this.cantidad);
   }
 
   ngOnInit(): void {
-
   }
 
 }

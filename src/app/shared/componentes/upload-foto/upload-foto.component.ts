@@ -47,9 +47,6 @@ export class UploadFotoComponent implements OnInit, OnDestroy {
   }
 
   subirFoto(): void {
-    console.log('sufijo =' + this.sufijoController);
-    console.log('id =' + this.id);
-    console.log('fotoActual =' + this.fotoActual);
 
     if (this.nombreArchivoFoto) {
       this.observ$ = this.uploadFotoService.subirFoto(this.nombreArchivoFoto, this.id, this.sufijoController)
@@ -73,11 +70,10 @@ export class UploadFotoComponent implements OnInit, OnDestroy {
 
                 console.log('response=' + JSON.stringify(response));
                 this.fotoActual = response.data.imgFileName;
-                console.log('fotoActual=');
-                console.log(this.fotoActual);
+
                 // this.cliente = response.cliente as Cliente;
                 // this.modalService.eventoNotificacionUpload.emit(this.cliente);
-                swal.fire('La foto se ha subido con éxito', response.mensaje, 'success');
+                swal.fire('Foto subida ', response.mensaje, 'success');
                 break;
               default:
                 console.log (`surprising upload event: ${event.type}.`);

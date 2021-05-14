@@ -102,10 +102,6 @@ export class MenuFormComponent implements OnInit, OnDestroy {
     this.erroresValidacion = [];
     this.observ$ = this.adminSugerenciaService.update(menu).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {
@@ -131,10 +127,6 @@ export class MenuFormComponent implements OnInit, OnDestroy {
     this.erroresValidacion = [];
     this.observ$ = this.adminSugerenciaService.create(menu).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

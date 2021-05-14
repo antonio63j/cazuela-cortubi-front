@@ -34,7 +34,6 @@ export class AdminIndexComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.unsubscribe$),
         tap((response: any) => {
-          console.log(response);
         }),
         map((response: any) => {
           (response as AdminIndex[]).map(admin => {

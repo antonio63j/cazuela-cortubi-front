@@ -69,8 +69,6 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
       response => {
         this.sliders = (response as Slider[]);
         // this.paginador = response;
-        console.log('sliders:');
-        console.log(response);
       }
       , err => {
         console.log(err);
@@ -127,10 +125,8 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
     ).pipe(
       take(1) // take() manages unsubscription for us
     ).subscribe(result => {
-      console.log({ confirmedResult: result });
       this.adminSliderService.getSliders().subscribe(respon => {
         this.sliders = respon as Slider[];
-        // this.paginador = respon;
       });
     });
   }

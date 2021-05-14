@@ -17,10 +17,10 @@ const routes: Routes = [
   },
   {
     path: 'carrito', component: CarritoComponent,
-    children: [
+    // children: [
 
-      { path: 'tramitar/:idCarrito', component: TramitarCarritoComponent},
-    ]
+    //   { path: 'tramitar/:idCarrito', component: TramitarCarritoComponent},
+    // ]
   }
 
 ];

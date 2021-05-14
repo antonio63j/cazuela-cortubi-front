@@ -10,6 +10,8 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PedidoConfirmacion } from '../../../shared/modelos/pedido-confirmacion';
 import { CarritoService } from '../carrito.service';
+import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
+import { Empresa } from 'src/app/shared/modelos/empresa';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -35,10 +37,6 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject();
 
   private idCarrito: number;
-  public horaApertura = '09:00';
-  public horaCierre = '22:35';
-  public horasHacerPedido = 2;
-  public diasRecogidaPedido = 4;
 
   public hoy: Date = new Date();
   public minDate: Date = new Date();
@@ -54,13 +52,15 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   private pedidoConfirmacion: PedidoConfirmacion = new PedidoConfirmacion();
   public nota: string;
 
-  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    // Only highligh dates inside the month view.
-    if (view === 'month') {
-      const date = cellDate.getDate();
+  public empresa: Empresa;
+  public  diasDescanso: number[];
 
-      // Highlight the 1st and 20th day of each month.
-      return (date === 1 || date === 28) ? 'example-custom-date-class' : '';
+  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+    if (view === 'month') {
+      // const date = cellDate.getDate();
+      const day = cellDate.getDay();
+      const b = this.diasDescanso.findIndex(item => item === day);
+      return (b > -1) ? 'example-custom-date-class' : '';
     }
 
     return '';
@@ -69,14 +69,18 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private shareEmpresaService: ShareEmpresaService
   ) {
-    // this.getDatePropuesta();
+
+    this.empresa = this.shareEmpresaService.copiaEmpresa();
+    this.diasDescanso = this.setDiasDescanso();
+
     this.chosenDate = new Date();
     this.SetPropuestas(new Date());
 
     this.minDate.setDate(this.chosenDate.getDate());
-    this.maxDate.setDate(this.chosenDate.getDate() + this.diasRecogidaPedido);
+    this.maxDate.setDate(this.chosenDate.getDate() + this.empresa.diasMaxRecogidaPedido);
   }
 
   ngOnInit(): void {
@@ -95,7 +99,35 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
     this.idCarrito = params.idCarrito; // o +params.get('tipo');
   }
 
-
+  setDiasDescanso(): number [] {
+    const diasDescanso: number[] = [];
+    for (const dia of this.empresa.diasDescanso) {
+      switch (dia) {
+        case 'lunes': {
+          diasDescanso.push(1); break;
+        }
+        case 'martes': {
+          diasDescanso.push(2); break;
+        }
+        case 'miercoles': {
+          diasDescanso.push(3); break;
+        }
+        case 'jueves': {
+          diasDescanso.push(4); break;
+        }
+        case 'viernes': {
+          diasDescanso.push(5); break;
+        }
+        case 'sábado': {
+          diasDescanso.push(6); break;
+        }
+        case 'domingo': {
+          diasDescanso.push(0); break;
+        }
+      }
+    }
+    return diasDescanso;
+  }
   pad(num: number, size: number): string {
     let s = num + '';
     while (s.length < size) { s = '0' + s; }
@@ -115,45 +147,45 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
 
     const mananaDate = new Date(hoyDate.getFullYear(), hoyDate.getMonth(), hoyDate.getDate() + 1);
 
-    const ha = this.horaApertura;
-    const hc = this.horaCierre;
+    const ha = this.empresa.horaApertura;
+    const hc = this.empresa.horaCierre;
 
     const hxDate = new Date(hoyDate.getFullYear(), hoyDate.getMonth(), hoyDate.getDate(),
       hoyDate.getHours(), hoyDate.getMinutes());
 
     const hx = this.pad(hoyDate.getHours(), 2) + ':' + this.pad(hoyDate.getMinutes(), 2);
 
-    const offSetPedido = hoyDate.getHours() + this.horasHacerPedido;
+    const offSetPedido = hoyDate.getHours() + this.empresa.horasMinPreparacionPedido;
     const hp = this.pad(offSetPedido, 2) + ':' + this.pad(hoyDate.getMinutes(), 2);
     const hp24 = this.pad((offSetPedido % 24), 2) + ':' + this.pad(hoyDate.getMinutes(), 2);
 
     if (ha < hc) {
-      if (hx < ha) {
+
+      if ('00:00' <= hp && hp < ha) {
         this.chosenDate = hoyDate;
-        this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
-        console.log('chosenTime:' + this.chosenTime);
+        this.chosenTime = this.offsetHora(ha, this.empresa.horasMinPreparacionPedido);
         return;
       }
 
-      if (hx < hc) {
-        if (hp < hc) {
-          this.chosenDate = hoyDate;
-          this.chosenTime = hp;
-        } else {
-          this.chosenDate = mananaDate;
-          this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
-        }
+      if (ha <= hp && hp < hc ){
+        this.chosenDate = hoyDate;
+        this.chosenTime = hp;
         return;
+
       }
-      if (hx < '24:00') {
+
+      if (hc <= hp) {
         this.chosenDate = mananaDate;
-        this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
+        this.chosenTime = this.offsetHora(ha, this.empresa.horasMinPreparacionPedido);
         return;
       }
-      console.error('caso no comtemplado');
+
+      swal.fire('Hora recogida de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido`, 'warning');
+
     }
 
     if (ha === hc) {
+
       if (hp > '24:00') {
         this.chosenDate = mananaDate;
       } else {
@@ -164,40 +196,29 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
     }
 
     if (ha > hc) {
-      if (hx < hc) {
-        if (hp < hc) {
-          this.chosenDate = hoyDate;
-          this.chosenTime = hp;
-        } else {
-          this.chosenDate = hoyDate;
-          this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
-        }
-        return;
-      }
 
-      if (hx < ha) {
+      if ('00:00' <= hp && hp < hc){
         this.chosenDate = hoyDate;
-        this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
+        this.chosenTime = hp;
         return;
       }
 
-      if (hx < '24:00') {
-        if (hp < '24:00') {
-          this.chosenDate = hoyDate;
-          this.chosenTime = hp;
-        } else {
-          if (hp24 < hc) {
-            this.chosenDate = hoyDate;
-            this.chosenTime = hp24;
-          } else {
-            this.chosenDate = mananaDate;
-            this.chosenTime = this.offsetHora(ha, this.horasHacerPedido);
-          }
-        }
+      if (hc <= hp && hp < ha) {
+        this.chosenDate = mananaDate;
+        this.chosenTime = this.offsetHora(ha, this.empresa.horasMinPreparacionPedido);
         return;
       }
+
+      if (ha <= hp) {
+        this.chosenDate = hoyDate;
+        this.chosenTime = hp;
+        return;
+      }
+
+      swal.fire('Hora recogida de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido` , 'warning');
+
     }
-    console.error('caso no comtemplado');
+
   }
 
   timeChanged(event: string): void {
@@ -215,15 +236,13 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
       this.chosenDate.setHours(hoy.getHours(), hoy.getMinutes());
     }
 
-    console.log(`chosenDete pasa a : ${this.chosenDate}`);
-
     this.SetPropuestas(this.chosenDate);
   }
 
   confirmar(): void {
 
     swalWithBootstrapButtons.fire({
-      title: '¿Estás seguro?',
+      title: 'Confirmacion de pedido',
       text: `Confimarás la recogida del pedido para el ${formatDate(this.chosenDate, 'dd/MM/YYYY', 'es-Es')} a las ${this.chosenTime}`,
       icon: 'warning',
       showCancelButton: true,
@@ -241,35 +260,8 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
 
         this.pedidoConfirmacion.nota = this.nota;
 
-        console.log(`chosenDate: ${JSON.stringify(this.chosenDate)}`);
-        console.log(`chosenTime: ${JSON.stringify(this.chosenTime)}`);
-        console.log(`pedidoConfirmacion = ${JSON.stringify(this.pedidoConfirmacion)}`);
-        console.log(`this.pedidoConfirmacion.fhRecogidaSolicitada: ${JSON.stringify(this.pedidoConfirmacion.fhRecogidaSolicitada)}`);
-
         this.solicitarTramitarCarrito.emit(this.pedidoConfirmacion);
 
-        // this.carritoService.confirmar(this.pedidoConfirmacion).subscribe(
-        //   response => {
-        //     this.router.navigate(['/dashboard']);
-        //   }
-        //   , err => {
-        //     switch (err) {
-        //       case 400: {
-        //          console.log(`Errores de validacion: ${err.errores}`);
-        //          break;
-        //       }
-        //       case 501: {
-        //          console.log(`error en la peticion ${JSON.stringify(err)}`);
-        //          break;
-        //       }
-        //       default: {
-        //         swal.fire(err.mensaje, '', 'error');
-        //         break;
-        //       }
-        //    }
-        //     console.log(err);
-        //   }
-        // );
       }
     });
   }

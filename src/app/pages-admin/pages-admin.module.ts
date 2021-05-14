@@ -35,6 +35,9 @@ import { RecortarPipe } from '../shared/pipes/recortar.pipe';
 // import { SharedPipesModule } from '../shared';
 import { LayoutModule } from '../layout/layout.module';
 import { PaginatorModule } from '../shared/componentes/paginator/paginator.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,13 @@ import { PaginatorModule } from '../shared/componentes/paginator/paginator.modul
 
     LayoutModule,
 
-    PaginatorModule
+    FlexLayoutModule,
+
+    PaginatorModule,
+
+    MatDatepickerModule,
+    NgxMaterialTimepickerModule
+
   ],
   exports: [
     TranslateModule,
@@ -99,6 +108,9 @@ import { PaginatorModule } from '../shared/componentes/paginator/paginator.modul
     MatSelectModule,
     ReactiveFormsModule,
     AngularEditorModule,
+
+    MatDatepickerModule,
+    NgxMaterialTimepickerModule
   ]
 })
 export class PagesAdminModule { }

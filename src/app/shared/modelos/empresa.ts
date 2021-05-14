@@ -1,7 +1,7 @@
 
 export class DiaDescansoOpciones {
     static dias: string [] = [
-        '',
+        'indefinido',
         'lunes',
         'martes',
         'miércoles',
@@ -21,16 +21,12 @@ export class Empresa {
     email: string;
     urlWeb: string;
     descripcionBreve: string;
-    horario: string;
+    // horario: string;
     portada: string;
-    horaEntrada: number;
-    horaSalida: number;
-    diasDescanso: string;
+    horaApertura: string;
+    horaCierre: string;
+    diasDescanso: string[];
     horasMinPreparacionPedido: number;
     diasMaxRecogidaPedido: number;
 
-
-    // cabeceraBienvenida: string;
-    // bienvenida: string;
-    // sliders: Slider;
 }

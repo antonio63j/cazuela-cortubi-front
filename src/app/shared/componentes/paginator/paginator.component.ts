@@ -38,8 +38,7 @@ export class PaginatorComponent implements OnInit, OnChanges {
             return;
         }
         const paginadorActualizado = changes.paginador;
-        // console.log('paginadorActualizado:');
-        // console.log(JSON.stringify(paginadorActualizado));
+
         if (paginadorActualizado.previousValue) {
             this.initPaginador();
         }

@@ -189,16 +189,7 @@ export class CartaComponent implements OnInit, OnDestroy {
             .pipe(
                 takeUntil(this.unsubscribe$),
                 tap((response: any) => {
-                    // console.log(response);
                 })
-                // ,
-                // map((response: any) => {
-                //     (response.content as Sugerencia[]).map(sugerencia => {
-                //         sugerencia.label = sugerencia.label.toUpperCase();
-                //         return sugerencia;
-                //     });
-                //     return response;
-                // })
             )
             .subscribe(
                 response => {

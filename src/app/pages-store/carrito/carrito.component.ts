@@ -122,7 +122,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
             this.carrito.id = undefined;
-            console.log('carrito = null');
           } else {
             // this.carrito = response.data;
             this.carritoCheck = response.data;
@@ -154,7 +153,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
       response => {
         if (response == null) {
           this.carritoService.inicializaCarrito(this.carrito);
-          console.log('carrito = null');
         } else {
           this.carritoCheck = response.data;
           this.controlCambioPrecio();
@@ -206,18 +204,13 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
     this.preciosModificados = [];
 
-    // console.log(`carrito antes: ${JSON.stringify(this.carrito)}`);
-    // console.log(`carritoCheck antes: ${JSON.stringify(this.carritoCheck)}`);
-
     for (const lSugx of this.carrito.pedidoLineaSugerencias) {
       lineaSug = this.getLineaSugerencia(this.carritoCheck.pedidoLineaSugerencias, lSugx.sugerencia.id);
       if (lineaSug === undefined) {
         if (eliminando) {
-          console.log(`eliminando sugerencia: ${lSugx.sugerencia.label}`);
           this.carrito.pedidoLineaSugerencias.splice(
             this.getLineaSugerenciaIndex(this.carrito.pedidoLineaSugerencias, lSugx), 1);
         } else {
-          console.log(`se mantiene sugerencia: ${lSugx.sugerencia.label}`);
         }
       } else {
         // ver for .. of de carritoCheck
@@ -228,11 +221,9 @@ export class CarritoComponent implements OnInit, OnDestroy {
       lineaMen = this.getLineaMenu(this.carritoCheck.pedidoLineaMenus, lMenx.menu.id);
       if (lineaMen === undefined) {
         if (eliminando) {
-          console.log(`eliminando menu: ${lMenx.menu.label}`);
           this.carrito.pedidoLineaMenus.splice(
             this.getLineaMenuIndex(this.carrito.pedidoLineaMenus, lMenx), 1);
         } else {
-          console.log(`se mantiene menu: ${lMenx.menu.label}`);
         }
       }
     }
@@ -282,8 +273,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
     this.carritoService.calculosCarrito(this.carrito);
 
-    // console.log(`carrito despues: ${JSON.stringify(this.carrito)}`);
-    // console.log(`carritoCheck despues: ${JSON.stringify(this.carritoCheck)}`);
   }
 
   cambioCantidadSugerencia(pedidoLineaSugerencia: PedidoLineaSugerencia): void {
@@ -294,7 +283,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
           } else {
             this.carritoCheck = response.data;
             this.controlCambioPrecio();
@@ -322,7 +310,6 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
           } else {
             this.carritoCheck = response.data;
             this.controlCambioPrecio();
@@ -360,6 +347,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
+            this.carritoCheck.pedidoLineaSugerencias = [];
           } else {
             this.carritoCheck = response.data;
             this.controlCambioPrecio(true);
@@ -390,7 +378,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
+            this.carritoCheck.pedidoLineaMenus = [];
           } else {
             this.carritoCheck = response.data;
             this.controlCambioPrecio(true);
@@ -421,11 +409,8 @@ export class CarritoComponent implements OnInit, OnDestroy {
         response => {
           if (response == null) {
             this.carritoService.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
           } else {
             this.carrito = response.data;
-            console.log('carrito:');
-            console.log(this.carrito);
           }
           // this.carritoService.sendNumArticulosCarritoMsg(this.carrito.numArticulos);
         },

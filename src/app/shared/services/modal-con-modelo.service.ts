@@ -9,7 +9,6 @@ export class ModalConModeloService implements OnDestroy {
     modal: any;
 
     constructor(private ngbModal: NgbModal) {
-        console.log('en constructor()');
     }
 
     public openModalScrollable(

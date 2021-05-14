@@ -6,10 +6,13 @@ import swal from 'sweetalert2';
 
 import { environment } from 'src/environments/environment';
 import { EmpresaService } from './empresa.service';
-import { Empresa } from '../../shared/modelos/empresa';
+import { Empresa, DiaDescansoOpciones } from '../../shared/modelos/empresa';
 import { Subject, Subscription } from 'rxjs';
 import { ShareEmpresaService } from '../../shared/services/share-empresa.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+
+import * as mySettings from '../../shared/settings/ngx-material-timepicker';
+import { CantidadesOpciones } from 'src/app/shared/modelos/pedido';
 
 @Component({
   selector: 'app-empresa',
@@ -21,10 +24,19 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   host: string = environment.urlEndPoint;
   public erroresValidacion: string[];
   empresa: Empresa;
+  diasDescanso = DiaDescansoOpciones.dias;
   private observ$: Subscription = null;
   private observ1$: Subscription = null;
   private observ2$: Subscription = null;
   private unsubscribe$ = new Subject();
+
+  public horaApertura = '09:00';
+  public horaCierre = '22:35';
+  public horasHacerPedido = 2;
+  public diasRecogidaPedido = 4;
+  public chosenTime: string;
+  public oktTheme = mySettings.timeSettings;
+  public cantidades: number[] = CantidadesOpciones.cantidades;
 
   configPortada: AngularEditorConfig = {
     editable: true,
@@ -93,6 +105,18 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
+  private getIndex(arr: string[], elemento: string): number {
+    // devuele -1 como findIndex() si no se encuentra
+    return arr.findIndex(item => item === elemento);
+  }
+
+  cambioDiaDescanso(dias: string[]): void {
+    if (this.getIndex(dias, 'indefinido') > -1) {
+      this.empresa.diasDescanso = [];
+      this.empresa.diasDescanso[0] = 'indefinido';
+    }
+  }
+
   getEmpresa(id: number): void {
     this.observ$ = this.empresaService.get(id).pipe(
       takeUntil(this.unsubscribe$)
@@ -128,13 +152,10 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   }
 
   updateEmpresa(empresa: Empresa): void{
+
     this.erroresValidacion = [];
     this.observ1$ = this.empresaService.update(empresa).pipe(
       takeUntil(this.unsubscribe$)
-      /*      , catchError(err => {
-               console.log('Se muestra el error y se vuelve a lanzar con throwError(err)', err);
-               return throwError(err);
-            }) */
     )
       .subscribe(
         json => {

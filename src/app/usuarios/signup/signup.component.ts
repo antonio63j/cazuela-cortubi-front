@@ -48,7 +48,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       ).pipe(
         take(1) // take() manages unsubscription for us
       ).subscribe(result => {
-        console.log({ confirmedResult: result });
       });
     }
 

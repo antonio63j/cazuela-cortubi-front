@@ -26,7 +26,7 @@ export class AdminSliderService implements OnDestroy {
         return response;
       }),
       tap((response: any) => {
-        /*           (response.content as slider[]).forEach (slider => console.log(slider)); */
+        /* (response.content as slider[]).forEach (slider => console.log(slider)); */
       })
     );
   }

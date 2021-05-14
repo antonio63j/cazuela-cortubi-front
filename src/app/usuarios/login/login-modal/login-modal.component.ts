@@ -30,17 +30,15 @@ export class LoginModalComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    console.log('en ngOninit');
   }
 
   login(): void {
     this.authService.login(this.usuario).subscribe(
       response => {
-        console.log(response);
         this.authService.guardarUsuario(response.access_token);
         this.authService.guardarToken(response.access_token);
         const usuario = this.authService.usuario;
-        console.log(`login con éxito de ${usuario.username}`);
+        // console.log(`login con éxito de ${usuario.username}`);
         this.carritoService.cargaCarrito();
 
         this.modalService.eventoCerrarModalScrollable.emit();
@@ -69,7 +67,6 @@ export class LoginModalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log('en ngOnDestroy()');
     if (this.authService.hasRole('ROLE_ADMIN')) {
-      console.log('se redirige a admin-index');
       this.router.navigate(['\admin-index']);
     } else {
       this.location.back();

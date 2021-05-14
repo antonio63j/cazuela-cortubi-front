@@ -28,7 +28,6 @@ export class AdminMenuService implements OnDestroy {
   getMenus(): Observable<any> {
     return this.http.get<Menu[]>(environment.urlEndPoint + '/api/menu/list').pipe(
       tap((response: any) => {
-        //  (response.content as menu[]).forEach (menu => console.log(menu));
       }),
       map((response: any) => {
         (response as Menu[]).map(menu => {
@@ -94,8 +93,6 @@ export class AdminMenuService implements OnDestroy {
       .set('sugerenciaId', sugerenciaId.toString())
       // .set('primerPlato', primerPlato.toString());
       .set('componenteMenu', componenteMenu);
-    console.log('parametros:');
-    console.log(parametros);
 
     return this.http.post<any>(`${environment.urlEndPoint}/api/menusugerencia/create`, menu, { params: parametros }).pipe(
         catchError(err => {

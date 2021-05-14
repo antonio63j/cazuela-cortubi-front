@@ -47,7 +47,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log('en ngOnInt');
 
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
@@ -136,7 +135,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     ).subscribe(
       (evento) => {
         console.log('recibido evento para cerrar modal:');
-        console.log(evento);
         this.modalConModeloService.closeModalScrollable();
         // this.location.back();
       },

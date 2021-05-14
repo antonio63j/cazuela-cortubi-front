@@ -56,7 +56,6 @@ export class SidebarComponent implements OnInit {
 
     eventCalled(): void {
         this.isActive = !this.isActive;
-        console.log(this.isActive);
     }
 
     addExpandClass(element: any): void {

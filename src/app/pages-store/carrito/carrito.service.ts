@@ -39,15 +39,10 @@ export class CarritoService implements OnDestroy {
     private http: HttpClient
 
   ) {
-    // test
-    console.log('arranque servicio, username: ---------------------------');
-    console.log(this.authService.usuario.username);
 
     this.carrito = new Pedido(this.authService.usuario.username);
     this.inicializaCarrito(this.carrito);
 
-    // para notificar a subscriptores del carrito (header.component)
-    // this.carrito = this.cargaCarrito();
     this.cargaCarrito();
   }
 
@@ -102,11 +97,8 @@ export class CarritoService implements OnDestroy {
         response => {
           if (response == null) {
             this.inicializaCarrito(this.carrito);
-            console.log('carrito = null');
           } else {
             this.carrito = response.data;
-            console.log('carrito:');
-            console.log(this.carrito);
           }
         },
         err => {
@@ -134,9 +126,6 @@ export class CarritoService implements OnDestroy {
   private actualizarLineaMenuEnCarrito(
     carrito: Pedido,
     pedidoLineaMenu: PedidoLineaMenu): void {
-
-    console.log('pedidoLineaMenu:');
-    console.log(pedidoLineaMenu);
 
     let index: number;
     index = carrito.pedidoLineaMenus.findIndex(
@@ -166,9 +155,7 @@ export class CarritoService implements OnDestroy {
   // LLamado desde this.addPedidoLineaSugerecia / .. menu
   saveCarrito(): void {
     this.erroresValidacion = [];
-
     this.carrito.usuario = this.authService.usuario.username;
-
     this.observ$ = this.save(this.carrito).pipe(
       takeUntil(this.unsubscribe$)
     )
@@ -225,6 +212,7 @@ export class CarritoService implements OnDestroy {
   save(carrito: Pedido): Observable<any> {
     // Ojo que no actualiza this.carrito con la peticion
     // lo actualiza con la respuesta
+
     return this.http.post<Pedido>(environment.urlEndPoint + '/api/pedido/save', carrito).pipe(
       catchError(err => {
         console.log(`error capturado: ${err.status} `);

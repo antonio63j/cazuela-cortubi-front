@@ -145,32 +145,12 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         ).pipe(
             take(1) // take() manages unsubscription for us
         ).subscribe(result => {
-            console.log({ confirmedResult: result });
             this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
                 this.sugerencias = respon.content as Sugerencia[];
                 this.paginador = respon;
             });
         });
     }
-
-    // public update(sugerencia: Sugerencia): void {
-    //     this.modalConModeloService.openModalScrollable(
-    //         SugerenciaFormComponent,
-    //         { size: 'lg', backdrop: 'static', scrollable: true },
-    //         sugerencia,
-    //         'sugerencia',
-    //         'Los campos con * son obligatorios',
-    //         'Datos del sugerencia'
-    //     ).pipe(
-    //         take(1) // take() manages unsubscription for us
-    //     ).subscribe(result => {
-    //         console.log({ confirmedResult: result });
-    //         this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
-    //             this.sugerencias = respon.content as Sugerencia[];
-    //             this.paginador = respon;
-    //         });
-    //     });
-    // }
 
     delete(sugerencia: Sugerencia): void {
         swalWithBootstrapButtons.fire({

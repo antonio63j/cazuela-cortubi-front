@@ -17,7 +17,6 @@ export class AdminTipoplatoService implements OnDestroy {
   getTipoplatos(): Observable<any> {
     return this.http.get<Tipoplato[]>(environment.urlEndPoint + '/api/tipoplato/list').pipe(
       tap((response: any) => {
-        //  (response.content as tipoplato[]).forEach (tipoplato => console.log(tipoplato));
       }),
       map((response: any) => {
         (response as Tipoplato[]).map(sli => {

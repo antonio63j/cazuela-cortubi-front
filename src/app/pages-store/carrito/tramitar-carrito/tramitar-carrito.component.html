@@ -17,8 +17,6 @@
         </mat-form-field>
       </mat-card>
 
-          <!-- [defaultTime]="chosenTime"  -->
-          <!-- [defaultTime]="chosenTime" -->
       <mat-card class="center" fxFlex="calc(100%-80%)" fxFlex.xs="100" fxFlexOrder.gt-xs="2">
         <mat-label style="font-size: 12px;">hora recogida del pedido</mat-label>
         <ngx-timepicker-field [format]="24" [clockTheme]="oktTheme" (timeChanged)="timeChanged($event)"
@@ -66,7 +64,10 @@
   </div>
 
   <div class="card-footer">
-       <p>Nuestro horario es de {{horaApertura}}h  a  {{horaCierre}}h</p>
-       <p>Tiempo mínimo de elavoración de un pedido: {{horasHacerPedido}} horas </p>   
+    <ul>
+       <li>Nuestro horario es de {{empresa.horaApertura}}h  a  {{empresa.horaCierre}}h</li>
+       <li>Tiempo mínimo de elavoración de un pedido: {{empresa.horasMinPreparacionPedido}} horas</li>
+       <li>Puede hacer su pedido con hasta {{empresa.diasMaxRecogidaPedido}} días de adelanto</li>    
+    </ul>     
   </div>
 </div>
