@@ -32,12 +32,17 @@ import { MenuFormComponent } from './admin-menu/menu-form/menu-form.component';
 import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
 import { LowerCasePipe } from '@angular/common';
 import { RecortarPipe } from '../shared/pipes/recortar.pipe';
-// import { SharedPipesModule } from '../shared';
 import { LayoutModule } from '../layout/layout.module';
 import { PaginatorModule } from '../shared/componentes/paginator/paginator.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AdminPedidoComponent } from './admin-pedido/admin-pedido.component';
+import { DynamicFieldDirective } from '../shared/componentes/filtro/dynamic-field/dynamic-field.directive';
+import { DynamicFormComponent } from '../shared/componentes/filtro/dynamic-form/dynamic-form.component';
+import { FiltroModule } from '../shared/componentes/filtro/filtro.module';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
+import { CustomDateAdapter } from '../shared/adapters/custom-date-adapter';
 
 @NgModule({
   declarations: [
@@ -56,6 +61,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 
     SugerenciaFormComponent,
     AdminMenuSugerenciaComponent,
+    AdminPedidoComponent,
+
 
   ],
 
@@ -87,9 +94,19 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     PaginatorModule,
 
     MatDatepickerModule,
-    NgxMaterialTimepickerModule
+
+    MatNativeDateModule,
+
+    NgxMaterialTimepickerModule,
+
+    FiltroModule
 
   ],
+
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+  ],
+
   exports: [
     TranslateModule,
 
@@ -108,6 +125,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSelectModule,
     ReactiveFormsModule,
     AngularEditorModule,
+
+    MatNativeDateModule,
 
     MatDatepickerModule,
     NgxMaterialTimepickerModule

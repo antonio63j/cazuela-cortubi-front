@@ -6,7 +6,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-SimpleChanges
+  SimpleChanges
 } from '@angular/core';
 import {
   FormGroup,
@@ -37,7 +37,7 @@ export class DynamicFormComponent implements OnInit {
   get value() {
     return this.form.value;
   }
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.form = this.createControl();
@@ -56,15 +56,53 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+
   createControl() {
     const group = this.fb.group({});
     this.fields.forEach(field => {
+
+      console.log(`field: ${JSON.stringify(field)}`);
+
+      if (field.type === 'button') { return; }
+
+      if (field.type === 'daterange') {
+        // group.addControl(field.nameIni, control);
+        // group.addControl(field.nameFin, control);
+        const controlIni = this.fb.control(
+          field.valueIni, this.bindValidations(field.validations || []));
+        group.addControl(field.nameIni, controlIni);
+        const controlFin = this.fb.control(
+          field.valueFin, this.bindValidations(field.validations || []));
+        group.addControl(field.nameFin, controlFin);
+
+      } else {
+        const control = this.fb.control(
+          field.value, this.bindValidations(field.validations || [])
+        );
+        group.addControl(field.name, control);
+      }
+    });
+    return group;
+  }
+
+
+  createControl_old() {
+    const group = this.fb.group({});
+    this.fields.forEach(field => {
+
+      console.log(`field: ${JSON.stringify(field)}`);
+
       if (field.type === 'button') { return; }
       const control = this.fb.control(
-        field.value,
-        this.bindValidations(field.validations || [])
+        field.value, this.bindValidations(field.validations || [])
       );
-      group.addControl(field.name, control);
+      if (field.type === 'daterange') {
+        // group.addControl(field.nameIni, control);
+        // group.addControl(field.nameFin, control);
+
+      } else {
+        group.addControl(field.name, control);
+      }
     });
     return group;
   }
@@ -89,7 +127,7 @@ export class DynamicFormComponent implements OnInit {
 
   onValueChanges(): void {
     this.form.valueChanges.subscribe(val => {
-    // this.submit.emit(this.form.value);
+      // this.submit.emit(this.form.value);
 
     });
   }

@@ -45,8 +45,8 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
     MenuComponent,
     MenuDetalleComponent,
 
-    DynamicFieldDirective,
-    DynamicFormComponent,
+    // DynamicFieldDirective,
+    // DynamicFormComponent,
 
     CarritoComponent,
     TramitarCarritoComponent,

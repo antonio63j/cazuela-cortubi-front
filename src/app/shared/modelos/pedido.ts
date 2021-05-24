@@ -46,13 +46,16 @@ export class Pedido {
     numArticulos: number;
 
     fechaRegistro: Date;
-    fhRecogidaSolicitada: Date;
+    fechaRecogida: Date;
     nota: string;
     pedidoLineaSugerencias: PedidoLineaSugerencia [] = [];
     pedidoLineaMenus: PedidoLineaMenu [] = [];
 
-    constructor(usuario: string) {
-       this.usuario = usuario;
+    constructor(usuario?: string) {
+       if (usuario !== undefined) {
+        this.usuario = usuario;
+       }
     }
+
 
 }

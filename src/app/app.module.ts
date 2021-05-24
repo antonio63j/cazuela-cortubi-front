@@ -24,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RecortarPipe } from './shared/pipes/recortar.pipe';
 import { PaginatorComponent } from './shared/componentes/paginator/paginator.component';
 import { CustomDateAdapter } from './shared/adapters/custom-date-adapter';
+import { DatePipe } from '@angular/common';
 
 
 export const MY_FORMATS = {
@@ -67,6 +68,7 @@ export const MY_FORMATS = {
     ModalService,
     ModalConModeloService,
     AuthService,
+    DatePipe,
 
     // {provide: DEFAULT_CURRENCY_CODE, useValue: 'es'},
     { provide: LOCALE_ID, useValue: 'es' },

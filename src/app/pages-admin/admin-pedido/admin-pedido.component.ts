@@ -6,19 +6,20 @@ import { AdminSugerenciaService } from 'src/app/pages-admin/admin-sugerencia/adm
 import { DynamicFormComponent } from 'src/app/shared/componentes/filtro/dynamic-form/dynamic-form.component';
 import { FieldConfig, OpcionesSelect } from 'src/app/shared/componentes/filtro/field.interface';
 import { Validators } from '@angular/forms';
-import { FiltroSugerencia } from 'src/app/shared/modelos/filtro-sugerencia';
-import { Sugerencia } from 'src/app/shared/modelos/sugerencia';
-import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
+import { FiltroPedido } from 'src/app/shared/modelos/filtro-pedido';
 import { ModalConModeloService } from 'src/app/shared/services/modal-con-modelo.service';
 import { ModalService } from 'src/app/shared/services/modal.service';
-import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
+import { EstadoPedidoEnum, Pedido } from 'src/app/shared/modelos/pedido';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+import { AdminPedidoService } from './admin-pedido.service';
 
-import { CartaDetalleComponent } from './carta-detalle/carta-detalle.component';
-import { CarritoService } from '../carrito/carrito.service';
+registerLocaleData(localeEs, 'es');
+
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -32,58 +33,57 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 
 @Component({
-    selector: 'app-carta',
-    templateUrl: './carta.component.html',
-    styleUrls: ['./carta.component.scss']
+    selector: 'app-admin-pedido',
+    templateUrl: './admin-pedido.component.html',
+    styleUrls: ['./admin-pedido.component.scss']
 })
 
-export class CartaComponent implements OnInit, OnDestroy {
+export class AdminPedidoComponent implements OnInit, OnDestroy {
 
     @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
-    sugerencias: Sugerencia[];
-    sugerencia: Sugerencia = new Sugerencia();
+    pedidos: Pedido[];
+    pedido: Pedido = new Pedido();
+
 
     host: string = environment.urlEndPoint;
     private unsubscribe$ = new Subject();
     public paginador: any;
 
-    public tipoPlatos: Tipoplato[];
-
     public filterChecked = false;
-    public filtroSugerencia: FiltroSugerencia = new FiltroSugerencia();
+    public filtroPedido: FiltroPedido = new FiltroPedido();
 
     public disable = true;
 
     regConfig: FieldConfig[];
 
-    public opcionesPlatos: OpcionesSelect[];
     public opcionesOrdenacion: OpcionesSelect[];
     public sentidoOrdenacion: OpcionesSelect[];
+    public opcionesEstado: OpcionesSelect[];
+
 
     constructor(
-        private sugerenciaService: AdminSugerenciaService,
-        private shareEmpresaService: ShareEmpresaService,
+        private pedidoService: AdminPedidoService,
         private modalConModeloService: ModalConModeloService,
         private modalService: ModalService,
         private translate: TranslateService,
         private authService: AuthService,
-        private carritoService: CarritoService
 
     ) {
-        this.filtroSugerencia.setSoloVisibles();
-        this.sugerencias = [];
-        this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
 
-        this.opcionesPlatos = [{ value: null, viewValue: 'sin filtro' }].concat(this.tipoPlatos.map(item => ({
-            value: item.nombre, viewValue: item.nombre
-        })
-        ));
+        this.opcionesEstado = [{ value: null, viewValue: 'sin filtro' }]
+            .concat(Object.keys(EstadoPedidoEnum).map(key => {
+                return {
+                    value: key,
+                    viewValue: EstadoPedidoEnum[key],
+                };
+            }));
 
         this.opcionesOrdenacion = [
-            { value: 'label', viewValue: 'Nombre' },
-            { value: 'tipo', viewValue: 'Tipo Plato' },
-            { value: 'precio', viewValue: 'Precio' },
+            { value: 'estadoPedido', viewValue: 'Estado del pedido' },
+            { value: 'fechaRegistro', viewValue: 'Fecha de registro' },
+            { value: 'fechaRecogida', viewValue: 'Fecha de recogida' },
+            { value: 'usuario', viewValue: 'Cuenta cliente' },
         ];
 
         this.sentidoOrdenacion = [
@@ -93,39 +93,45 @@ export class CartaComponent implements OnInit, OnDestroy {
 
         this.regConfig = [
             {
-                type: 'input',
-                label: 'Nombre',
-                inputType: 'text',
-                class: 'demo-15-width',
-                name: 'label',
+                type: 'daterange',
+                label: 'Rango registro pedido',
+                nameIni: 'diaRegistroIni',
+                nameFin: 'diaRegistroFin',
+                valueIni: null,
+                valueFin: null,
+
+                class: 'demo-10-width',
                 validations: [
                 ]
             },
             {
                 type: 'select',
-                label: 'Tipo plato',
-                name: 'tipo',
+                label: 'Estado',
+                name: 'estado',
                 value: null,
                 class: 'demo-15-width',
-                options: this.opcionesPlatos,
+                options: this.opcionesEstado,
+                validations: [
+                ]
+            },
+
+            {
+                type: 'daterange',
+                label: 'Rango recogida pedido',
+                nameIni: 'diaRecogidaIni',
+                nameFin: 'diaRecogidaFin',
+                valueIni: null,
+                valueFin: null,
+                class: 'demo-10-width',
                 validations: [
                 ]
             },
             {
                 type: 'input',
-                label: 'Precio mim.',
-                class: 'demo-10-width',
-                inputType: 'number',
-                name: 'precioMin',
-                validations: [
-                ]
-            },
-            {
-                type: 'input',
-                label: 'Precio max.',
-                class: 'demo-10-width',
-                inputType: 'number',
-                name: 'precioMax',
+                label: 'Cuenta cliente',
+                inputType: 'text',
+                class: 'demo-20-width',
+                name: 'usuario',
                 validations: [
                 ]
             },
@@ -134,7 +140,7 @@ export class CartaComponent implements OnInit, OnDestroy {
                 label: 'Ordenación',
                 name: 'ordenacion',
                 class: 'campoOrdenacion',
-                value: 'label',
+                value: 'fechaRecogida',
                 options: this.opcionesOrdenacion,
                 validations: [
                 ]
@@ -149,6 +155,7 @@ export class CartaComponent implements OnInit, OnDestroy {
                 validations: [
                 ]
             },
+
             {
                 type: 'button',
                 label: 'Aplicar filtros y ordenación'
@@ -160,32 +167,29 @@ export class CartaComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.nuevaPagina(0);
-        this.subscripcioneventoCerrarModalScrollable();
+        // this.subscripcioneventoCerrarModalScrollable();
 
-        // Suponemos que el servicio es singleton por lo que no hay que 
-        // invocar a cargaCarrito()
-        // this.carritoService.cargaCarrito();
     }
 
     // Es llamado por el paginator
     public getPagina(paginaYSize: any): void {
         const pagina: number = paginaYSize.pagina;
         const size: number = paginaYSize.size;
-        this.filtroSugerencia.size = size.toString();
+        this.filtroPedido.size = size.toString();
         this.nuevaPagina(pagina);
     }
 
     nuevaPagina(pagina: number): void {
-        this.filtroSugerencia.page = pagina.toString();
+        this.filtroPedido.page = pagina.toString();
 
-        // test
+        //     // test
         if (!this.filterChecked) {
-            this.filtroSugerencia.init();
+            this.filtroPedido.init();
         }
-        // test
+        //     // test
 
-        this.sugerenciaService
-            .getSugerencias(this.filtroSugerencia)
+        this.pedidoService
+            .getPedidos(this.filtroPedido)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 tap((response: any) => {
@@ -193,7 +197,9 @@ export class CartaComponent implements OnInit, OnDestroy {
             )
             .subscribe(
                 response => {
-                    this.sugerencias = response.content as Sugerencia[];
+                    console.log(`response: ${JSON.stringify(response)}`);
+
+                    this.pedidos = response.content as Pedido[];
                     this.paginador = response;
                     window.scrollTo(0, 0);
                 },
@@ -212,7 +218,7 @@ export class CartaComponent implements OnInit, OnDestroy {
                             break;
                         }
                         default: {
-                            swal.fire('Error carga de sugerencias ', err.status, 'error');
+                            swal.fire('Error carga de pedidos ', err.status, 'error');
                             console.log(err);
                             swal.fire(err.mensaje, '', 'error');
                             break;
@@ -223,30 +229,25 @@ export class CartaComponent implements OnInit, OnDestroy {
             );
     }
 
-    public cartaDetalle(sugerencia: Sugerencia): void {
-        this.modalConModeloService.openModalScrollable(
-            CartaDetalleComponent,
-            { size: 'lg', backdrop: 'static', scrollable: true },
-            sugerencia,
-            'sugerencia',
-            'Los campos con * son obligatorios',
-            'Datos del sugerencia'
-        ).pipe(
-            take(1) // take() manages unsubscription for us
-        ).subscribe(result => {
-            console.log({ confirmedResult: result });
+    // public cartaDetalle(sugerencia: Sugerencia): void {
+    //     this.modalConModeloService.openModalScrollable(
+    //         CartaDetalleComponent,
+    //         { size: 'lg', backdrop: 'static', scrollable: true },
+    //         sugerencia,
+    //         'sugerencia',
+    //         'Los campos con * son obligatorios',
+    //         'Datos del sugerencia'
+    //     ).pipe(
+    //         take(1) // take() manages unsubscription for us
+    //     ).subscribe(result => {
+    //         console.log({ confirmedResult: result });
+    //         this.sugerenciaService.getSugerencias(this.filtroPedido).subscribe(respon => {
+    //             this.sugerencias = respon.content as Sugerencia[];
+    //             this.paginador = respon;
+    //         });
+    //     });
+    // }
 
-            // this.sugerenciaService.getSugerencias(this.filtroSugerencia).subscribe(respon => {
-            //     this.sugerencias = respon.content as Sugerencia[];
-            //     this.paginador = respon;
-
-//         });
-        });
-    }
-
-    public comprar(sugerencia: Sugerencia): void {
-        this.cartaDetalle(sugerencia);
-    }
 
     subscripcioneventoCerrarModalScrollable(): void {
         this.modalService.eventoCerrarModalScrollable.pipe(
@@ -259,44 +260,56 @@ export class CartaComponent implements OnInit, OnDestroy {
         );
     }
 
-    subscripcioneventoNotificacionUpload(): void {
-        this.modalService.eventoNotificacionUpload.pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe(
-            sugerencia => {
-                console.log('recibido evento fin Upload');
-                this.sugerencias.map(sugerenciaOriginal => {
-                    if (sugerenciaOriginal.id === sugerencia.id) {
-                        sugerenciaOriginal.imgFileName = sugerencia.imgFileName;
-                    }
-                    return sugerenciaOriginal;
-                }); // map
-            }
-        );
-    }
+    // subscripcioneventoNotificacionUpload(): void {
+    //     this.modalService.eventoNotificacionUpload.pipe(
+    //         takeUntil(this.unsubscribe$),
+    //     ).subscribe(
+    //         sugerencia => {
+    //             console.log('recibido evento fin Upload');
+    //             this.sugerencias.map(sugerenciaOriginal => {
+    //                 if (sugerenciaOriginal.id === sugerencia.id) {
+    //                     sugerenciaOriginal.imgFileName = sugerencia.imgFileName;
+    //                 }
+    //                 return sugerenciaOriginal;
+    //             }); // map
+    //         }
+    //     );
+    // }
 
     changedFilter(): void {
         if (this.filterChecked) {
             //     this.nuevaPagina(0);
+            console.log('filterChecked');
         } else {
-            this.filtroSugerencia.init();
+            this.filtroPedido.init();
             this.nuevaPagina(0);
         }
     }
 
     quitarFiltros(): void {
-        this.filtroSugerencia.init();
+        this.filtroPedido.init();
         this.filterChecked = !this.filterChecked;
         this.nuevaPagina(0);
     }
 
     submit(value: any): void {
-        this.filtroSugerencia.label = value.label;
-        this.filtroSugerencia.tipo = value.tipo;
-        this.filtroSugerencia.precioMin = value.precioMin;
-        this.filtroSugerencia.precioMax = value.precioMax;
-        this.filtroSugerencia.order = value.ordenacion;
-        this.filtroSugerencia.direction = value.sentidoOrdenacion;
+        // this.filtroPedido.label = value.label;
+        // this.filtroPedido.tipo = value.tipo;
+        // this.filtroPedido.precioMin = value.precioMin;
+        // this.filtroPedido.precioMax = value.precioMax;
+        this.filtroPedido.order = value.ordenacion;
+        this.filtroPedido.direction = value.sentidoOrdenacion;
+
+        this.filtroPedido.estado = value.estado;
+        this.filtroPedido.diaRegistroIni = value.diaRegistroIni;
+        this.filtroPedido.diaRegistroFin = value.diaRegistroFin;
+        this.filtroPedido.diaRecogidaIni = value.diaRecogidaIni;
+        this.filtroPedido.diaRecogidaFin = value.diaRecogidaFin;
+        this.filtroPedido.usuario = value.usuario;
+
+        console.log(`filtroPedido: ${JSON.stringify(this.filtroPedido)}`);
+        console.log(`value: ${JSON.stringify(value)}`);
+
         this.nuevaPagina(0);
     }
 
@@ -306,5 +319,3 @@ export class CartaComponent implements OnInit, OnDestroy {
         this.unsubscribe$.complete();
     }
 }
-
-

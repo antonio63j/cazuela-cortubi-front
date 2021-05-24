@@ -112,7 +112,9 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
   tramitar(pedidoConfirmacion: PedidoConfirmacion): void {
     this.carrito.nota = pedidoConfirmacion.nota;
-    this.carrito.fhRecogidaSolicitada = pedidoConfirmacion.fhRecogidaSolicitada;
+    this.carrito.fechaRecogida = pedidoConfirmacion.fechaRecogida;
+    this.carrito.fechaRegistro = new Date();
+    this.carrito.fechaRegistro.setHours(0, 0, 0 , 0);
 
     this.observ$ = this.carritoService.confirmar(this.carrito).pipe(
       takeUntil(this.unsubscribe$)

@@ -55,6 +55,11 @@ export class CarritoService implements OnDestroy {
     carrito.pedidoLineaSugerencias = [];
     carrito.pedidoLineaMenus = [];
 
+    console.log(`carrito: ${JSON.stringify(carrito)}`);
+    console.log(`local: ${carrito.fechaRegistro.toLocaleString()}`);
+    console.log(`local Date: ${carrito.fechaRegistro.toLocaleDateString()}`);
+
+
     this.sendNumArticulosCarritoMsg(carrito.numArticulos);
 
   }
@@ -156,6 +161,9 @@ export class CarritoService implements OnDestroy {
   saveCarrito(): void {
     this.erroresValidacion = [];
     this.carrito.usuario = this.authService.usuario.username;
+
+    console.log(`salvando carrito: ${JSON.stringify(this.carrito)}`);
+
     this.observ$ = this.save(this.carrito).pipe(
       takeUntil(this.unsubscribe$)
     )
@@ -213,7 +221,7 @@ export class CarritoService implements OnDestroy {
     // Ojo que no actualiza this.carrito con la peticion
     // lo actualiza con la respuesta
 
-    return this.http.post<Pedido>(environment.urlEndPoint + '/api/pedido/save', carrito).pipe(
+    return this.http.post<Pedido>(environment.urlEndPoint + '/api/carrito/save', carrito).pipe(
       catchError(err => {
         console.log(`error capturado: ${err.status} `);
         return throwError(err);
@@ -224,6 +232,9 @@ export class CarritoService implements OnDestroy {
 
         this.sortCarrito(response.data);
         this.carrito = response.data;
+
+        console.log(`carrito: ${JSON.stringify(this.carrito)}`);
+
         this.calculosCarrito(this.carrito);
         return response;
 
@@ -253,7 +264,7 @@ export class CarritoService implements OnDestroy {
     let parametros = new HttpParams();
     parametros = parametros.append('usuario', this.authService.usuario.username);
 
-    return this.http.get<Pedido>(environment.urlEndPoint + '/api/pedido/usuario',
+    return this.http.get<Pedido>(environment.urlEndPoint + '/api/carrito/usuario',
       { params: parametros }).pipe(
         catchError(err => {
           console.log(`error capturado: ${err.status} `);
@@ -279,7 +290,7 @@ export class CarritoService implements OnDestroy {
     parametros = parametros.append('idPedido', idPedido.toString());
     parametros = parametros.append('idLineaSugerencia', idLineaSugerencia.toString());
 
-    return this.http.delete<Pedido>(environment.urlEndPoint + '/api/pedido/lineaSugerencia',
+    return this.http.delete<Pedido>(environment.urlEndPoint + '/api/carrito/lineaSugerencia',
       { params: parametros }).pipe(
         catchError(err => {
           console.log(`error capturado: ${err.status} `);
@@ -303,7 +314,7 @@ export class CarritoService implements OnDestroy {
     parametros = parametros.append('idPedido', idPedido.toString());
     parametros = parametros.append('idLineaMenu', idLineaMenu.toString());
 
-    return this.http.delete<Pedido>(environment.urlEndPoint + '/api/pedido/lineaMenu',
+    return this.http.delete<Pedido>(environment.urlEndPoint + '/api/carrito/lineaMenu',
       { params: parametros }).pipe(
         catchError(err => {
           console.log(`error capturado: ${err.status} `);
@@ -326,7 +337,9 @@ export class CarritoService implements OnDestroy {
   }
 
   confirmar(carrito: Pedido): Observable<any> {
-    return this.http.post<PedidoConfirmacion>(environment.urlEndPoint + '/api/pedido/confirmacion', carrito).pipe(
+
+    console.log(`enviando confirmacion carrito: ${JSON.stringify(carrito)}`);
+    return this.http.post<PedidoConfirmacion>(environment.urlEndPoint + '/api/carrito/confirmacion', carrito).pipe(
       catchError(err => {
         console.log(`error capturado: ${err.status} `);
         return throwError(err);

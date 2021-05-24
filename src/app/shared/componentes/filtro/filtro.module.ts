@@ -4,7 +4,10 @@ import { FiltroComponent } from './filtro.component';
 import { InputComponent } from './input/input.component';
 import { ButtonComponent } from './button/button.component';
 import { SelectComponent } from './select/select.component';
+
 import { DateComponent } from './date/date.component';
+import { DateRangeComponent } from './date-range/date-range.component';
+
 import { RadiobuttonComponent } from './radiobutton/radiobutton.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { DynamicFieldDirective } from './dynamic-field/dynamic-field.directive';
@@ -33,8 +36,11 @@ import { MatRadioModule } from '@angular/material/radio';
     DateComponent,
     RadiobuttonComponent,
     CheckboxComponent,
-    // DynamicFieldDirective,
-    // DynamicFormComponent
+
+    DateRangeComponent,
+
+    DynamicFieldDirective,
+    DynamicFormComponent
   ],
   imports: [
 
@@ -57,6 +63,11 @@ import { MatRadioModule } from '@angular/material/radio';
     MatRadioModule
 
   ],
+  exports: [
+    DynamicFieldDirective,
+    DynamicFormComponent
+  ],
+
   providers: [],
 
   entryComponents: [
@@ -65,7 +76,8 @@ import { MatRadioModule } from '@angular/material/radio';
     SelectComponent,
     DateComponent,
     RadiobuttonComponent,
-    CheckboxComponent
+    CheckboxComponent,
+
   ]
 })
 

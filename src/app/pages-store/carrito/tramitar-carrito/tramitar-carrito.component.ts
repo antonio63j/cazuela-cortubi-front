@@ -228,6 +228,9 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   }
 
   dateChanged(): void {
+
+    console.log(`chosenDate: ${JSON.stringify(this.chosenDate)}`);
+
     if (this.chosenDate.getFullYear() === new Date().getFullYear() &&
       this.chosenDate.getMonth() === new Date().getMonth() &&
       this.chosenDate.getDate() === new Date().getDate()
@@ -251,14 +254,15 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        // this.pedidoConfirmacion.idCarrito = this.idCarrito;
-        this.pedidoConfirmacion.fhRecogidaSolicitada = new Date(this.chosenDate);
+        this.pedidoConfirmacion.fechaRecogida = new Date(this.chosenDate);
 
         //  this.chosenDate.setHours(hoy.getHours(), hoy.getMinutes());
-        this.pedidoConfirmacion.fhRecogidaSolicitada.setHours(+this.chosenTime.substr(0, 2),
+        this.pedidoConfirmacion.fechaRecogida.setHours(+this.chosenTime.substr(0, 2),
           +this.chosenTime.substr(3, 2), 0);
 
         this.pedidoConfirmacion.nota = this.nota;
+
+        console.log(`pedidoConfirmacion: ${JSON.stringify(this.pedidoConfirmacion)}`);
 
         this.solicitarTramitarCarrito.emit(this.pedidoConfirmacion);
 

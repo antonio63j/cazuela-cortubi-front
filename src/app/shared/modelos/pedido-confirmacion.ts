@@ -1,4 +1,4 @@
 export class PedidoConfirmacion {
-    fhRecogidaSolicitada: Date;
+    fechaRecogida: Date;
     nota: string;
 }
