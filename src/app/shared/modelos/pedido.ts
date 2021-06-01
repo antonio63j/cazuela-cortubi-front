@@ -45,8 +45,8 @@ export class Pedido {
     total: number;
     numArticulos: number;
 
-    fechaRegistro: Date;
-    fechaRecogida: Date;
+    fechaRegistro: string;
+    fechaRecogida: string;
     nota: string;
     pedidoLineaSugerencias: PedidoLineaSugerencia [] = [];
     pedidoLineaMenus: PedidoLineaMenu [] = [];

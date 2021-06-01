@@ -114,7 +114,7 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
       tipoplato,
       'tipoplato',
       'Los campos con * son obligatorios',
-      'Datos del tipoplato'
+      'Clasificación de platos'
     ).pipe(
       take(1) // take() manages unsubscription for us
     ).subscribe(result => {

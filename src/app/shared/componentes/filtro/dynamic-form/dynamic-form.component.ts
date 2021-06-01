@@ -69,10 +69,10 @@ export class DynamicFormComponent implements OnInit {
         // group.addControl(field.nameIni, control);
         // group.addControl(field.nameFin, control);
         const controlIni = this.fb.control(
-          field.valueIni, this.bindValidations(field.validations || []));
+          field.valueDateIni, this.bindValidations(field.validations || []));
         group.addControl(field.nameIni, controlIni);
         const controlFin = this.fb.control(
-          field.valueFin, this.bindValidations(field.validations || []));
+          field.valueDateFin, this.bindValidations(field.validations || []));
         group.addControl(field.nameFin, controlFin);
 
       } else {

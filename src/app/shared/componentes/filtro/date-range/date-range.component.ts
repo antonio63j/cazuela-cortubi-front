@@ -6,7 +6,10 @@ import { FieldConfig } from '../field.interface';
   template: `
   <mat-form-field class="demo-full-width margin-top" [formGroup]="group">
   <mat-label>{{field.label}}</mat-label>
-  <mat-date-range-input [rangePicker]="picker">
+  <mat-date-range-input
+    [rangePicker]="picker"
+    [comparisonStart]="field.valueDateIni"
+    [comparisonEnd]="field.valueDateFin">
     <input matStartDate [formControlName]="field.nameIni" placeholder="Start date">
     <input matEndDate [formControlName]="field.nameFin" placeholder="End date">
   </mat-date-range-input>

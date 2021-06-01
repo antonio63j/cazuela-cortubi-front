@@ -43,6 +43,8 @@ import { DynamicFormComponent } from '../shared/componentes/filtro/dynamic-form/
 import { FiltroModule } from '../shared/componentes/filtro/filtro.module';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CustomDateAdapter } from '../shared/adapters/custom-date-adapter';
+import { AdminPedidoFormComponent } from './admin-pedido/admin-pedido-form/admin-pedido-form.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -55,51 +57,38 @@ import { CustomDateAdapter } from '../shared/adapters/custom-date-adapter';
     TipoplatoFormComponent,
     UploadFotoComponent,
     AdminSugerenciaComponent,
-
     AdminMenuComponent,
     MenuFormComponent,
-
     SugerenciaFormComponent,
     AdminMenuSugerenciaComponent,
     AdminPedidoComponent,
-
-
+    AdminPedidoFormComponent,
   ],
 
   imports: [
     CommonModule,
     PagesAdminRoutingModule,
     TranslateModule,
-
     FormsModule,
-
     MatIconModule,
     MatButtonModule,
     MatCardModule,
     MatSortModule,
-
     MatSliderModule,
     MatSlideToggleModule,
-
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     ReactiveFormsModule,
     AngularEditorModule,
-
     LayoutModule,
-
     FlexLayoutModule,
-
     PaginatorModule,
-
     MatDatepickerModule,
-
     MatNativeDateModule,
-
     NgxMaterialTimepickerModule,
-
-    FiltroModule
+    FiltroModule,
+    MatRadioModule
 
   ],
 

@@ -94,7 +94,7 @@
           <div fxLayout="row wrap">
             <mat-card fxFlex="315px" fxFlex.xs="100" fxFlexOrder.gt-xs="1">
               <img *ngIf="lineaMenu.menu.imgFileName" class="img-thumbnail"
-                src="{{host}}/api/sugerencia/uploads/img/{{lineaMenu.menu.imgFileName}}">
+                src="{{host}}/api/menu/uploads/img/{{lineaMenu.menu.imgFileName}}">
             </mat-card>
             <mat-card fxFlex="calc(100%-315px)" fxFlex.xs="100" fxFlexOrder.gt-xs="2">
               <div [innerHTML]=lineaMenu.menu.descripcion></div>

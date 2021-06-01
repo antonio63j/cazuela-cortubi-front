@@ -9,7 +9,9 @@ export class FiltroPedido {
         diaRegistroIni: Date;
         diaRegistroFin: Date;
         diaRecogidaIni: Date;
+        horaRecogidaIni: string;
         diaRecogidaFin: Date;
+        horaRecogidaFin: string;
         usuario: string;
 
         constructor() {
@@ -20,8 +22,12 @@ export class FiltroPedido {
         init(): void{
             this.diaRegistroIni = null;
             this.diaRegistroFin = null;
-            this.diaRecogidaIni = null;
-            this.diaRecogidaFin = null;
+            this.diaRecogidaIni = new Date();
+            this.diaRecogidaIni.setHours(0, 0, 0);
+            this.horaRecogidaIni = '00:00';
+            this.diaRecogidaFin = new Date();
+            this.diaRecogidaFin.setHours(23 , 59, 59);
+            this.horaRecogidaFin = '23:59';
             this.estado = null;
             this.usuario = null;
 

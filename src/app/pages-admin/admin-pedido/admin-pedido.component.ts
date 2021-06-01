@@ -70,6 +70,7 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
         private authService: AuthService,
 
     ) {
+        this.filtroPedido.init();
 
         this.opcionesEstado = [{ value: null, viewValue: 'sin filtro' }]
             .concat(Object.keys(EstadoPedidoEnum).map(key => {
@@ -97,9 +98,8 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
                 label: 'Rango registro pedido',
                 nameIni: 'diaRegistroIni',
                 nameFin: 'diaRegistroFin',
-                valueIni: null,
-                valueFin: null,
-
+                valueDateIni: null,
+                valueDateFin: null,
                 class: 'demo-10-width',
                 validations: [
                 ]
@@ -120,18 +120,39 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
                 label: 'Rango recogida pedido',
                 nameIni: 'diaRecogidaIni',
                 nameFin: 'diaRecogidaFin',
-                valueIni: null,
-                valueFin: null,
+                valueDateIni: this.filtroPedido.diaRecogidaIni,
+                valueDateFin: this.filtroPedido.diaRecogidaFin,
                 class: 'demo-10-width',
                 validations: [
                 ]
             },
+
+            {
+                type: 'time',
+                label: 'Hora inicial recogida',
+                name: 'horaRecogidaIni',
+                value: this.filtroPedido.horaRecogidaIni,
+                class: 'demo-15-width margin-top',
+                validations: [
+                ]
+            },
+            {
+                type: 'time',
+                label: 'Hora final recogida',
+                name: 'horaRecogidaFin',
+                value: this.filtroPedido.horaRecogidaFin,
+                class: 'demo-15-width margin-top',
+                validations: [
+                ]
+            },
+
             {
                 type: 'input',
                 label: 'Cuenta cliente',
                 inputType: 'text',
-                class: 'demo-20-width',
+                class: 'demo-25-width',
                 name: 'usuario',
+                value: null,
                 validations: [
                 ]
             },
@@ -293,18 +314,33 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
     }
 
     submit(value: any): void {
-        // this.filtroPedido.label = value.label;
-        // this.filtroPedido.tipo = value.tipo;
-        // this.filtroPedido.precioMin = value.precioMin;
-        // this.filtroPedido.precioMax = value.precioMax;
         this.filtroPedido.order = value.ordenacion;
         this.filtroPedido.direction = value.sentidoOrdenacion;
 
         this.filtroPedido.estado = value.estado;
         this.filtroPedido.diaRegistroIni = value.diaRegistroIni;
+        if (value.diaRegistroIni !== null) {
+          this.filtroPedido.diaRegistroIni.setHours(0, 0, 0, 0);
+        }
+
         this.filtroPedido.diaRegistroFin = value.diaRegistroFin;
+        if (value.diaRegistroFin !== null) {
+          this.filtroPedido.diaRegistroFin.setHours(23, 59, 59, 999);
+        }
+
         this.filtroPedido.diaRecogidaIni = value.diaRecogidaIni;
+        if (this.filtroPedido.diaRecogidaIni !== null) {
+          this.filtroPedido.diaRecogidaIni.
+            setHours(+value.horaRecogidaIni.substr(0, 2),
+                     +value.horaRecogidaIni.substr(3, 2), 0);
+        }
         this.filtroPedido.diaRecogidaFin = value.diaRecogidaFin;
+        if(this.filtroPedido.diaRecogidaFin !== null) {
+            this.filtroPedido.diaRecogidaFin.
+            setHours(+value.horaRecogidaFin.substr(0, 2),
+                     +value.horaRecogidaFin.substr(3, 2), 0);
+        }
+        
         this.filtroPedido.usuario = value.usuario;
 
         console.log(`filtroPedido: ${JSON.stringify(this.filtroPedido)}`);

@@ -4,7 +4,7 @@
   </div>
   <div class="card-title">
       <div *ngIf="!pedidos" class="alert alert-info">Esperando carga de pedidos</div>
-      <div *ngIf="pedidos?.length==0" class="alert alert-info"> Lista vacía
+      <div *ngIf="pedidos?.length==0" class="alert alert-info"> Lista vacía, hoy no hay pedidos para su recogida.
       </div>
 
       <mat-slide-toggle style="margin-left: 30px; margin-top: 15px;" [(ngModel)]="filterChecked"
@@ -26,6 +26,8 @@
           <th>f. registro</th>
           <th>f. recogida</th>
           <th>cliente</th>
+          <th>nota del cliente</th>
+
           <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-edit"></i></th>
           <th *ngIf="authService.hasRole('ROLE_ADMIN')"><i class="fa fa-trash-o"></i></th>
 
@@ -40,8 +42,10 @@
           <td>{{ pedido.fechaRegistro}}</td>
           <td>{{ pedido.fechaRecogida}}</td>
           <td>{{ pedido.usuario }}</td>
+          <td>{{ pedido.nota}}</td>
           <td *ngIf="authService.hasRole('ROLE_ADMIN')">
-            <button type="button" class="btn btn-primary btn-sm" (click)='update(pedido)'>
+            <button type="button" class="btn btn-primary btn-sm" 
+              [routerLink]="['/admin-index/admpedidoform', pedido.id]">
               <i class="fa fa-edit"></i>
             </button>
           </td>

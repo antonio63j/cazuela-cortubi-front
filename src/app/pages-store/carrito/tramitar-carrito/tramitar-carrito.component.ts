@@ -109,7 +109,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
         case 'martes': {
           diasDescanso.push(2); break;
         }
-        case 'miercoles': {
+        case 'miércoles': {
           diasDescanso.push(3); break;
         }
         case 'jueves': {

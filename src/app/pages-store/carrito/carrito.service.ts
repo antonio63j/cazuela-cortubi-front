@@ -51,15 +51,12 @@ export class CarritoService implements OnDestroy {
     carrito.estadoPedido = EstadoPedidoEnum.creacion;
     carrito.total = 0;
     carrito.numArticulos = 0;
-    carrito.fechaRegistro = new Date();
+    const now = new Date();
+    carrito.fechaRegistro = now.toLocaleString();
     carrito.pedidoLineaSugerencias = [];
     carrito.pedidoLineaMenus = [];
 
     console.log(`carrito: ${JSON.stringify(carrito)}`);
-    console.log(`local: ${carrito.fechaRegistro.toLocaleString()}`);
-    console.log(`local Date: ${carrito.fechaRegistro.toLocaleDateString()}`);
-
-
     this.sendNumArticulosCarritoMsg(carrito.numArticulos);
 
   }

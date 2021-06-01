@@ -18,10 +18,13 @@ export interface FieldConfig {
   collections?: any;
   type: string;
   value?: any;
+  valueDateIni?: Date;
+  valueDateFin?: Date;
+
   validations?: Validator[];
 
   nameIni?: string;
   nameFin?: string;
-  valueIni?: string;
-  valueFin?: string;
+  // valueIni?: string;
+  // valueFin?: string;
 }

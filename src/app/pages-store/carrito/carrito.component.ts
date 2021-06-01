@@ -67,9 +67,9 @@ import { Pedido, PedidoLineaSugerencia, CantidadesOpciones, PedidoLineaMenu } fr
 import { environment } from 'src/environments/environment';
 import { CarritoService } from './carrito.service';
 import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import swal from 'sweetalert2';
 
-import localeEs from '@angular/common/locales/es';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/usuarios/auth.service';
@@ -112,9 +112,10 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
   tramitar(pedidoConfirmacion: PedidoConfirmacion): void {
     this.carrito.nota = pedidoConfirmacion.nota;
-    this.carrito.fechaRecogida = pedidoConfirmacion.fechaRecogida;
-    this.carrito.fechaRegistro = new Date();
-    this.carrito.fechaRegistro.setHours(0, 0, 0 , 0);
+    this.carrito.fechaRecogida = pedidoConfirmacion.
+       fechaRecogida.toLocaleString();
+    const now = new Date();
+    this.carrito.fechaRegistro = now.toLocaleString();
 
     this.observ$ = this.carritoService.confirmar(this.carrito).pipe(
       takeUntil(this.unsubscribe$)

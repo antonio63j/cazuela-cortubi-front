@@ -26,6 +26,9 @@ import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { TimeComponent } from './time/time.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -38,10 +41,12 @@ import { MatRadioModule } from '@angular/material/radio';
     CheckboxComponent,
 
     DateRangeComponent,
+    TimeComponent,
 
     DynamicFieldDirective,
     DynamicFormComponent
-  ],
+
+    ],
   imports: [
 
     CommonModule,
@@ -60,7 +65,11 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSelectModule,
     MatOptionModule,
     MatCheckboxModule,
-    MatRadioModule
+    MatRadioModule,
+    NgxMaterialTimepickerModule,
+
+    TranslateModule
+
 
   ],
   exports: [
@@ -77,6 +86,7 @@ import { MatRadioModule } from '@angular/material/radio';
     DateComponent,
     RadiobuttonComponent,
     CheckboxComponent,
+    TimeComponent
 
   ]
 })

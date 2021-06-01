@@ -4,6 +4,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { AdminIndexComponent } from './admin-index/admin-index.component';
 import { AdminMenuSugerenciaComponent } from './admin-menu-sugerencia/admin-menu-sugerencia.component';
 import { AdminMenuComponent } from './admin-menu/admin-menu.component';
+import { AdminPedidoFormComponent } from './admin-pedido/admin-pedido-form/admin-pedido-form.component';
 import { AdminPedidoComponent } from './admin-pedido/admin-pedido.component';
 import { AdminSlidersComponent } from './admin-sliders/admin-sliders.component';
 import { AdminSugerenciaComponent } from './admin-sugerencia/admin-sugerencia.component';
@@ -43,22 +44,13 @@ const routes: Routes = [
 
   {
     path: 'admpedido', component: AdminPedidoComponent,
+  },
+
+  {
+    path: 'admpedidoform/:pedidoId', component: AdminPedidoFormComponent,
   }
+
 ];
-
-  // {
-  //   path: '', component: AdminIndexComponent,
-  //   children: [
-  //       {
-  //         path: '/empresa', component: EmpresaComponent
-  //       }
-  //       // ,
-  //       // {
-  //       //   path: 'registro', loadChildren: () => import('../usuarios/signup/signup.module').then((m) => m.SignupModule)
-  //       // }
-  //   ]
-  // }
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
