@@ -13,6 +13,7 @@ import { LoadingComponent } from 'src/app/shared/componentes/loading/loading.com
 import { PedidoConfirmacion } from 'src/app/shared/modelos/pedido-confirmacion';
 import { isTemplateExpression } from 'typescript';
 import { NullTemplateVisitor } from '@angular/compiler';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 // Este servicio deberá tener el carrito actualizado reflejando cambios de desde carta-component,
 // menu-component y carrito-componet. Carrito-component deberá tener tambien tener una 
@@ -36,7 +37,8 @@ export class CarritoService implements OnDestroy {
 
   constructor(
     public authService: AuthService,
-    private http: HttpClient
+    private http: HttpClient,
+    private showErrorService: ShowErrorService
 
   ) {
 
@@ -103,9 +105,7 @@ export class CarritoService implements OnDestroy {
             this.carrito = response.data;
           }
         },
-        err => {
-          console.log(err);
-          swal.fire('Error carga de carrito', err.status, 'error');
+        err => {this.showErrorService.httpErrorResponse(err, 'Error en carga del carrito', '', 'error');
         }
       );
   }
@@ -159,7 +159,7 @@ export class CarritoService implements OnDestroy {
     this.erroresValidacion = [];
     this.carrito.usuario = this.authService.usuario.username;
 
-    console.log(`salvando carrito: ${JSON.stringify(this.carrito)}`);
+    // console.log(`salvando carrito: ${JSON.stringify(this.carrito)}`);
 
     this.observ$ = this.save(this.carrito).pipe(
       takeUntil(this.unsubscribe$)
@@ -175,9 +175,7 @@ export class CarritoService implements OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al guardar carrito', '', 'error');
           }
         }
       );
@@ -230,7 +228,7 @@ export class CarritoService implements OnDestroy {
         this.sortCarrito(response.data);
         this.carrito = response.data;
 
-        console.log(`carrito: ${JSON.stringify(this.carrito)}`);
+        // console.log(`carrito: ${JSON.stringify(this.carrito)}`);
 
         this.calculosCarrito(this.carrito);
         return response;

@@ -34,7 +34,7 @@ import { PwdResetModalComponent } from './pwd-reset-modal/pwd-reset-modal.compon
     LoginComponent,
     LoginModalComponent,
     PwdResetModalComponent,
-    
+
   ],
 
 })

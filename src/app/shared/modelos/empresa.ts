@@ -27,6 +27,6 @@ export class Empresa {
     horaCierre: string;
     diasDescanso: string[];
     horasMinPreparacionPedido: number;
-    diasMaxRecogidaPedido: number;
+    diasMaxEntregaPedido: number;
 
 }

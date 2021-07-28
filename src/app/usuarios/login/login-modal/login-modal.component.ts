@@ -7,6 +7,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '../../../shared/services/modal.service';
 import { Router } from '@angular/router';
 import { CarritoService } from 'src/app/pages-store/carrito/carrito.service';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 
 @Component({
@@ -26,7 +27,8 @@ export class LoginModalComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private location: Location,
     private router: Router,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private showErrorService: ShowErrorService
   ) { }
 
   ngOnInit(): void {
@@ -44,11 +46,10 @@ export class LoginModalComponent implements OnInit, OnDestroy {
         this.modalService.eventoCerrarModalScrollable.emit();
       },
       err => {
-        console.log(err);
         if (err.status === 400) {
+          console.log(err);
           swal.fire('Error Login', 'Usuario o password incorrectas o cuenta no activada!', 'error');
-        } else {
-          swal.fire('Error Login', err.status, 'error');
+        } else {this.showErrorService.httpErrorResponse(err, 'Error login', '', 'error');
         }
       }
     );

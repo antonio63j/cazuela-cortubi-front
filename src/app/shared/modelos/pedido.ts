@@ -1,5 +1,11 @@
+import { Direccion } from './direccion';
 import { Menu } from './menu';
 import { Sugerencia } from './sugerencia';
+
+export enum EntregaPedidoEnum {
+  domicilio = 'EN DOMICILIO',
+  restaurante = 'EN RESTAURANTE'
+}
 
 export enum EstadoPedidoEnum {
     creacion = 'CREACION',
@@ -42,11 +48,13 @@ export class Pedido {
     id: number;
     usuario: string;
     estadoPedido: EstadoPedidoEnum;
+    entregaPedido: EntregaPedidoEnum;
+    direccion: Direccion;
     total: number;
     numArticulos: number;
 
     fechaRegistro: string;
-    fechaRecogida: string;
+    fechaEntrega: string;
     nota: string;
     pedidoLineaSugerencias: PedidoLineaSugerencia [] = [];
     pedidoLineaMenus: PedidoLineaMenu [] = [];

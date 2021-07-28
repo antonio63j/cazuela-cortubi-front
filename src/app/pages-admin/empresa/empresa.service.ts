@@ -34,7 +34,7 @@ export class EmpresaService {
     return this.http.post<Empresa>(environment.urlEndPoint + '/api/empresa', empresa)
       .pipe(
         catchError(err => {
-          console.log('error capturado ' + JSON.stringify(err));
+          console.log('error capturado al crear datos empresa' + JSON.stringify(err));
           return throwError(err);
         })
       );
@@ -44,7 +44,7 @@ export class EmpresaService {
     return this.http.put<Empresa>(environment.urlEndPoint + '/api/empresa', empresa)
       .pipe(
         catchError(err => {
-          console.log('error capturado ' + JSON.stringify(err));
+          console.log('error capturado en actualización datos empresa ' + JSON.stringify(err));
           return throwError(err);
         })
       );

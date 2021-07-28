@@ -12,6 +12,13 @@ import { PedidoConfirmacion } from '../../../shared/modelos/pedido-confirmacion'
 import { CarritoService } from '../carrito.service';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { Empresa } from 'src/app/shared/modelos/empresa';
+import { OpcionesSelect } from 'src/app/shared/componentes/filtro/field.interface';
+import { EntregaPedidoEnum } from 'src/app/shared/modelos/pedido';
+import { PerfilService } from 'src/app/usuarios/perfil/perfil.service';
+import { Usuario } from 'src/app/shared/modelos/usuario';
+import { AuthService } from 'src/app/usuarios/auth.service';
+import { Direccion } from 'src/app/shared/modelos/direccion';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -36,6 +43,13 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   private subscriptionParams$: Subscription = null;
   private unsubscribe$ = new Subject();
 
+  public opcionesEntrega: OpcionesSelect[];
+  public opcionesDireccion: OpcionesSelect[] = [];
+  public entregaDefault: any;
+  public direccionDefault: any;
+  public usuario: Usuario;
+
+  private observ$: Subscription = null;
   private idCarrito: number;
 
   public hoy: Date = new Date();
@@ -53,7 +67,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   public nota: string;
 
   public empresa: Empresa;
-  public  diasDescanso: number[];
+  public diasDescanso: number[];
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view === 'month') {
@@ -70,8 +84,20 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private carritoService: CarritoService,
-    private shareEmpresaService: ShareEmpresaService
+    private shareEmpresaService: ShareEmpresaService,
+    private perfilService: PerfilService,
+    private authService: AuthService,
+    private showErrorService: ShowErrorService
   ) {
+
+    this.opcionesEntrega = Object.keys(EntregaPedidoEnum).map(key => {
+      return {
+        value: key,
+        viewValue: EntregaPedidoEnum[key],
+      };
+    });
+
+    this.opcionEntregaDefault();
 
     this.empresa = this.shareEmpresaService.copiaEmpresa();
     this.diasDescanso = this.setDiasDescanso();
@@ -80,11 +106,34 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
     this.SetPropuestas(new Date());
 
     this.minDate.setDate(this.chosenDate.getDate());
-    this.maxDate.setDate(this.chosenDate.getDate() + this.empresa.diasMaxRecogidaPedido);
+    this.maxDate.setDate(this.chosenDate.getDate() + this.empresa.diasMaxEntregaPedido);
   }
 
   ngOnInit(): void {
     this.subscripcionGestionParams();
+    this.getUsuario(this.authService.usuario.username);
+  }
+
+  private opcionEntregaDefault(): void {
+    this.entregaDefault = this.opcionesEntrega[1].value;
+  }
+
+  private opcionDireccionDefault(): void {
+    this.direccionDefault = this.opcionesDireccion[0].value;
+  }
+
+  public cambioEntrega(entrega: EntregaPedidoEnum): void {
+    console.log(entrega);
+    if (entrega.valueOf() === 'domicilio') {
+      if (this.usuario.direcciones.length < 1) {
+        swal.fire('Acceda a su perfil para añadir una dirección', '', 'warning');
+        // this.opcionEntregaDefault();
+      }
+    }
+  }
+
+  public cambioDireccion(direccion: string): void {
+    console.log(direccion);
   }
 
   subscripcionGestionParams(): void {
@@ -99,7 +148,19 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
     this.idCarrito = params.idCarrito; // o +params.get('tipo');
   }
 
-  setDiasDescanso(): number [] {
+  setOpcionesDireccion(): void {
+
+    this.usuario.direcciones.forEach((element, index) => {
+      let opt = {} as OpcionesSelect;
+      opt.value = element.id.toString();
+      opt.viewValue = element.calle + ',' + element.numero + ',' +
+        element.planta + ',' + element.puerta + ',' + element.codigoPostal.toString();
+      this.opcionesDireccion.push(opt);
+    });
+    this.opcionDireccionDefault();
+  }
+
+  setDiasDescanso(): number[] {
     const diasDescanso: number[] = [];
     for (const dia of this.empresa.diasDescanso) {
       switch (dia) {
@@ -141,7 +202,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
   }
 
   SetPropuestas(hoyDate: Date): void {
-    // Propone fecha y hora para recogida de pedido y actualiza las siguientes var globales
+    // Propone fecha y hora para entrega de pedido y actualiza las siguientes var globales
     // * this.chosenDate
     // * this.chosenTime
 
@@ -167,7 +228,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (ha <= hp && hp < hc ){
+      if (ha <= hp && hp < hc) {
         this.chosenDate = hoyDate;
         this.chosenTime = hp;
         return;
@@ -180,7 +241,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
         return;
       }
 
-      swal.fire('Hora recogida de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido`, 'warning');
+      swal.fire('Hora entrega de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido`, 'warning');
 
     }
 
@@ -197,7 +258,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
 
     if (ha > hc) {
 
-      if ('00:00' <= hp && hp < hc){
+      if ('00:00' <= hp && hp < hc) {
         this.chosenDate = hoyDate;
         this.chosenTime = hp;
         return;
@@ -215,7 +276,7 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
         return;
       }
 
-      swal.fire('Hora recogida de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido` , 'warning');
+      swal.fire('Hora entrega de pedido', `Por favor, tenga en cuenta un mínimo de ${this.empresa.horasMinPreparacionPedido} horas para preparar el pedido`, 'warning');
 
     }
 
@@ -244,9 +305,16 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
 
   confirmar(): void {
 
+    console.log(this.entregaDefault);
+    console.log(this.direccionDefault);
+    if (this.entregaDefault === 'domicilio' && this.direccionDefault === undefined) {
+      swal.fire('Acceda a su perfil para añadir una dirección', '', 'warning');
+      return;
+    }
+
     swalWithBootstrapButtons.fire({
       title: 'Confirmacion de pedido',
-      text: `Confimarás la recogida del pedido para el ${formatDate(this.chosenDate, 'dd/MM/YYYY', 'es-Es')} a las ${this.chosenTime}`,
+      text: `Confimarás la entrega del pedido para el ${formatDate(this.chosenDate, 'dd/MM/YYYY', 'es-Es')} a las ${this.chosenTime}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, confirmar!',
@@ -254,11 +322,18 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
       reverseButtons: true
     }).then((result) => {
       if (result.value) {
-        this.pedidoConfirmacion.fechaRecogida = new Date(this.chosenDate);
+        this.pedidoConfirmacion.fechaEntrega = new Date(this.chosenDate);
 
         //  this.chosenDate.setHours(hoy.getHours(), hoy.getMinutes());
-        this.pedidoConfirmacion.fechaRecogida.setHours(+this.chosenTime.substr(0, 2),
+        this.pedidoConfirmacion.fechaEntrega.setHours(+this.chosenTime.substr(0, 2),
           +this.chosenTime.substr(3, 2), 0);
+
+        this.pedidoConfirmacion.entregaPedido = this.entregaDefault.toUpperCase();
+        if (this.entregaDefault === 'domicilio') {
+          this.pedidoConfirmacion.direccion = this.usuario.direcciones.find(x => x.id === +this.direccionDefault);
+        } else {
+          this.pedidoConfirmacion.direccion = null;
+        }
 
         this.pedidoConfirmacion.nota = this.nota;
 
@@ -268,6 +343,26 @@ export class TramitarCarritoComponent implements OnInit, OnDestroy {
 
       }
     });
+  }
+
+  getUsuario(cuenta: string): void {
+    this.observ$ = this.perfilService.getUsuario(cuenta).pipe(
+      takeUntil(this.unsubscribe$)
+    )
+      .subscribe(
+        json => {
+          this.usuario = json;
+          if (this.usuario == null) {
+            swal.fire('Error en acceso datos usuario', cuenta, 'error');
+          } else {
+            if (this.usuario.direcciones.length > 0) {
+              this.setOpcionesDireccion();
+            }
+          }
+        }
+        , err => {this.showErrorService.httpErrorResponse(err, 'Error acceso a usuario', '', 'error');
+        }
+      );
   }
 
   ngOnDestroy(): void {

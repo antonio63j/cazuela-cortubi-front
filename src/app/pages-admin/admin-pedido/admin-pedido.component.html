@@ -4,7 +4,7 @@
   </div>
   <div class="card-title">
       <div *ngIf="!pedidos" class="alert alert-info">Esperando carga de pedidos</div>
-      <div *ngIf="pedidos?.length==0" class="alert alert-info"> Lista vacía, hoy no hay pedidos para su recogida.
+      <div *ngIf="pedidos?.length==0" class="alert alert-info"> Lista vacía, hoy no hay pedidos para su entrega.
       </div>
 
       <mat-slide-toggle style="margin-left: 30px; margin-top: 15px;" [(ngModel)]="filterChecked"
@@ -23,8 +23,9 @@
       <thead>
         <tr>
           <th>estado</th>
-          <th>f. registro</th>
-          <th>f. recogida</th>
+          <th>registro</th>
+          <th>entrega</th>
+          <th>lugar entrega</th>
           <th>cliente</th>
           <th>nota del cliente</th>
 
@@ -37,10 +38,11 @@
         <tr *ngFor="let pedido of pedidos">
           <td>{{ pedido.estadoPedido }}</td>
           <!-- <td>{{ pedido.fechaRegistro | date:"dd MMM yyyy HH:mm"}}</td>
-          <td>{{ pedido.fechaRecogida | date:"dd MMM yyyy HH:mm"}}</td> -->
+          <td>{{ pedido.fechaEntrega | date:"dd MMM yyyy HH:mm"}}</td> -->
 
           <td>{{ pedido.fechaRegistro}}</td>
-          <td>{{ pedido.fechaRecogida}}</td>
+          <td>{{ pedido.fechaEntrega}}</td>
+          <td>{{ pedido.entregaPedido}}</td>
           <td>{{ pedido.usuario }}</td>
           <td>{{ pedido.nota}}</td>
           <td *ngIf="authService.hasRole('ROLE_ADMIN')">

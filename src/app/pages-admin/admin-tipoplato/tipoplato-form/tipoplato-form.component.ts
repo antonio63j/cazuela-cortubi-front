@@ -9,6 +9,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { AdminTipoplatoService } from '../admin-tipoplato.service';
 import { environment } from 'src/environments/environment';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-tipoplato-form',
@@ -27,7 +28,8 @@ export class TipoplatoFormComponent implements OnInit, OnDestroy {
   constructor(
     private adminTipoplatoService: AdminTipoplatoService,
     private modalService: ModalService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private showErrorService: ShowErrorService
   ) { }
 
   ngOnInit(): void {
@@ -49,10 +51,7 @@ export class TipoplatoFormComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en actualización ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error actualización tipo plato', '', 'error');
           }
         }
       );
@@ -87,10 +86,7 @@ export class TipoplatoFormComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en creación ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error creación tipo plato', '', 'error');
           }
         }
       );

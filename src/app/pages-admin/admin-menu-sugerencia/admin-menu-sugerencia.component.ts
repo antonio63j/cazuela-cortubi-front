@@ -18,6 +18,7 @@ import { AdminMenuService } from '../admin-menu/admin-menu.service';
 import { AdminSugerenciaService } from '../admin-sugerencia/admin-sugerencia.service';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { ComponenteMenu } from 'src/app/shared/modelos/componente-menu.enum';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -68,7 +69,8 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private menuService: AdminMenuService,
     private sugerenciaService: AdminSugerenciaService,
-    private shareEmpresaService: ShareEmpresaService
+    private shareEmpresaService: ShareEmpresaService,
+    private showErrorService: ShowErrorService
 
   ) {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
@@ -107,9 +109,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
         response => {
           this.menu = response.data as Menu;
         },
-        err => {
-          console.log(err);
-          swal.fire('Error carga de sugerencias ', err.status, 'error');
+        err => {this.showErrorService.httpErrorResponse(err, 'Error en carga sugerencias', '', 'error');
         }
       );
   }
@@ -128,7 +128,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
   public deleteMenuSugerencia(menuSugerencia: MenuSugerencia): void {
     swalWithBootstrapButtons.fire({
       title: '¿Estás seguro?',
-      text: `Eliminarás el sugerencia ${menuSugerencia.sugerencia.label}`,
+      text: `Eliminarás la sugerencia ${menuSugerencia.sugerencia.label}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar!',
@@ -140,8 +140,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
           response => {
             this.getMenu(this.menu.id);
           }
-          , err => {
-            console.log(err);
+          , err => {this.showErrorService.httpErrorResponse(err, 'Error eliminando menu-sugerencia', '', 'error');
           }
         );
       }
@@ -260,9 +259,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
           this.paginador = response;
           window.scrollTo(0, 0);
         },
-        err => {
-          console.log(err);
-          swal.fire('Error carga de sugerencias ', err.status, 'error');
+        err => {this.showErrorService.httpErrorResponse(err, 'Error carga sugerencias', '', 'error');
         }
       );
   }
@@ -292,9 +289,7 @@ export class AdminMenuSugerenciaComponent implements OnInit, OnDestroy {
           this.menu = response.data as Menu;
           this.sortColumnMS();
         },
-        err => {
-          console.log(err);
-          swal.fire('Error en añadir sugerencia al menu', err.status, 'error');
+        err => {this.showErrorService.httpErrorResponse(err, 'Error al añadir sugerencia', '', 'error');
         }
       );
   }

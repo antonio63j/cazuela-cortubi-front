@@ -8,31 +8,33 @@ export class FiltroPedido {
         estado: string;
         diaRegistroIni: Date;
         diaRegistroFin: Date;
-        diaRecogidaIni: Date;
-        horaRecogidaIni: string;
-        diaRecogidaFin: Date;
-        horaRecogidaFin: string;
+        diaEntregaIni: Date;
+        horaEntregaIni: string;
+        diaEntregaFin: Date;
+        horaEntregaFin: string;
+        entregaPedido: string;
         usuario: string;
 
         constructor() {
            this.init();
-           this.initPage('0', '10', 'fechaRecogida', 'asc');
+           this.initPage('0', '10', 'fechaEntrega', 'asc');
         }
 
         init(): void{
             this.diaRegistroIni = null;
             this.diaRegistroFin = null;
-            this.diaRecogidaIni = new Date();
-            this.diaRecogidaIni.setHours(0, 0, 0);
-            this.horaRecogidaIni = '00:00';
-            this.diaRecogidaFin = new Date();
-            this.diaRecogidaFin.setHours(23 , 59, 59);
-            this.horaRecogidaFin = '23:59';
+            this.diaEntregaIni = new Date();
+            this.diaEntregaIni.setHours(0, 0, 0);
+            this.horaEntregaIni = '00:00';
+            this.diaEntregaFin = new Date();
+            this.diaEntregaFin.setHours(23 , 59, 59);
+            this.horaEntregaFin = '23:59';
+            this.entregaPedido = null;
             this.estado = null;
             this.usuario = null;
 
         }
-    
+
         initPage(page: string,
                  size: string,
                  order: string,

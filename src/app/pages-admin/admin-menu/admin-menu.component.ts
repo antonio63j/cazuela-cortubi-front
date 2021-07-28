@@ -13,6 +13,7 @@ import { ModalConModeloService } from '../../shared/services/modal-con-modelo.se
 import { AuthService } from '../../usuarios/auth.service';
 import { Menu } from 'src/app/shared/modelos/menu';
 import { MenuFormComponent } from './menu-form/menu-form.component';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -44,6 +45,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
     private modalService: ModalService,
     private modalConModeloService: ModalConModeloService,
     public authService: AuthService,
+    private showErrorService: ShowErrorService,
     private router: Router
   ) {
   }
@@ -62,11 +64,8 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
         this.menus = (response as Menu[]);
         // this.paginador = response;
       }
-      , err => {
-        console.log(err);
-        this.router.navigate(['/dashborad']);
-        swal.fire('Error carga de Menu', err.message, 'error');
-      }
+      , err => this.showErrorService.httpErrorResponse(err, 'Carga menus', '', 'error')
+
     );
   }
 
@@ -93,10 +92,7 @@ export class AdminMenuComponent implements OnInit, OnDestroy{
               this.menus = (respon as Menu[]);
             });
           }
-          , err => {
-            console.log(err);
-            swal.fire('Error al eliminar menu', '', 'error');
-          }
+          , err => this.showErrorService.httpErrorResponse(err, 'Error eliminando menu', '', 'error')
         );
       }
     });

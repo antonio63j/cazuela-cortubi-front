@@ -6,25 +6,35 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-2">
-      </div>
+        <mat-form-field class="example-full-width">
+          <mat-label style="font-size: 14px;">Hora de entrega</mat-label>
+          <input style="margin-top: 12px;" matInput disabled="true"> {{pedido.fechaEntrega}}
+        </mat-form-field>
+      </div> 
+        
       <div class="col-md-2">
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Hora de recogida" [(ngModel)]="pedido.fechaRecogida" disabled="true">
+          <mat-label style="font-size: 14px;">Lugar de entrega</mat-label>
+          <input style="margin-top: 12px;" matInput disabled="true">
+          {{pedido.entregaPedido}}
+        </mat-form-field>
+      </div>
+      <div class="col-md-6" *ngIf="pedido.direccion">
+        <mat-form-field class="example-full-width">
+          <mat-label style="font-size: 14px;">Dirección</mat-label>
+          <input style="margin-top: 12px;" matInput disabled="true">
+          {{pedido.direccion.calle}}, {{pedido.direccion.numero}}, {{pedido.direccion.planta}},
+          {{pedido.direccion.puerta}}, {{pedido.direccion.codigoPostal}}, {{pedido.direccion.municipio}}
         </mat-form-field>
       </div>
       <div class="col-md-2">
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Hora de registro" [(ngModel)]="pedido.fechaRegistro" disabled="true">
+          <mat-label style="font-size: 14px;">Hora de registro</mat-label>
+          <input style="margin-top: 12px;" matInput disabled="true">
+          {{pedido.fechaRegistro}}
         </mat-form-field>
       </div>
-      <div class="col-md-4">
-        <mat-form-field class="example-full-width">
-          <textarea matInput placeholder="Nota del cliente" [(ngModel)]="pedido.nota" disabled="tue">
-        </textarea>
-        </mat-form-field>
-      </div>
-      <div class="col-md-2">
-      </div>
+
     </div>
 
     <div class="row">
@@ -37,16 +47,24 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="col-md-6">
+
+      <div class="col-md-4">
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Nota del cliente" [(ngModel)]="pedido.nota" disabled="true">
+          </textarea> 
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12 grupo-botones">
         <button mat-stroked-button color="success" (click)="cambiarEstado(pedido)">{{'Cambiar estado del pedido' |
           translate}}</button>
         &nbsp;
         <button mat-stroked-button (click)="salir()" color="success">{{'Salir' | translate}}</button>
       </div>
-      <div class="col-md-2">
-      </div>
     </div>
-
+    <br>
     <div *ngFor="let lineaSugerencia of pedido.pedidoLineaSugerencias">
 
       <mat-card class="card contenedor">

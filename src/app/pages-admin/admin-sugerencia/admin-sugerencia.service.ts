@@ -58,7 +58,7 @@ export class AdminSugerenciaService implements OnDestroy {
     return this.http.post<Sugerencia>(environment.urlEndPoint + '/api/sugerencia/create', sugerencia).pipe(
       catchError(err => {
 
-        console.log(`error capturado: ${err.status} `);
+        console.log(`error capturado al crear sugerencia: ${err.status} `);
         return throwError(err);
       })
     );
@@ -70,7 +70,7 @@ export class AdminSugerenciaService implements OnDestroy {
 
     return this.http.put<Sugerencia>(environment.urlEndPoint + '/api/sugerencia/update', sugerencia).pipe(
       catchError(err => {
-        console.log(`error capturado: ${err.status} `);
+        console.log(`error capturado al actualizar sugerencia: ${err.status} `);
         return throwError(err);
       })
     );

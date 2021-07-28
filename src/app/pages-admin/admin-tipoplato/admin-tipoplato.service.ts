@@ -33,7 +33,7 @@ export class AdminTipoplatoService implements OnDestroy {
     tipoplato.id = null;
     return this.http.post<Tipoplato>(environment.urlEndPoint + '/api/tipoplato/create', tipoplato).pipe(
       catchError(err => {
-        console.log(`error capturado en create: ${err.error.error} `);
+        console.log(`error capturado en create tipoplato: ${err.error.error} `);
         return throwError(err);
       })
     );

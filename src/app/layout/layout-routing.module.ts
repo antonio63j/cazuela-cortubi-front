@@ -13,17 +13,14 @@ const routes: Routes = [
       children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'prefix' },
           { path: 'dashboard', loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule)},
+
+          { path: 'perfil', loadChildren: () => import ('../usuarios/perfil/perfil.module').then ((m) => m.PerfilModule)},
+
           { path: 'admin-index',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
             loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
           { path: 'store',
             loadChildren: () => import('../pages-store/pages-store.module').then((m) => m.PagesStoreModule) },
 
-
-          // { path: 'admin-sugerencia',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
-          //   loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
-
-          // { path: 'admin-menu',  canActivate: [RoleGuard], data: {role: 'ROLE_ADMIN'},
-          //   loadChildren: () => import('../pages-admin/pages-admin.module').then((m) => m.PagesAdminModule) },
       ]
   }
 ];

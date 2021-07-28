@@ -13,6 +13,7 @@ import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.servi
 import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { FormControl, Validators } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-sugerencia-form',
@@ -91,7 +92,8 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
     private adminSugerenciaService: AdminSugerenciaService,
     private shareEmpresaService: ShareEmpresaService,
     private modalService: ModalService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private showErrorService: ShowErrorService
   ) {
     this.tipoPlatos = this.shareEmpresaService.getIipoplatosInMem();
   }
@@ -119,10 +121,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en actualización ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error en actualización sugerencia', '', 'error');
           }
         }
       );
@@ -157,10 +156,7 @@ export class SugerenciaFormComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al crear sugerencia ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error creación sugerencia', '', 'error');
           }
         }
       );

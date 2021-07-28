@@ -9,6 +9,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { AdminSliderService } from '../admin-slider.service';
 import { environment } from 'src/environments/environment';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-slider-form',
@@ -26,7 +27,8 @@ export class SliderFormComponent implements OnInit, OnDestroy {
   constructor(
     private adminSliderService: AdminSliderService,
     private modalService: ModalService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private showErrorService: ShowErrorService
   ) { }
 
   ngOnInit(): void {
@@ -50,9 +52,7 @@ export class SliderFormComponent implements OnInit, OnDestroy {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
           } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en actualización ', `error.status = ${err.status.toString()}`, 'error');
+            this.showErrorService.httpErrorResponse(err, 'Error actualización imagen portada', '', 'error');
           }
         }
       );
@@ -85,9 +85,7 @@ export class SliderFormComponent implements OnInit, OnDestroy {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
           } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en creación ', `error.status = ${err.status.toString()}`, 'error');
+            this.showErrorService.httpErrorResponse(err, 'Error creación imagen portada', '', 'error');
           }
         }
       );

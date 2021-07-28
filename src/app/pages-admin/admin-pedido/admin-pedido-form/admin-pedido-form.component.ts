@@ -11,6 +11,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { environment } from 'src/environments/environment';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 registerLocaleData(localeEs, 'es');
 
 @Component({
@@ -34,7 +35,8 @@ export class AdminPedidoFormComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private adminPedidoService: AdminPedidoService,
-    private location: Location
+    private location: Location,
+    private showErrorService: ShowErrorService
   ) {
     this.opcionesEstado = (Object.keys(EstadoPedidoEnum).map(key => {
       return {
@@ -82,11 +84,9 @@ export class AdminPedidoFormComponent implements OnInit, OnDestroy {
           this.estado = this.pedido.estadoPedido.toLowerCase();
           this.calculosPedido(this.pedido);
           console.log(`pedido=${JSON.stringify(this.pedido)}`);
-        },
-        err => {
-          console.log(err);
-          swal.fire('Error carga de pedido ', err.status, 'error');
         }
+        , err => this.showErrorService.httpErrorResponse(err, 'Carga carga de pedido', '', 'error')
+
       );
   }
 
@@ -103,15 +103,8 @@ export class AdminPedidoFormComponent implements OnInit, OnDestroy {
           } else {
             this.pedido = response.data;
           }
-        },
-        err => {
-          if (err.status === 400) {
-            swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
-          }
         }
+        , err => this.showErrorService.httpErrorResponse(err, 'Cambio estado de pedido', '', 'error')
       );
   }
 

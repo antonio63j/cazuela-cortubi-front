@@ -11,6 +11,7 @@ import swal from 'sweetalert2';
 import { SliderFormComponent } from './slider-form/slider-form.component';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -42,7 +43,8 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private modalConModeloService: ModalConModeloService,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private showErrorService: ShowErrorService
   ) {
   }
 
@@ -70,10 +72,7 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
         this.sliders = (response as Slider[]);
         // this.paginador = response;
       }
-      , err => {
-        console.log(err);
-        this.router.navigate(['/dashborad']);
-        swal.fire('Error carga de sliders', err.message, 'error');
+      , err => {this.showErrorService.httpErrorResponse(err, 'Carga imágenes de portada', '', 'error');
       }
     );
   }
@@ -99,9 +98,7 @@ export class AdminSlidersComponent implements OnInit, OnDestroy {
               this.sliders = (respon as Slider[]);
             });
           }
-          , err => {
-            console.log(err);
-            swal.fire('Error al eliminar slider', '', 'error');
+          , err => {this.showErrorService.httpErrorResponse(err, 'Error eliminando imagen de portada', '', 'error');
           }
         );
       }

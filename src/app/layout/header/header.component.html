@@ -57,7 +57,7 @@
           </a>
 
           <div class="dropdown-menu-right" ngbDropdownMenu>
-            <a class="dropdown-item" href="javascript:void(0)">
+            <a *ngIf="authService.hasRole('ROLE_ADMIN')" class="dropdown-item" [routerLink]="['/perfil']">
               <i class="fa fa-fw fa-user"></i> 
               <b>{{ 'Profile' | translate }}</b>
             </a>

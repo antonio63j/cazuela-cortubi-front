@@ -19,6 +19,7 @@ import swal from 'sweetalert2';
 
 import { CartaDetalleComponent } from './carta-detalle/carta-detalle.component';
 import { CarritoService } from '../carrito/carrito.service';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -68,7 +69,8 @@ export class CartaComponent implements OnInit, OnDestroy {
         private modalService: ModalService,
         private translate: TranslateService,
         private authService: AuthService,
-        private carritoService: CarritoService
+        private carritoService: CarritoService,
+        private showErrorService: ShowErrorService
 
     ) {
         this.filtroSugerencia.setSoloVisibles();
@@ -197,28 +199,7 @@ export class CartaComponent implements OnInit, OnDestroy {
                     this.paginador = response;
                     window.scrollTo(0, 0);
                 },
-                err => {
-                    switch (err) {
-                        case 400: {
-                            console.log(`Errores de validacion: ${err.errores}`);
-                            break;
-                        }
-                        case 401: {
-                            swal.fire(`La sesión ha caducado, inicie sesión `, err.status, 'warning');
-                            break;
-                        }
-                        case 501: {
-                            console.log(`error en la peticion ${JSON.stringify(err)}`);
-                            break;
-                        }
-                        default: {
-                            swal.fire('Error carga de sugerencias ', err.status, 'error');
-                            console.log(err);
-                            swal.fire(err.mensaje, '', 'error');
-                            break;
-                        }
-                    }
-
+                err => {this.showErrorService.httpErrorResponse(err, 'Error carga sugerencias', '', 'error');
                 }
             );
     }

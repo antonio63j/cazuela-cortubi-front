@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       err => {
         console.log(err);
-        swal.fire('Error gestion cambio contraseña', err.status, 'error');
+        swal.fire('Error gestion cierre modal', err.status, 'error');
     }
     );
   }

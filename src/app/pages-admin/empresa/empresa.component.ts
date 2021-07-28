@@ -13,6 +13,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 import * as mySettings from '../../shared/settings/ngx-material-timepicker';
 import { CantidadesOpciones } from 'src/app/shared/modelos/pedido';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-empresa',
@@ -33,7 +34,7 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   public horaApertura = '09:00';
   public horaCierre = '22:35';
   public horasHacerPedido = 2;
-  public diasRecogidaPedido = 4;
+  public diasEntregaPedido = 4;
   public chosenTime: string;
   public oktTheme = mySettings.timeSettings;
   public cantidades: number[] = CantidadesOpciones.cantidades;
@@ -96,7 +97,8 @@ export class EmpresaComponent implements OnInit, OnDestroy {
   constructor(
     private location: Location,
     private empresaService: EmpresaService,
-    private shareEmpresaService: ShareEmpresaService
+    private shareEmpresaService: ShareEmpresaService,
+    private showErrorService: ShowErrorService
 
   ) {
       this.getEmpresa(1);
@@ -134,10 +136,7 @@ export class EmpresaComponent implements OnInit, OnDestroy {
             console.log('error 400');
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            console.log('nook');
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en consulta empresa', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error carga datos empresa', '', 'error');
           }
         }
       );
@@ -168,10 +167,7 @@ export class EmpresaComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/cursos']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en actualización empresa', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error actualización datos empresa', '', 'error');
           }
         }
       );
@@ -191,10 +187,7 @@ export class EmpresaComponent implements OnInit, OnDestroy {
           if (err.status === 400) {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            // this.router.navigate(['/cursos']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en alta de empresa', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error creación empresa', '', 'error');
           }
         }
       );

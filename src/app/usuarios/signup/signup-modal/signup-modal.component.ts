@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Usuario } from '../../../shared/modelos/usuario';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-signup-modal',
@@ -28,7 +29,8 @@ export class SignupModalComponent implements OnInit, OnDestroy {
     public activeModal: NgbActiveModal,
     private modalService: ModalService,
     private translate: TranslateService,
-    private location: Location
+    private location: Location,
+    private showErrorService: ShowErrorService
 
   ) { }
 
@@ -48,11 +50,10 @@ export class SignupModalComponent implements OnInit, OnDestroy {
     ).subscribe(
       response => {
         this.modalService.eventoCerrarModalScrollable.emit();
-        swal.fire('Registro ok,', 'Se envió un email para activar la cuenta, por favor, revise la bandeja de spam', 'success');
+        swal.fire('Registro realizdo', 'Se envió un email para activar la cuenta, por favor, revise la bandeja de spam', 'success');
       },
       err => {
-        console.log(err);
-        swal.fire('Error en registro', `status ${err.status}, ${err.error.mensaje} `, 'error');
+        this.showErrorService.httpErrorResponse(err, 'Error al registrar usuario', err.error.mensaje, 'error');
       }
     );
     return;

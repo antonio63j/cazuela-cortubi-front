@@ -10,6 +10,7 @@ import { Slider } from '../modelos/slider';
 import { SliderData } from '../modelos/slider-data';
 import { Tipoplato } from '../modelos/tipoplato';
 import { ImageService } from './image-service';
+import { ShowErrorService } from './show-error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class ShareEmpresaService {
     private sliderService: AdminSliderService,
     private imageService: ImageService,
     private tipoplatoService: AdminTipoplatoService,
-    private empresaService: EmpresaService
+    private empresaService: EmpresaService,
+    private showErrorService: ShowErrorService
     ) {
       this.cargaSliders();
       this.cargaTipoplatos();
@@ -56,9 +58,7 @@ export class ShareEmpresaService {
       response => {
         this.tipoplatos = (response as Tipoplato[]);
       },
-      err => {
-        console.log('error en carga inicial de tipoplatos');
-        console.log(err);
+      err => {this.showErrorService.httpErrorResponse(err, 'Error en carga tipos platos', '', 'error');
       }
     );
   }
@@ -74,10 +74,8 @@ export class ShareEmpresaService {
           this.sliders = (response as Slider[]);
           this.cargaSliderData();
         }
-        , err => {
-          console.log('error en carga de slider');
-          console.log(err);
-          // swal.fire('Error carga de sliders', err.message, 'error');
+        , err => {this.showErrorService.httpErrorResponse(err, 'Error carga sliders de empresa', '', 'error');
+
         }
       );
   }
@@ -107,9 +105,7 @@ export class ShareEmpresaService {
           this.slidersData.push (sliderData);
         }
         ,
-        err => {
-          console.log('error en carga de imagen slider');
-          console.log(err);
+        err => {this.showErrorService.httpErrorResponse(err, 'Error carga imagen slider', '', 'error');
         }
       );
   }
@@ -134,9 +130,7 @@ export class ShareEmpresaService {
             console.log('error 400');
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
-          } else {
-            console.log('nook');
-            console.log(`error=${JSON.stringify(err)}`);
+          } else {this.showErrorService.httpErrorResponse(err, 'Error carga datos empresa', '', 'error');
           }
         }
       );

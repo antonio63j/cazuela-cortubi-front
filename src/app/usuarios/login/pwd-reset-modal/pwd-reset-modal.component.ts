@@ -9,6 +9,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import swal from 'sweetalert2';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class PwdResetModalComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     public activeModal: NgbActiveModal,
+    public showErrorService: ShowErrorService,
     private modalService: ModalService,
     private translate: TranslateService,
     private location: Location
@@ -44,9 +46,7 @@ export class PwdResetModalComponent implements OnInit, OnDestroy {
         // this.modalService.eventoCerrarModalScrollable.emit();
         swal.fire('Reset contraseña de usuario: ', 'Se envió un email con un codigo que le permitirá cambiar la contraseña, no olvide revisar la bandeja de spam', 'success');
       },
-      err => {
-        console.log(err);
-        swal.fire('Error en la gestión del cambio de contraseña', `status ${err.status}, ${err.error.mensaje} `, 'error');
+      err => {this.showErrorService.httpErrorResponse(err, 'Gestión envio email para cambio de contraseña', err.error.mensaje, 'error');
       }
     );
     return;
@@ -60,11 +60,8 @@ export class PwdResetModalComponent implements OnInit, OnDestroy {
         // this.modalService.eventoCerrarModalScrollable.emit();
         this.activeModal.close(true);
       },
-      err => {
-        console.log(err);
-        swal.fire('Error en la gestión del cambio de contraseña', `status ${err.status}, ${err.error.mensaje} `, 'error');
-      }
-    );
+      err => {this.showErrorService.httpErrorResponse(err, 'Gestión cambio contraseña', err.error.mensaje, 'error');}
+     );
     return;
   }
   ngOnDestroy(): void {

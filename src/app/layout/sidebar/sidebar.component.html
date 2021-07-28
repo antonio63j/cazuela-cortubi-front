@@ -15,7 +15,12 @@
       <a [routerLink]="['/dashboard']" class="list-group-item">
         <span><i class="fa fa-home"></i>&nbsp; Home</span>
       </a>
-
+      <a [routerLink]="['/store/menu']" class="list-group-item">
+        <span><i class="fa fa-cutlery"></i>&nbsp; Menu</span>
+      </a>
+      <a [routerLink]="['/store/carta']" class="list-group-item">
+        <span><i class="fa fa-list-ul"></i>&nbsp; Carta</span>
+      </a>
 
       <!-- login -->
       <div class="nested-menu">
@@ -28,7 +33,7 @@
         <li [class.expand]="showMenu === 'profile'" class="nested">
           <ul class="submenu">
             <li>
-              <a href="javascript:void(0)">
+              <a *ngIf="authService.usuario.username" [routerLink]="['/perfil']">
                 <span><i class="fa fa-fw fa-user"></i> {{ 'Profile' | translate }}</span>
               </a>
             </li>
@@ -86,7 +91,11 @@
       </div>
       <!-- seleccion idioma-->
 
-
+      <a *ngIf="authService.isAuthenticated()" 
+         [routerLink]="['/store/carrito']" class="list-group-item">
+         <!-- <span><i class="fa fa-list-ul"></i>&nbsp; Carta</span> -->
+         <mat-icon [matBadge]= "numArticulosCarrito" matBadgeColor="warn" [matBadgeHidden]="hiddenProductosEnCarrito">shopping_cart</mat-icon>
+      </a>
       <!-- <a (click)="rltAndLtr()" class="list-group-item">
         <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
       </a> -->

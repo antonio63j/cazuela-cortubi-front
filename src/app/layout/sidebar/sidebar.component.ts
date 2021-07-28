@@ -10,6 +10,7 @@ import { Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from '../../usuarios/auth.service';
+import { CarritoService } from 'src/app/pages-store/carrito/carrito.service';
 
 interface SubMenu {
     routLink: string;
@@ -33,12 +34,19 @@ export class SidebarComponent implements OnInit {
     private observ$: Subscription = null;
     private unsubscribe$ = new Subject();
 
+    public hiddenProductosEnCarrito = false;
+    public numArticulosCarrito = 0;
+    public subscripcionNumArticulosEnCarrito: Subscription;
+
+
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
   constructor(
     private translate: TranslateService,
     public router: Router,
     public authService: AuthService,
+    public carritoService: CarritoService
+
   ) {
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
@@ -52,6 +60,11 @@ export class SidebarComponent implements OnInit {
         this.collapsed = false;
         this.showMenu = '';
         this.pushRightClass = 'push-right';
+        this.subscripcionNumArticulosEnCarrito = this.carritoService.getNumArticulosCarritoMsg()
+        .subscribe(num => {
+            console.log('recibido cambios datos carrito, numArticulos= ' + num);
+            this.numArticulosCarrito = num;
+        });
     }
 
     eventCalled(): void {

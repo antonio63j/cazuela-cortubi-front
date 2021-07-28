@@ -5,6 +5,7 @@ import swal from 'sweetalert2';
 import { AdminIndex } from '../../shared/modelos/admin-index';
 import { AdminIndexService } from './admin-index.service';
 import { environment } from 'src/environments/environment';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-admin-index',
@@ -21,6 +22,7 @@ export class AdminIndexComponent implements OnInit, OnDestroy {
 
   constructor(
     private adminIndexService: AdminIndexService,
+    private showErrorService: ShowErrorService
   ) { }
 
   ngOnInit(): void {
@@ -45,13 +47,10 @@ export class AdminIndexComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         response => {
-          console.log(response);
+          // console.log(response);
           this.adminIndexList = response as AdminIndex[];
-        },
-        err => {
-          console.log(err);
-          swal.fire('Error carga opciones administración ', err.error.error, 'error');
         }
+        , err => this.showErrorService.httpErrorResponse(err, 'Carga opciones de administración', '', 'error')
       );
   }
 

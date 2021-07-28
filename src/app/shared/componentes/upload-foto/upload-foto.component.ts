@@ -8,6 +8,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import swal from 'sweetalert2';
+import { ShowErrorService } from '../../services/show-error.service';
 import { UploadFotoService } from './upload-foto.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class UploadFotoComponent implements OnInit, OnDestroy {
 
   constructor(
     private uploadFotoService: UploadFotoService,
+    private showErrorService: ShowErrorService,
     private router: Router
     ) {
   }
@@ -81,10 +83,8 @@ export class UploadFotoComponent implements OnInit, OnDestroy {
             }
 
           },
-          err => {
+          err => {this.showErrorService.httpErrorResponse(err, 'Error al subir foto', '', 'error');
             //  swal solo mustra el último aviso, por tanto no vemos el swal que se ha puesto en AuthInterceptor
-            swal.fire(`status  ${err.status}`, err.error.error, 'error');
-            console.error(err);
           }
         );
     } else {

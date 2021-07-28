@@ -13,6 +13,7 @@ import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.servi
 import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { FormControl, Validators } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 @Component({
   selector: 'app-menu-form',
@@ -91,7 +92,8 @@ export class MenuFormComponent implements OnInit, OnDestroy {
     private adminSugerenciaService: AdminMenuService,
     private shareEmpresaService: ShareEmpresaService,
     private modalService: ModalService,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+    private showErrorService: ShowErrorService
   ) {
   }
 
@@ -116,9 +118,7 @@ export class MenuFormComponent implements OnInit, OnDestroy {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
           } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error en actualización ', `error.status = ${err.status.toString()}`, 'error');
+            this.showErrorService.httpErrorResponse(err, 'Error en actualización de menu', '', 'error');
           }
         }
       );
@@ -151,9 +151,7 @@ export class MenuFormComponent implements OnInit, OnDestroy {
             this.erroresValidacion = err.error.errors as string[];
             console.log(this.erroresValidacion);
           } else {
-            // this.router.navigate(['/clientes']);
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al crear menu ', `error.status = ${err.status.toString()}`, 'error');
+            this.showErrorService.httpErrorResponse(err, 'Error al crear menu', '', 'error');
           }
         }
       );

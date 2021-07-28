@@ -13,7 +13,6 @@ import { ModalConModeloService } from '../../shared/services/modal-con-modelo.se
 import { ModalService } from '../../shared/services/modal.service';
 // import { SugerenciaFormComponent } from './sugerencia-form/sugerencia-form.component';
 
-// ant
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../usuarios/auth.service';
 import { SugerenciaFormComponent } from './sugerencia-form/sugerencia-form.component';
@@ -22,8 +21,7 @@ import { Tipoplato } from 'src/app/shared/modelos/tipoplato';
 import { ShareEmpresaService } from 'src/app/shared/services/share-empresa.service';
 import { FiltroSugerencia } from 'src/app/shared/modelos/filtro-sugerencia';
 import { HttpParams } from '@angular/common/http';
-// import { DisableDirective } from 'src/app/shared/directivas/disable.directive';
-
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -64,6 +62,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
         private modalService: ModalService,
         private translate: TranslateService,
         private authService: AuthService,
+        private showErrorService: ShowErrorService
         // public disableDirective: DisableDirective
 
     ) {
@@ -117,9 +116,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                     this.paginador = response;
                     window.scrollTo(0, 0);
                 },
-                err => {
-                    console.log(err);
-                    swal.fire('Error carga de sugerencias ', err.status, 'error');
+                err => {this.showErrorService.httpErrorResponse(err, 'Error carga sugerencias', '', 'error');
                 }
             );
     }
@@ -179,9 +176,7 @@ export class AdminSugerenciaComponent implements OnInit, OnDestroy {
                             'success'
                         );
                     }
-                    , err => {
-                        console.log(err);
-                        // swal.fire('Error al eliminar sugerencia', err.error.error, 'error');
+                    , err => {this.showErrorService.httpErrorResponse(err, 'Error eliminando sugerencia', '', 'error');
                     }
                 );
             }

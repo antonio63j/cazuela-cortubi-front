@@ -13,10 +13,11 @@ import { AuthService } from 'src/app/usuarios/auth.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import swal from 'sweetalert2';
-import { EstadoPedidoEnum, Pedido } from 'src/app/shared/modelos/pedido';
+import { EntregaPedidoEnum, EstadoPedidoEnum, Pedido } from 'src/app/shared/modelos/pedido';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 import { AdminPedidoService } from './admin-pedido.service';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 registerLocaleData(localeEs, 'es');
 
@@ -60,12 +61,13 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
     public opcionesOrdenacion: OpcionesSelect[];
     public sentidoOrdenacion: OpcionesSelect[];
     public opcionesEstado: OpcionesSelect[];
-
+    public opcionesEntrega: OpcionesSelect[];
 
     constructor(
         private pedidoService: AdminPedidoService,
         private modalConModeloService: ModalConModeloService,
         private modalService: ModalService,
+        private showErrorService: ShowErrorService,
         private translate: TranslateService,
         private authService: AuthService,
 
@@ -80,10 +82,18 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
                 };
             }));
 
+        this.opcionesEntrega = Object.keys(EntregaPedidoEnum).map(key => {
+            return {
+                value: key,
+                viewValue: EntregaPedidoEnum[key],
+            };
+        });
+
         this.opcionesOrdenacion = [
             { value: 'estadoPedido', viewValue: 'Estado del pedido' },
             { value: 'fechaRegistro', viewValue: 'Fecha de registro' },
-            { value: 'fechaRecogida', viewValue: 'Fecha de recogida' },
+            { value: 'fechaEntrega', viewValue: 'Fecha de entrega' },
+            { value: 'entregaPedido', viewValue: 'Lugar de entrega' },
             { value: 'usuario', viewValue: 'Cuenta cliente' },
         ];
 
@@ -117,11 +127,11 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
 
             {
                 type: 'daterange',
-                label: 'Rango recogida pedido',
-                nameIni: 'diaRecogidaIni',
-                nameFin: 'diaRecogidaFin',
-                valueDateIni: this.filtroPedido.diaRecogidaIni,
-                valueDateFin: this.filtroPedido.diaRecogidaFin,
+                label: 'Rango entrega pedido',
+                nameIni: 'diaEntregaIni',
+                nameFin: 'diaEntregaFin',
+                valueDateIni: this.filtroPedido.diaEntregaIni,
+                valueDateFin: this.filtroPedido.diaEntregaFin,
                 class: 'demo-10-width',
                 validations: [
                 ]
@@ -129,19 +139,29 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
 
             {
                 type: 'time',
-                label: 'Hora inicial recogida',
-                name: 'horaRecogidaIni',
-                value: this.filtroPedido.horaRecogidaIni,
+                label: 'Hora inicial entrega',
+                name: 'horaEntregaIni',
+                value: this.filtroPedido.horaEntregaIni,
                 class: 'demo-15-width margin-top',
                 validations: [
                 ]
             },
             {
                 type: 'time',
-                label: 'Hora final recogida',
-                name: 'horaRecogidaFin',
-                value: this.filtroPedido.horaRecogidaFin,
+                label: 'Hora final entrega',
+                name: 'horaEntregaFin',
+                value: this.filtroPedido.horaEntregaFin,
                 class: 'demo-15-width margin-top',
+                validations: [
+                ]
+            },
+            {
+                type: 'select',
+                label: 'lugar Entrega',
+                name: 'lugarEntrega',
+                value: null,
+                class: 'demo-15-width',
+                options: this.opcionesEntrega,
                 validations: [
                 ]
             },
@@ -161,7 +181,7 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
                 label: 'Ordenación',
                 name: 'ordenacion',
                 class: 'campoOrdenacion',
-                value: 'fechaRecogida',
+                value: 'fechaEntrega',
                 options: this.opcionesOrdenacion,
                 validations: [
                 ]
@@ -224,29 +244,7 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
                     this.paginador = response;
                     window.scrollTo(0, 0);
                 },
-                err => {
-                    switch (err) {
-                        case 400: {
-                            console.log(`Errores de validacion: ${err.errores}`);
-                            break;
-                        }
-                        case 401: {
-                            swal.fire(`La sesión ha caducado, inicie sesión `, err.status, 'warning');
-                            break;
-                        }
-                        case 501: {
-                            console.log(`error en la peticion ${JSON.stringify(err)}`);
-                            break;
-                        }
-                        default: {
-                            swal.fire('Error carga de pedidos ', err.status, 'error');
-                            console.log(err);
-                            swal.fire(err.mensaje, '', 'error');
-                            break;
-                        }
-                    }
-
-                }
+                err => this.showErrorService.httpErrorResponse(err, 'Carga de pedidos')
             );
     }
 
@@ -320,27 +318,28 @@ export class AdminPedidoComponent implements OnInit, OnDestroy {
         this.filtroPedido.estado = value.estado;
         this.filtroPedido.diaRegistroIni = value.diaRegistroIni;
         if (value.diaRegistroIni !== null) {
-          this.filtroPedido.diaRegistroIni.setHours(0, 0, 0, 0);
+            this.filtroPedido.diaRegistroIni.setHours(0, 0, 0, 0);
         }
 
         this.filtroPedido.diaRegistroFin = value.diaRegistroFin;
         if (value.diaRegistroFin !== null) {
-          this.filtroPedido.diaRegistroFin.setHours(23, 59, 59, 999);
+            this.filtroPedido.diaRegistroFin.setHours(23, 59, 59, 999);
         }
 
-        this.filtroPedido.diaRecogidaIni = value.diaRecogidaIni;
-        if (this.filtroPedido.diaRecogidaIni !== null) {
-          this.filtroPedido.diaRecogidaIni.
-            setHours(+value.horaRecogidaIni.substr(0, 2),
-                     +value.horaRecogidaIni.substr(3, 2), 0);
+        this.filtroPedido.diaEntregaIni = value.diaEntregaIni;
+        if (this.filtroPedido.diaEntregaIni !== null) {
+            this.filtroPedido.diaEntregaIni.
+                setHours(+value.horaEntregaIni.substr(0, 2),
+                    +value.horaEntregaIni.substr(3, 2), 0);
         }
-        this.filtroPedido.diaRecogidaFin = value.diaRecogidaFin;
-        if(this.filtroPedido.diaRecogidaFin !== null) {
-            this.filtroPedido.diaRecogidaFin.
-            setHours(+value.horaRecogidaFin.substr(0, 2),
-                     +value.horaRecogidaFin.substr(3, 2), 0);
+        this.filtroPedido.diaEntregaFin = value.diaEntregaFin;
+        if (this.filtroPedido.diaEntregaFin !== null) {
+            this.filtroPedido.diaEntregaFin.
+                setHours(+value.horaEntregaFin.substr(0, 2),
+                    +value.horaEntregaFin.substr(3, 2), 0);
         }
-        
+        this.filtroPedido.entregaPedido = value.lugarEntrega;
+
         this.filtroPedido.usuario = value.usuario;
 
         console.log(`filtroPedido: ${JSON.stringify(this.filtroPedido)}`);

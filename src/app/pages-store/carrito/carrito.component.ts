@@ -6,11 +6,11 @@
       la DB mantiene el carrito actualizado únicamente con la última acción realizada
       desde cualquiera de las sesiones. Podemos decir que un update, borrar el carrito
       anterior y crea uno nuevo.
-    - Gestion en servidor web para establcer que diferentes sesiones simultáneas con el 
+    - Gestion en servidor web para establcer que diferentes sesiones simultáneas con el
       mismo usuario, tengan el mismo id de pedido:
-      Cuando le llega al servidor web una peticion de actualización del carrito con 
-      carrito.id = null, busca en la tabla de pedidos, utilizando cód. de usuario y 
-      estado=CREACION, y si existe, asigna a la peticion de actualización el id obtenido 
+      Cuando le llega al servidor web una peticion de actualización del carrito con
+      carrito.id = null, busca en la tabla de pedidos, utilizando cód. de usuario y
+      estado=CREACION, y si existe, asigna a la peticion de actualización el id obtenido
       en la tabla.
 
     Nomenclatura:
@@ -74,6 +74,7 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { PedidoConfirmacion } from 'src/app/shared/modelos/pedido-confirmacion';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 registerLocaleData(localeEs, 'es');
 
 
@@ -100,7 +101,8 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
   constructor(
     public carritoService: CarritoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private showErrorService: ShowErrorService
   ) {
     this.carrito = this.carritoService.copiaCarrito();
     this.subscripcionCarritoCheck();
@@ -112,10 +114,12 @@ export class CarritoComponent implements OnInit, OnDestroy {
 
   tramitar(pedidoConfirmacion: PedidoConfirmacion): void {
     this.carrito.nota = pedidoConfirmacion.nota;
-    this.carrito.fechaRecogida = pedidoConfirmacion.
-       fechaRecogida.toLocaleString();
+    this.carrito.fechaEntrega = pedidoConfirmacion.
+       fechaEntrega.toLocaleString();
     const now = new Date();
     this.carrito.fechaRegistro = now.toLocaleString();
+    this.carrito.direccion = pedidoConfirmacion.direccion;
+    this.carrito.entregaPedido = pedidoConfirmacion.entregaPedido;
 
     this.observ$ = this.carritoService.confirmar(this.carrito).pipe(
       takeUntil(this.unsubscribe$)
@@ -141,9 +145,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al añadir en carrito', '', 'error');
           }
         }
       );
@@ -160,23 +162,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
           this.carritoCheck = response.data;
           this.controlCambioPrecio();
         }
-      }, err => {
-        switch (err) {
-          case 401: {
-            swal.fire(`La sesión ha caducado, inicie sesión `, err.status, 'warning');
-            break;
-          }
-          case 501: {
-            console.log(`error en la peticion ${JSON.stringify(err)}`);
-            break;
-          }
-          default: {
-            swal.fire('Error carga de artículos del carrito ', err.status, 'error');
-            console.log(err);
-            swal.fire(err.mensaje, '', 'error');
-            break;
-          }
-        }
+      }, err => {this.showErrorService.httpErrorResponse(err, 'Carga articulos del carrito', '', 'error');
       }
     );
   }
@@ -297,9 +283,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al actualizar carrito', '', 'error');
           }
         }
       );
@@ -324,9 +308,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al actualizar carrito', '', 'error');
           }
         }
       );
@@ -363,9 +345,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error al eliminar articulo de carrito', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al eliminar articulo del carrito', '', 'error');
           }
         }
       );
@@ -394,9 +374,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al eliminar articulo del carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al actualizar carrito', '', 'error');
           }
         }
       );
@@ -423,9 +401,7 @@ export class CarritoComponent implements OnInit, OnDestroy {
             console.log(this.erroresValidacion);
             swal.fire('Error en validación de datos ', `error.status = ${err.status.toString()}`, 'error');
 
-          } else {
-            console.log(`error=${JSON.stringify(err)}`);
-            swal.fire('Error al añadir al carrito ', `error.status = ${err.status.toString()}`, 'error');
+          } else {this.showErrorService.httpErrorResponse(err, 'Error al actualizar carrito', '', 'error');
           }
         }
       );

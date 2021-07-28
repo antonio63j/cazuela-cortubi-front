@@ -118,4 +118,13 @@ export class AuthService {
      );
  }
 
+ actualizarPerfil(usuario: Usuario): Observable<any> {
+  return this.http.put<Usuario>(environment.urlEndPoint + '/api/usuario/update', usuario).pipe(
+       catchError(err => {
+         console.log(`error capturado: ${err.status} `);
+         return throwError (err);
+       })
+   );
+}
+
 }

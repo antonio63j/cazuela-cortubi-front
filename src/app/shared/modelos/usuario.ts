@@ -1,3 +1,5 @@
+import { Direccion } from './direccion';
+
 export class Usuario {
     id: number;
     username: string;
@@ -14,4 +16,5 @@ export class Usuario {
     enabled: boolean;
     aceptaEmails: boolean;
     roles: string[] = [];
+    direcciones: Direccion[];
 }

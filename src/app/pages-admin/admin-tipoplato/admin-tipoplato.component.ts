@@ -13,6 +13,7 @@ import { ModalConModeloService } from '../../shared/services/modal-con-modelo.se
 import { AuthService } from 'src/app/usuarios/auth.service';
 import { Router } from '@angular/router';
 import { TipoplatoFormComponent } from './tipoplato-form/tipoplato-form.component';
+import { ShowErrorService } from 'src/app/shared/services/show-error.service';
 
 const swalWithBootstrapButtons = swal.mixin({
   customClass: {
@@ -46,7 +47,8 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private modalConModeloService: ModalConModeloService,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private showErrorService: ShowErrorService
   ) {
   }
 
@@ -63,10 +65,7 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
       response => {
         this.tipoplatos = (response as Tipoplato[]);
       }
-      , err => {
-        console.log(err);
-        this.router.navigate(['/dashborad']);
-        swal.fire('Error carga de Tipoplato', err.message, 'error');
+      , err => {this.showErrorService.httpErrorResponse(err, 'Error carga tipo de plato', '', 'error');
       }
     );
   }
@@ -92,9 +91,7 @@ export class AdminTipoplatoComponent implements OnInit, OnDestroy {
               this.tipoplatos = (respon as Tipoplato[]);
             });
           }
-          , err => {
-            console.log(err);
-            swal.fire('Error al eliminar tipoplato', '', 'error');
+          , err => {this.showErrorService.httpErrorResponse(err, 'Error eliminando tipo-plato', '', 'error');
           }
         );
       }
